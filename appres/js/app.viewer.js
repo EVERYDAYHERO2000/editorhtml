@@ -9,7 +9,7 @@ $(function () {
   app.f.slectElement = function (elem) {
 
     var $documents__content = app.e.$documents__content;
-    var $selectetElement = app.e.$selectetElement = elem;
+    var $selectedElement = app.e.$selectedElement = elem;
     var $helpers = app.e.$helpers;
     
     

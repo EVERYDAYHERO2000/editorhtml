@@ -134,10 +134,21 @@ $(function () {
       
       app.f.slectElement( $(this).parent().data('node') );
       
+      
+      
 
 
     })
 
+  }
+  
+  app.e.selectLayer = function(elem){
+    $('#sidebarTabs-layers').find('li').each(function () {
+        if ($(this).data('node')[0] === elem[0]) {
+          //console.log($(this).data('node')[0],$(this)[0])
+          $(this).find('div').first().mouseup();
+        }
+      });
   }
 
 });

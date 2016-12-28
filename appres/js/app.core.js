@@ -12,9 +12,9 @@ $(function () {
     app.e.$mainmenu = $('<ul class="mainmenu"></ul>');
     app.e.$documents = $('<div class="documents"></div>');
     app.e.$statusbar = $('<div class="statusbar"></div>');
-    app.e.$documents__browser = $('<iframe class="documents__browser"></iframe>');
+    app.e.$documents__browser = $('<iframe scrolling="no" class="documents__browser"></iframe>');
     app.e.$documents__content;
-    app.e.$selectetElement;
+    app.e.$selectedElement;
     app.e.$helpers;
     app.e.$helpers__virtualbody
     

@@ -105,8 +105,8 @@ li {
   width: 100%;
   height: 100%;
   border: none;
-  overflow-x: auto;
-  overflow-y: scroll;
+  overflow-x: hidden;
+  overflow-y: hidden;
   background: @bgColor;
   color: #000;
   pointer-events: all;
@@ -114,31 +114,24 @@ li {
 .documents__browser_disabled {
   pointer-events: none;
 }
-.documents__body {
-  overflow-x: auto;
-  overflow-y: auto;
-}
-::-webkit-scrollbar,
-.documents__body::-webkit-scrollbar {
+
+::-webkit-scrollbar {
   width: 12px;
   height: 12px;
   box-shadow: none;
   background: @bgColor;
 }
-::-webkit-scrollbar-track,
-.documents__body::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   -webkit-border-radius: 10px;
   border-radius: 10px;
 }
-::-webkit-scrollbar-thumb,
-.documents__body::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   -webkit-border-radius: 10px;
   border-radius: 10px;
   background: @lightColor;
   border: 1px solid @bgColor;
 }
-::-webkit-scrollbar-corner,
-.documents__body::-webkit-scrollbar-corner {
+::-webkit-scrollbar-corner {
   background: @bgColor;
 }
 .statusbar {
@@ -271,43 +264,43 @@ li {
 .layers__tree .ui-sortable-placeholder {
   background-color: @toneColor;
 }
-.editable {}
-.editable .ui-resizable-handle {
+.helpers__box {}
+.helpers__box .ui-resizable-handle {
   width: @editableHandlesSize;
   height: @editableHandlesSize;
   background: #fff;
   outline: 1px solid @selectedColor;
   position: absolute;
 }
-.editable .ui-resizable-handle.ui-resizable-n {
+.helpers__box .ui-resizable-handle.ui-resizable-n {
   top: 0 - @editableHandlesSize / 2;
   left: calc(50% ~"-" @editableHandlesSize / 2);
 }
-.editable .ui-resizable-handle.ui-resizable-e {
+.helpers__box .ui-resizable-handle.ui-resizable-e {
   right: 0 - @editableHandlesSize / 2;
   top: calc(50% ~"-" @editableHandlesSize / 2);
 }
-.editable .ui-resizable-handle.ui-resizable-s {
+.helpers__box .ui-resizable-handle.ui-resizable-s {
   bottom: 0 - @editableHandlesSize / 2;
   left: calc(50% ~"-" @editableHandlesSize / 2);
 }
-.editable .ui-resizable-handle.ui-resizable-w {
+.helpers__box .ui-resizable-handle.ui-resizable-w {
   left: 0 - @editableHandlesSize / 2;
   top: calc(50% ~"-" @editableHandlesSize / 2);
 }
-.editable .ui-resizable-handle.ui-resizable-ne {
+.helpers__box .ui-resizable-handle.ui-resizable-ne {
   top: 0 - @editableHandlesSize / 2;
   right: 0 - @editableHandlesSize / 2;
 }
-.editable .ui-resizable-handle.ui-resizable-se {
+.helpers__box .ui-resizable-handle.ui-resizable-se {
   bottom: 0 - @editableHandlesSize / 2;
   right: 0 - @editableHandlesSize / 2;
 }
-.editable .ui-resizable-handle.ui-resizable-sw {
+.helpers__box .ui-resizable-handle.ui-resizable-sw {
   bottom: 0 - @editableHandlesSize / 2;
   left: 0 - @editableHandlesSize / 2;
 }
-.editable .ui-resizable-handle.ui-resizable-nw {
+.helpers__box .ui-resizable-handle.ui-resizable-nw {
   top: 0 - @editableHandlesSize / 2;
   left: 0 - @editableHandlesSize / 2;
 }
@@ -384,18 +377,23 @@ li {
   width: 100%;
   height: 100%;
   overflow:auto;
-  background: rgba(255, 0, 0, 0.46);
   position: absolute;
   top:0;
   left:0;
-  pointer-events: none;
+  pointer-events:all;
+}
+
+.helpers_lock {
+  background: rgba(255, 0, 0, 0.31);
 }
 
 .helpers__virtualbody {
   overflow: hidden;
+  pointer-events:none;
 }
 
 .helpers__box {
   position: absolute;
   outline: 1px solid @selectedColor;
+  pointer-events: all;
 }
