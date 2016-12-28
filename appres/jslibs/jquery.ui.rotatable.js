@@ -55,7 +55,6 @@ $.widget("ui.rotatable", $.ui.mouse, {
     },
 
     _create: function() {
-      
         var handle;
         if (!this.options.handle) {
             handle = $(document.createElement('div'));
@@ -145,7 +144,6 @@ $.widget("ui.rotatable", $.ui.mouse, {
     },
 
     startRotate: function(event) {
-     
         var center = this.getElementCenter();
         var startXFromCenter = event.pageX - this.options.handleOffset.left - center[0];
         var startYFromCenter = event.pageY - this.options.handleOffset.top - center[1];
@@ -155,14 +153,13 @@ $.widget("ui.rotatable", $.ui.mouse, {
 
         this._propagate("start", event);
 
-        app.e.$documents__content.bind('mousemove', this.listeners.rotateElement);
-        app.e.$documents__content.bind('mouseup', this.listeners.stopRotate);
+        $(document).bind('mousemove', this.listeners.rotateElement);
+        $(document).bind('mouseup', this.listeners.stopRotate);
 
         return false;
     },
 
     rotateElement: function(event){
-      
         if (!this.element || this.element.disabled){
             return false;
         }
@@ -206,8 +203,8 @@ $.widget("ui.rotatable", $.ui.mouse, {
             return;
         }
 
-        app.e.$documents__content.unbind('mousemove', this.listeners.rotateElement);
-        app.e.$documents__content.unbind('mouseup', this.listeners.stopRotate);
+        $(document).unbind('mousemove', this.listeners.rotateElement);
+        $(document).unbind('mouseup', this.listeners.stopRotate);
 
         this.elementStopAngle = this.elementCurrentAngle;
 

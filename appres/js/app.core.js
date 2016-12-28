@@ -27,6 +27,11 @@ $(function () {
     app.e.$frame__viewer.append(app.e.$documents, app.e.$statusbar);
 
     
+    $(document).on('dragstart', 'a', function () {
+      return false;
+    });
+    
+    
     app.f.setTools();
 
     app.f.setMenu();

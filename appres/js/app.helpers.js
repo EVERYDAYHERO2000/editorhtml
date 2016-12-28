@@ -43,31 +43,34 @@ $(function () {
       }
     });
 
+    
 
-    function virtualbodySizeDetector() {
+    app.f.virtualbodySizeDetector();
 
+  }
+
+  app.f.virtualbodySizeDetector = function() {
+
+      var $documents__content = app.e.$documents__content;
       var $selectedElement = app.e.$selectedElement;
+      var $helpers = app.e.$helpers;
+      var $helpers__virtualbody = app.e.$helpers__virtualbody;
 
-      if (!$helpers.is('.helpers_lock') &&
-        $documents__content.outerWidth() !== $helpers__virtualbody.outerWidth() ||
+      if ($helpers.attr('.helpers_lock') !== 'false') {
+        if ($documents__content.outerWidth() !== $helpers__virtualbody.outerWidth() ||
         $documents__content.outerHeight() !== $helpers__virtualbody.outerHeight()) {
-
         
-
         $helpers__virtualbody.css({
-          width: $documents__content.outerWidth() + 'px',
-          height: $documents__content.outerHeight() + 'px'
+          width: $documents__content.outerWidth() - 12 + 'px',
+          height: $documents__content.outerHeight() - 12 + 'px'
         })
 
         if ($selectedElement) app.e.selectLayer($selectedElement);
       }
-      setTimeout(virtualbodySizeDetector, 100);
     }
-
-    virtualbodySizeDetector();
-
-  }
-
+      //setTimeout(virtualbodySizeDetector, 500);
+    }
+  
   app.f.slectElement = function (elem) {
 
     var $documents__content = app.e.$documents__content;
@@ -78,34 +81,42 @@ $(function () {
     var $helpers__box = $('<div class="helpers__box"></div>');
     var selectedRect = $selectedElement[0].getBoundingClientRect();
 
-
+    
     $helpers__virtualbody.html('').append($helpers__box);
+    
+    
+    
+    
+    
     $helpers__box.css({
-      width: $selectedElement.outerWidth() + 'px',
-      height: $selectedElement.outerHeight() + 'px',
+      width: $selectedElement.css('width'),
+      height: $selectedElement.css('height'),
       left: $helpers.scrollLeft() + selectedRect.left + 'px',
       top: $helpers.scrollTop() + selectedRect.top + 'px',
-      transform: $selectedElement.css('transform')
+      //transform: $selectedElement.css('transform')
     }).draggable({
       start: function (event, ui) {
-        $helpers.addClass('helpers_lock');
         updateSelectedElement(event, ui);
+        
       },
-      drag: updateSelectedElement,
-      stop: function (event, ui) {
-        $helpers.removeClass('helpers_lock');
+      drag: function (event, ui) {
         updateSelectedElement(event, ui);
+        
+      },   
+      stop: function (event, ui) {
+        updateSelectedElement(event, ui);
+        app.f.virtualbodySizeDetector();
       }
 
     }).resizable({
       handles: 'all',
       start: function (event, ui) {
-        $helpers.addClass('helpers_lock');
+        
         updateSelectedElement(event, ui)
       },
       stop: function (event, ui) {
-        $helpers.removeClass('helpers_lock');
         updateSelectedElement(event, ui);
+        app.f.virtualbodySizeDetector();
       },
       resize: updateSelectedElement
     }).rotatable({
@@ -116,12 +127,12 @@ $(function () {
       angle: 0,
       wheelRotate: false,
       start: function (event, ui) {
-        $helpers.addClass('helpers_lock');
+        
         updateSelectedElement(event, ui)
       },
       rotate: updateSelectedElement,
       stop: function (event, ui) {
-        $helpers.removeClass('helpers_lock');
+        
         updateSelectedElement(event, ui);
       },
     });
@@ -156,15 +167,17 @@ $(function () {
 
 
 
-      width = $helpers__box.css('width');
-      height = $helpers__box.css('height');
+      width = $helpers__box.outerWidth();
+      height = $helpers__box.outerHeight();
 
+      
+      
       $selectedElement.css({
         position: 'absolute',
         left: left + 'px',
         top: top + 'px',
-        width: width,
-        height: height,
+        width: width + 'px',
+        height: height + 'px',
         transform: $helpers__box.css('transform')
       })
     }
