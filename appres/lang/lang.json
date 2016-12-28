@@ -1,0 +1,110 @@
+{
+  "file": {
+    "RU": "Файл",
+    "EN": "File"
+  },
+  "exit": {
+    "RU": "Выход",
+    "EN": "Exit"
+  },
+  "div": {
+    "RU": "DIV",
+    "EN": "DIV"
+  },
+  "image": {
+    "RU": "Картинка",
+    "EN": "Image"
+  },
+  "text": {
+    "RU": "Текстовой блок",
+    "EN": "Text"
+  },
+  "forms": {
+    "RU": "Элементы формы",
+    "EN": "Forms"
+  },
+  "widgets": {
+    "RU": "Виджеты",
+    "EN": "Widgets"
+  },
+  "html": {
+    "RU": "HTML",
+    "EN": "HTML"
+  },
+  "new" : {
+    "RU": "Новый проект",
+    "EN" : "New project"
+  },
+  "open" : {
+    "RU" : "Открыть",
+    "EN" : "Open"
+  },
+  "save" : {
+    "RU" : "Сохранить",
+    "EN" : "Save"
+  },
+  "save_as" : {
+    "RU" : "Сохранить как",
+    "EN" : "Save as"
+  },
+  "close" : {
+    "RU": "Закрыть",
+    "EN" : "Close"
+  },
+  "export_html" : {
+    "RU" : "Экспортировать в html",
+    "EN" : "Export as html"
+  },
+  "help": {
+    "RU" : "Помощь",
+    "EN" : "Help"
+  },
+  "edit":{
+    "RU" : "Изменить",
+    "EN" : "Edit"
+  },
+  "view" : {
+    "RU" : "Вид",
+    "EN" : "View"
+  },
+  "cut" : {
+    "RU" : "Вырезать",
+    "EN" : "Cut"
+  },
+  "copy" : {
+    "RU" : "Копировать",
+    "EN" : "Copy"
+  },
+  "paste" : {
+    "RU" : "Вставить",
+    "EN" : "Paste"
+  },
+  "layers" : {
+    "RU" : "Слои",
+    "EN" : "Layers"
+  },
+  "properties" : {
+    "RU" : "Свойства",
+    "EN" : "Properties"
+  },
+  "project" : {
+    "RU" : "Проект",
+    "EN" : "Project"
+  },
+  "history" : {
+    "RU" : "История",
+    "EN" : "History"
+  },
+  "assets" : {
+    "RU" : "Блоки",
+    "EN" : "Assets"
+  },
+  "editor" : {
+    "RU" : "Редактирование",
+    "EN" : "Editor"
+  },
+  "preview" : {
+    "RU" : "Просмотр",
+    "EN" : "Preview"
+  }
+}

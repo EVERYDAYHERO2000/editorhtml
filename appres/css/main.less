@@ -1,0 +1,401 @@
+@bgColor : #303030;
+@mainColor : #535353;
+@toneColor : #444444;
+@tone2Color : #3e3e3e;
+@lightColor : #6a6a6a;
+@darkColor : #282828;
+@fontColor : #ffffff;
+@selectedColor : rgba(31, 195, 255, 0.61);
+@mainFont : 12px;
+@mainFontLineHeight : 1.2;
+@menuHeight : 35px;
+@toolsWidth : 36px;
+@sidebarWidth : 300px;
+@statusbarHeight : 20px;
+@documents__barHeight : 20px;
+@tabsHeight : 20px;
+@darkBorder : 1px solid @darkColor;
+@lightBorder : 1px solid @lightColor;
+@unborder : 1px solid @mainColor;
+@shadowText : 0px -1px 0px rgba(0, 0, 0, 0.5);
+@shadow1 : 1px 1px 1px rgba(0, 0, 0, 0.5);
+@shadow2 : 1px 1px 5px rgba(0, 0, 0, 0.3);
+@editableHandlesSize : 6px;
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  -webkit-font-smoothing: antialiased;
+}
+ul,
+li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.window {
+  background: @bgColor;
+  margin: 0;
+  padding: 0;
+  font-size: @mainFont;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  ;
+  color: @fontColor;
+  line-height: @mainFontLineHeight;
+}
+.app {
+  width: 100vw;
+  min-width: 800px;
+}
+.app__menu,
+.app__frame {
+  width: 100vw;
+}
+.app__menu {
+  height: @menuHeight;
+  background: @mainColor;
+  border-bottom: @darkBorder;
+  overflow: hidden;
+}
+.app__frame {
+  height: calc(100vh ~"-" @menuHeight);
+}
+.frame__tools,
+.frame__viewer,
+.frame__sidebar {
+  height: calc(100vh ~"-" @menuHeight );
+  position: absolute;
+}
+.frame__tools {
+  width: @toolsWidth;
+  background: @mainColor;
+  border-right: @darkBorder;
+  border-top: @lightBorder;
+}
+.frame__viewer {
+  width: calc(100vw ~"-" @toolsWidth ~"-" @sidebarWidth);
+  left: @toolsWidth;
+}
+.frame__sidebar .ui-resizable-w {
+  width: 5px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  cursor: col-resize;
+}
+.frame__sidebar {
+  width: @sidebarWidth;
+  right: 0;
+  background: @mainColor;
+  box-shadow: -1px 0px 0px @bgColor;
+}
+.documents {
+  width: 100%;
+  height: calc(100vh ~"-" @statusbarHeight ~"-" @menuHeight );
+  background: @darkColor;
+  position: absolute;
+}
+.documents__browser {
+  width: 100%;
+  height: 100%;
+  border: none;
+  overflow-x: auto;
+  overflow-y: scroll;
+  background: @bgColor;
+  color: #000;
+  pointer-events: all;
+}
+.documents__browser_disabled {
+  pointer-events: none;
+}
+.documents__body {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+::-webkit-scrollbar,
+.documents__body::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  box-shadow: none;
+  background: @bgColor;
+}
+::-webkit-scrollbar-track,
+.documents__body::-webkit-scrollbar-track {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb,
+.documents__body::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: @lightColor;
+  border: 1px solid @bgColor;
+}
+::-webkit-scrollbar-corner,
+.documents__body::-webkit-scrollbar-corner {
+  background: @bgColor;
+}
+.statusbar {
+  height: @statusbarHeight;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: @bgColor;
+}
+.tools__button {
+  border: none;
+  width: @toolsWidth;
+  height: 30px;
+  background-size: 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: @mainColor;
+  border-right: @darkBorder;
+}
+.tools__button:focus {
+  outline: none;
+}
+.tools__button:hover {
+  background-color: @lightColor;
+  transition: background-color .2s;
+}
+.mainmenu {
+  display: flex;
+  cursor: default;
+  user-select: none;
+}
+.mainmenu__item {
+  height: @menuHeight;
+  text-shadow: @shadowText;
+  padding: 10px;
+  width: auto !important;
+  user-select: none;
+}
+.mainmenu__item:hover {
+  background-color: @lightColor;
+  transition: background-color .2s;
+}
+.mainmenu__submenu {
+  width: 200px;
+  position: absolute;
+  background: @mainColor;
+  z-index: 1000;
+  top: auto!important;
+  left: auto!important;
+  transform: translate(-10px, 10px);
+  box-shadow: @shadow1;
+}
+.sidebar__tabs {
+  background: @toneColor;
+  display: flex;
+  height: @tabsHeight;
+  border-bottom: 1px solid @tone2Color;
+}
+.sidebar__tabs .ui-tabs-tab {
+  user-select: none;
+  border-top: 1px solid @toneColor;
+  outline: none;
+}
+.sidebar__tabs .ui-tabs-tab:first-of-type.ui-tabs-active {
+  box-shadow: 0px 1px 0px @mainColor, 1px 0px 0px @tone2Color;
+}
+.sidebar__tabs .ui-tabs-active {
+  background: @mainColor;
+  box-shadow: 0px 1px 0px @mainColor, 1px 0px 0px @tone2Color, -1px 0px 0px @tone2Color;
+  border-top: @lightBorder;
+}
+.sidebar__tabs a {
+  text-decoration: none;
+  color: @fontColor;
+  padding: 2px 8px 0 8px;
+  display: block;
+  text-shadow: @shadowText;
+  cursor: default;
+}
+.sidebar__tabs a:focus {
+  outline: none;
+}
+.documents__content a {
+  background: red;
+}
+#sidebarTabs-layers {
+  overflow:auto;
+  height: 100%;
+}
+.layers__tree,
+.layers__tree ol {
+  padding: 0;
+  margin: 0;
+  user-select: none;
+}
+.layers__tree div {
+  padding-left: 10px;
+  text-shadow: @shadowText;
+}
+.layers__tree ol div {
+  padding-left: 20px
+}
+.layers__tree ol ol div {
+  padding-left: 30px
+}
+.layers__tree ol ol ol div {
+  padding-left: 40px
+}
+.layers__tree ol ol ol ol div {
+  padding-left: 50px
+}
+.layers__tree ol ol ol ol ol div {
+  padding-left: 60px
+}
+.layers__tree div.ui-sortable-selected {
+  background-color: @lightColor;
+  transition: background-color 0.2s;
+}
+.layers__tree .ui-sortable-handle {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #3e3e3e;
+  background: @mainColor;
+}
+.ui-sortable-helper {
+  opacity: 0.85;
+  box-shadow: @shadow2
+}
+.layers__tree .ui-sortable-placeholder {
+  background-color: @toneColor;
+}
+.editable {}
+.editable .ui-resizable-handle {
+  width: @editableHandlesSize;
+  height: @editableHandlesSize;
+  background: #fff;
+  outline: 1px solid @selectedColor;
+  position: absolute;
+}
+.editable .ui-resizable-handle.ui-resizable-n {
+  top: 0 - @editableHandlesSize / 2;
+  left: calc(50% ~"-" @editableHandlesSize / 2);
+}
+.editable .ui-resizable-handle.ui-resizable-e {
+  right: 0 - @editableHandlesSize / 2;
+  top: calc(50% ~"-" @editableHandlesSize / 2);
+}
+.editable .ui-resizable-handle.ui-resizable-s {
+  bottom: 0 - @editableHandlesSize / 2;
+  left: calc(50% ~"-" @editableHandlesSize / 2);
+}
+.editable .ui-resizable-handle.ui-resizable-w {
+  left: 0 - @editableHandlesSize / 2;
+  top: calc(50% ~"-" @editableHandlesSize / 2);
+}
+.editable .ui-resizable-handle.ui-resizable-ne {
+  top: 0 - @editableHandlesSize / 2;
+  right: 0 - @editableHandlesSize / 2;
+}
+.editable .ui-resizable-handle.ui-resizable-se {
+  bottom: 0 - @editableHandlesSize / 2;
+  right: 0 - @editableHandlesSize / 2;
+}
+.editable .ui-resizable-handle.ui-resizable-sw {
+  bottom: 0 - @editableHandlesSize / 2;
+  left: 0 - @editableHandlesSize / 2;
+}
+.editable .ui-resizable-handle.ui-resizable-nw {
+  top: 0 - @editableHandlesSize / 2;
+  left: 0 - @editableHandlesSize / 2;
+}
+.selected {
+  outline: 1px solid @selectedColor;
+}
+#selectmode-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  border-left: 1px solid @tone2Color;
+  text-shadow: @shadowText;
+  padding: 10px 30px 10px 10px;
+  min-width: 100px;
+  background-color: @mainColor;
+  transition: background-color .2s;
+  cursor: default;
+  user-select: none;
+}
+#selectmode-button:hover {
+  background-color: @lightColor;
+  transition: background-color .2s;
+}
+#selectmode-button:focus {
+  outline: none;
+}
+#selectmode-button .ui-selectmenu-icon {
+  background-image: url(../img/icons/dd-arrow.svg);
+  background-size: 21px 21px;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 25px;
+  height: 20px;
+  height: 100%;
+}
+#selectmode-menu {
+  box-shadow: @shadow1;
+  border-left: 1px solid @tone2Color;
+  text-shadow: @shadowText;
+  cursor: default;
+  user-select: none;
+}
+#selectmode-menu .ui-menu-item-wrapper {
+  position: relative;
+  padding: 10px;
+  background-color: @mainColor;
+}
+.ui-selectmenu-menu {
+  display: none;
+}
+.ui-selectmenu-open {
+  display: block;
+}
+#selectmode-menu .ui-state-active {
+  background-color: @lightColor;
+  transition: background-color .2s;
+}
+
+.ui-rotatable-handle {
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  border: 1px red solid;
+  border-radius: 50%;
+  position: absolute;
+  top: -20px;
+  left: -20px;
+}
+
+.helpers {
+  width: 100%;
+  height: 100%;
+  overflow:auto;
+  background: rgba(255, 0, 0, 0.46);
+  position: absolute;
+  top:0;
+  left:0;
+  pointer-events: none;
+}
+
+.helpers__virtualbody {
+  overflow: hidden;
+}
+
+.helpers__box {
+  position: absolute;
+  outline: 1px solid @selectedColor;
+}

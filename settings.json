@@ -1,0 +1,9 @@
+{
+  "lang" : "EN",
+  "title" : "App",
+  "window" : {
+    "sidebarWidth" : 300,
+    "windowWidth" : 1200,
+    "activeSidebarTab" : 1
+  }
+}

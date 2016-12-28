@@ -1,0 +1,780 @@
+<head xmlns:og="http://ogp.me/ns#">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Яндекс</title>
+  <link rel="shortcut icon" href="//yastatic.net/morda-logo/i/ya_favicon_ru.png">
+  <meta http-equiv=Content-Type content="text/html;charset=UTF-8">
+  <link rel="apple-touch-icon" href="//yastatic.net/morda-logo/i/apple-touch-icon/ru-76x76_2.png" sizes="76x76">
+  <link rel="apple-touch-icon" href="//yastatic.net/morda-logo/i/apple-touch-icon/ru-120x120_2.png" sizes="120x120">
+  <link rel="apple-touch-icon" href="//yastatic.net/morda-logo/i/apple-touch-icon/ru-152x152_2.png" sizes="152x152">
+  <link rel="apple-touch-icon" href="//yastatic.net/morda-logo/i/apple-touch-icon/ru-180x180_2.png" sizes="180x180">
+  <link rel="alternate" type="application/rss+xml" title="Новости Яндекса" href="https://yandex.ru/company/press_releases/news.rss">
+  <link rel="alternate" type="application/rss+xml" title="Блог Яндекса" href="https://yandex.ru/blog/company/rss">
+  <link rel="search" href="//yandex.ru/opensearch.xml" title="Яндекс" type="application/opensearchdescription+xml">
+
+
+  <script>
+    function AC(t) {
+      this.callback = t, this.items = 0, this.results = {}
+    }
+
+    function PL() {
+      this.ls = this.checkLs() ? window.localStorage : null, this.lsVersion = "2", this.lsVersionKey = "lsVersion", this.isXDRSupport = -1 === window.location.hash.indexOf("fail_xdr=1") && !/fail_xdr=1(;|$)/.test(document.cookie) && !!(window.XDomainRequest || window.XMLHttpRequest && "withCredentials" in new XMLHttpRequest), this.XDRSupportFailed = !1, this.timing = {
+        fromLs: !1
+      }, this.checkLsVersion()
+    }
+    var ya = this.ya || {};
+    ya.zCookie = {}, ya.zCookie.insert = function (t, e) {
+      var o, n, i, r = e.split(":"),
+        s = [],
+        a = !1;
+      if (3 === r.length) {
+        i = r[0], n = t.split("|");
+        for (var c = 0, l = n.length; l > c; c++) n[c] && (o = n[c].split(":"), o[0] === i ? (s.push(e), a = !0) : s.push(n[c]));
+        return a || s.push(e), s.join("|")
+      }
+      return !1
+    }, AC.prototype.add = function (t, e) {
+      var o = this;
+      return this.items++,
+        function () {
+          var n = e.apply(e, arguments);
+          o.check(t, n)
+        }
+    }, AC.prototype.check = function (t, e) {
+      this.results[t] = e, this.items--, 0 === this.items && this.callback(this.results)
+    }, PL.prototype.init = function (t) {
+      this.config = t
+    }, PL.prototype.checkLs = function () {
+      try {
+        return "localStorage" in window && null !== window.localStorage ? (localStorage.setItem("test", "1"), "1" === localStorage.getItem("test")) : !1
+      } catch (t) {
+        return !1
+      }
+    }, PL.prototype.checkLsVersion = function () {
+      if (this.ls) try {
+        this.ls.getItem(this.lsVersionKey) !== this.lsVersion && this.ls.clear(), this.ls.setItem(this.lsVersionKey, this.lsVersion)
+      } catch (t) {}
+    }, PL.prototype.clearLs = function (t) {
+      var e, o, n, i, r, s = [];
+      if (this.ls) try {
+        for (i = 0, r = this.ls.length; r > i; ++i) e = this.ls.key(i), e && -1 !== e.indexOf(".") && (n = this.ls.getItem(e), n && "v=" === n.substr(0, 2) && n.indexOf("@") > -1 && (o = n.substr(2, n.indexOf("@") - 2), (o && !t[e] || t[e].version !== o) && s.push(e)));
+        for (i = 0, r = s.length; r > i; ++i) this.ls.removeItem(s[i])
+      } catch (a) {}
+    }, PL.prototype.clearCookie = function (t, e) {
+      for (var o, n, i, r = t.split("|"), s = [], a = 0, c = r.length; c > a; a++) r[a] && (i = r[a].split(":"), "m-" === i[0].substr(0, 2) && (o = i[0].substr(2), n = i[1], o = o.replace(/-https/, ""), o = o.replace(/-www/, ""), e[o] && e[o].version === n && s.push(r[a])));
+      return s.join("|")
+    }, PL.prototype.load = function (t, e) {
+      var o, n = this,
+        i = new AC(function (o) {
+          var i, r, s, a = {},
+            c = [];
+          for (i in o) o.hasOwnProperty(i) && (r = "m-" + o[i].name + ":" + o[i].version + ":", a[r] || (a[r] = {
+            0: 0,
+            1: 0,
+            2: 0
+          }), a[r][String(o[i].result)]++);
+          for (i in a) a.hasOwnProperty(i) && (s = i, r = a[i], r[0] || (!r[1] && r[2] ? s += "l" : r[1] && (s += "c"), c.push(s)));
+          if (n.clearLs(t), c.length) {
+            var l = decodeURIComponent((document.cookie.match(/zm=([^;]+)/) || [])[1] || ""),
+              p = l,
+              h = function (t, e) {
+                var o, n, i, r = e.split(":"),
+                  s = [],
+                  a = !1;
+                if (3 === r.length) {
+                  i = r[0], n = t.split("|");
+                  for (var c = 0, l = n.length; l > c; c++) n[c] && (o = n[c].split(":"), o[0] === i ? (s.push(e), a = !0) : s.push(n[c]));
+                  return a || s.push(e), s.join("|")
+                }
+                return t
+              };
+            p = n.clearCookie(p, t);
+            for (var u = 0, d = c.length; d > u; u++) p = h(p, c[u]);
+            if (p && p !== l) {
+              var f = "." + document.domain.match(/([^.]+(?:\.com?)?\.)?[^.]+$/)[0];
+              document.cookie = "zm=" + encodeURIComponent(p) + "; expires=" + new Date(+new Date + 12096e5).toUTCString() + "; domain=" + f + "; path=/"
+            }
+          }
+          e()
+        });
+      for (var r in t) t.hasOwnProperty(r) && (o = t[r], this.loadFile(o, r, i.add(r, this.loadFileHandler)))
+    }, PL.prototype.notloaded = {
+      css: 0,
+      js: 0
+    }, PL.prototype.markAsNotloaded = function (t) {
+      this.notloaded[t]++
+    }, PL.prototype.markAsLoaded = function (t) {
+      this.notloaded[t]--, window.$ && window.$.fn && !this.notloaded[t] && $(window).trigger(t + "loaded.cacher")
+    }, PL.prototype.loadFile = function (t, e, o) {
+      var n, i, r, s = t.version,
+        a = this;
+      if (this.ls && (i = new Date, n = this.loadFromLs(e, s), i = new Date - i, n)) return !t.dry && this["run" + t.type] && (r = new Date, this["run" + t.type](n), r = new Date - r), t.isMainCss && (this.timing.fromLs = !0, this.timing.lsTime = i, this.timing.appendTime = r), void setTimeout(function () {
+        o({
+          version: s,
+          name: t.name,
+          result: 2
+        })
+      }, 0);
+      if (this.markAsNotloaded(t.type), !t.dry) {
+        var c, l = this.getExtension(t.url);
+        this["get" + l] && (t.isMainCss && (c = this.appendStyle("body{display:none}"), setTimeout(function () {
+          c && (c.parentNode.removeChild(c), c = null, a.sendStat("zcookie.error.nocss"))
+        }, 5e3), this.sendStat("zcookie.error.missing")), this["get" + l](t.url, function () {
+          c && (c.parentNode.removeChild(c), c = null), a.markAsLoaded(t.type)
+        }))
+      }
+      this.XDRSupport() ? this.get(t.url, function (n) {
+        var i = !1;
+        n ? (i = a.saveToLs(e, s, t, n), o({
+          version: s,
+          name: t.name,
+          result: i ? 2 : 1
+        })) : o({
+          version: s,
+          name: t.name,
+          result: 1
+        })
+      }) : o({
+        version: s,
+        name: t.name,
+        result: 1
+      })
+    }, PL.prototype.loadFileHandler = function (t) {
+      return t
+    }, PL.prototype.getVersion = function (t) {
+      return "v=" + t + "@"
+    }, PL.prototype.getExtension = function (t) {
+      return t.split(".").slice(-1)[0]
+    }, PL.prototype.getXHR = function () {
+      return window.XMLHttpRequest ? function () {
+        return new window.XMLHttpRequest
+      } : function () {
+        try {
+          return new window.ActiveXObject("Microsoft.XMLHTTP")
+        } catch (t) {}
+      }
+    }, PL.prototype.getXDR = function () {
+      return window.XDomainRequest ? function () {
+        return new window.XDomainRequest
+      } : this.getXHR()
+    }, PL.prototype.XDRSupport = function () {
+      return this.isXDRSupport
+    }, PL.prototype.appendToHead = function (t) {
+      document.getElementsByTagName("head").item(0).appendChild(t)
+    }, PL.prototype.getcss = function (t, e) {
+      var o = document.createElement("link");
+      o.setAttribute("type", "text/css"), o.setAttribute("rel", "stylesheet"), o.setAttribute("href", t), /(opera|firefox)(?:.*version)?[ \/]([\w.]+)/i.test(navigator.userAgent) ? o.onload = e : "onreadystatechange" in o ? o.onreadystatechange = function () {
+        /loaded|complete/.test(o.readyState) && e()
+      } : ! function n() {
+        o && o.sheet ? e() : setTimeout(n, 20)
+      }(), this.appendToHead(o)
+    }, PL.prototype.getjs = function (t, e) {
+      var o = document.createElement("script");
+      o.setAttribute("type", "text/javascript"), o.setAttribute("charset", "utf-8"), o.setAttribute("src", t), this.appendToHead(o);
+      var n = !1;
+      o.onload = o.onreadystatechange = function () {
+        var t = this.readyState;
+        n || t && "loaded" !== t && "complete" !== t || (n = !0, e(), o.onload = o.onreadystatechange = null)
+      }
+    }, PL.prototype.get = function (t, e) {
+      var o = this,
+        n = /^\/\/|^https:\/\/|^http:\/\//.test(t) ? this.getXDR() : this.getXHR();
+      if (n) {
+        n = n(), n.open("GET", t, !0);
+        var i = function () {
+            n.onreadystatechange = function () {};
+            try {
+              n.onload = n.onerror = n.onprogress = function () {}
+            } catch (t) {}
+            i = r = null;
+            var o = n.responseText;
+            e(o)
+          },
+          r = function () {
+            n.onreadystatechange = function () {};
+            try {
+              n.onload = n.onerror = n.onprogress = function () {}
+            } catch (t) {}
+            i = r = null;
+            try {
+              n.abort()
+            } catch (t) {}
+            o.onXDRFail(), e()
+          };
+        "onreadystatechange" in n ? n.onreadystatechange = function () {
+          return n.readyState < 4 ? void 0 : location.hash.indexOf("abort_xdr=1") > -1 ? void(r && r()) : void(200 === n.status && n.responseText ? i && i() : r && r())
+        } : n.onload = i;
+        try {
+          n.onerror = r, n.onprogress = function () {}
+        } catch (s) {}
+        n.send(null)
+      }
+    }, PL.prototype.onXDRFail = function () {
+      this.XDRSupportFailed || (document.cookie = "fail_xdr=1;max-age=604800", this.isXDRSupport = !1, this.XDRSupportFailed = !0)
+    }, PL.prototype.runjs = function (t) {
+      t && /\S/.test(t) && (window.execScript || function (t) {
+        window.eval.call(window, t)
+      })(t)
+    }, PL.prototype.appendStyle = function (t, e) {
+      e = e || null;
+      var o = document.createElement("style");
+      return o.setAttribute("type", "text/css"), e && (o.media = e), this.appendToHead(o), o.styleSheet ? o.styleSheet.cssText = t : o.appendChild(document.createTextNode(t)), o
+    }, PL.prototype.qRegexp = /@media([^\{]+)\{([\s\S]*?\})[\s]*?\}/gi, PL.prototype.fqRegexp = /@media *([^\{]+)\{([\S\s]+?)\}$/, PL.prototype.runcss = function (t) {
+      this.appendStyle(t)
+    }, PL.prototype.loadFromLs = function (t, e) {
+      if (!this.ls) return "";
+      var o, n = this.getVersion(e),
+        i = n.length;
+      try {
+        o = this.ls.getItem(t)
+      } catch (r) {
+        return ""
+      }
+      if (o) {
+        var s = o.substr(0, i);
+        if (s === n) {
+          var a = parseInt(o.substr(i + 2), 10),
+            c = o.substr(i + 3 + (a + "").length);
+          if (a === c.length) return c;
+          this.sendStat("zcookie.error.get")
+        }
+        try {
+          this.ls.removeItem(t)
+        } catch (l) {}
+      }
+      return ""
+    }, PL.prototype.sendStat = function (t) {
+      var e = location.href.replace("'", "%27"),
+        o = this.config.clickHost;
+      o && ((new Image).src = location.protocol + "//" + o + "/jclck/dtype=clck/lid=" + this.config.statRoot + "." + t + "/sid=" + this.config.showId + "/rnd=" + ((new Date).getTime() + Math.round(100 * Math.random())) + "/vars=-eventtype=tech/*data=" + encodeURIComponent("url=" + encodeURIComponent(e)))
+    }, PL.prototype.saveToLs = function (t, e, o, n) {
+      if (!this.ls) return !1;
+      if (o.size !== n.length) return this.sendStat("zcookie.error.load"), !1;
+      var i;
+      try {
+        if (i = this.getVersion(e) + "s=" + n.length + "@" + n, this.ls.setItem(t, i), this.ls.getItem(t).length !== i.length) return this.ls.removeItem(t), this.sendStat("zcookie.error.set"), !1
+      } catch (r) {
+        return !1
+      }
+      return !0
+    };
+    var pl = new PL;
+    pl.init({
+      "clickHost": "yandex.ru/clck",
+      "statRoot": "v14",
+      "showId": "1482505553.22882.22896.18829"
+    });
+    pl.load({
+      "white_bender.flex.webp.css": {
+        "url": "//yastatic.net/www/_/1/w/jhu9q46c0ocpkyYmdoRc5yZ8Y.css",
+        "type": "css",
+        "version": "www_1wjhu9q46c0ocpkyYmdoRc5yZ8Y",
+        "name": "white_bender.flex.webp.css-https",
+        "dry": false,
+        "size": 191688,
+        "isMainCss": true
+      }
+    }, function () {});
+  </script>
+  
+  <style>
+    .weather__icon_ovc {
+      background-image: url("//yastatic.net/www/2.1050/common/blocks/weather-icons/general/ovc.png");
+    }
+    
+    .i-ua_inlinesvg_yes .weather__icon_ovc {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M25.494 13.05c-.41 0-.807.06-1.186.164-.467-3.25-3.255-5.754-6.635-5.754-2.94 0-5.43 1.893-6.34 4.52l-.402-.02c-2.1 0-3.854 1.447-4.34 3.397l-.12-.012c-1.84 0-3.327 1.49-3.327 3.327 0 1.823 1.468 3.3 3.286 3.322L6.42 22h18.943l-.005-.01.137.008c2.47 0 4.475-2.005 4.475-4.474 0-2.47-2.005-4.474-4.476-4.474z' fill-opacity='.6' fill='%23447EFF' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+  </style>
+
+</head>
+
+<div class="editable flex not-logged b-page_domik_visible i-ua i-bem b-page b-page_expand-on_default" data-bem="{&quot;i-ua&quot;:{}}">
+  <div class="container rows">
+    <div class="editable row rows__row rows__row_first">
+      <div class="col" role="complementary">
+        <div class="b-time-banner__place"></div>
+        <div class="container headline">
+          <div class="editable row">
+            <div class="col headline__item headline__leftcorner">
+              <a href="https://yandex.ru/tune/geo/?retpath=https%3A%2F%2Fyandex.ru%2F%3Fdomredir%3D1&amp;nosync=1" class="link geolink link_gray_yes link_geosuggest_yes" onmousedown="cp('v14.head.region.setup',this);">
+                <div class="geolink__button b-ico-geoarrow geolink__button_size_s"></div><span class="geolink__reg">Москва</span></a>
+            </div>
+            <div class="col headline__item headline__center"> </div>
+            <div class="col headline__item headline__bar">
+              <div class="container headline__bar_stuff">
+                <div class="row headline__bar-items">
+                  <div class="col headline__bar-item head-options2">
+                    <div class="dropdown-menu  dropdown i-bem" data-bem="{&quot;dropdown-menu&quot;:{}}"><a class="link  i-bem dropdown-menu__switcher head-options2__link link_black_yes  link_pseudo_yes" href="https://yandex.ru/tune/search/?retpath=https%3A%2F%2Fyandex.ru%2F%3Fdomredir%3D1&amp;nosync=1" role="button" aria-expanded="false" aria-haspopup="true" onmousedown="cp('v14.head.settings');"><span class="link__inner">Настройка</span></a>
+                      <div class="i-bem popup dropdown-menu__popup b-menu-vert__layout dropdown-menu__popup_list_yes dropdown__popup popup_domik_trigger popup_head-options_yes popup_theme_ffffff popup_autoclosable_yes popup_adaptive_yes popup_animate_yes" data-bem="{&quot;popup&quot;:{&quot;directions&quot;:&quot;bottom&quot;,&quot;disableoutside&quot;:&quot;yes&quot;}}">
+                        <div class="popup__under"></div><i class="popup__tail"></i>
+                        <div class="popup__content">
+                          <div role="menuitem"><a href="https://yandex.ru/themes" class="link" aria-label="Поставить тему" target="_self" onmousedown="cp('v14.head.settings.skincatalog',this);">Поставить тему</a></div>
+                          <div role="menuitem"><a href="https://yandex.ru/?edit=1" class="link" aria-label="Настроить Яндекс" target="_self" onmousedown="cp('v14.head.settings.editmorda',this);">Настроить Яндекс</a></div>
+                          <div class="b-menu__separator"></div>
+                          <div role="menuitem"><a href="https://yandex.ru/tune/geo/?retpath=https%3A%2F%2Fyandex.ru%2F%3Fdomredir%3D1&amp;nosync=1" class="link i-counter-toggler" aria-label="Изменить город" target="_self" onmousedown="cp('v14.head.settings.region',this);">Изменить город</a></div>
+                          <div role="menuitem"><a href="https://yandex.ru/tune/search/?retpath=https%3A%2F%2Fyandex.ru%2F%3Fdomredir%3D1&amp;nosync=1" class="link" aria-label="Другие настройки" target="_self" onmousedown="cp('v14.head.settings.other',this);">Другие настройки</a></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col headline__bar-item headline__domik">
+                    <div class="domik2 domik2_expanded_yes domik2_logged_no i-bem" data-bem="{&quot;domik2&quot;:{&quot;setOn&quot;:&quot;https://yandex.ru/portal/set/any/?sk=ybdae563dd472b4437f14f95ceacbef3d&amp;empty=1&amp;mv=0&quot;,&quot;setOff&quot;:&quot;https://yandex.ru/portal/set/any/?sk=ybdae563dd472b4437f14f95ceacbef3d&amp;empty=1&amp;mv=1&quot;,&quot;counters&quot;:{&quot;expand&quot;:&quot;v14.mail.logout.resize.small&quot;,&quot;collapse&quot;:&quot;v14.mail.logout.resize.big&quot;,&quot;socialExpand&quot;:&quot;v14.mail.logout.domik.social_more&quot;}}}"><a href="https://passport.yandex.ru/registration/mail?from=mail&origin=home_v14_ru&retpath=https%3A%2F%2Fmail.yandex.ru" class="link link_black_yes domik2__mail-promo" onmousedown="cp('v14.mail.logout.register');">Завести почту</a><a href="https://mail.yandex.ru" class="link domik2__link domik2__title link_black_yes" onmousedown="cp('v14.mail.logout.title.big',this);">Почта</a>
+                      <div class="domik2__toggler domik2__toggler-arrow b-ico-arrow_down"></div>
+                      <div class="domik2__dropdown-wrapper domik2__dropdown-wrapper_clickable_yes" role="form" aria-label="Авторизация">
+                        <h1 class="a11y-hidden">Авторизация</h1>
+                        <div class="domik2__dropdown">
+                          <div class="domik2__slider">
+                            <div class="domik2__slide domik2__slide_type_current domik2__slide_layout_login">
+                              <form class="domik2__dropdown-login auth auth_hint_yes auth_serverside_yes i-bem" method="POST" action="https://passport.yandex.ru/passport?mode=auth&retpath=https://mail.yandex.ru" onclick="return {'auth':{}}">
+                                <div class="domik2__dropdown-form domik2__dropdown-bg">
+                                  <div class="domik2__dropdown-form-wrapper">
+                                    <div class="domik2__dropdown-row"><span class="input auth__username domik2__dropdown-input input_theme_bordergray input_size_xs input_auth_yes i-bem" data-bem="{&quot;input&quot;:{}}"><label for="uniq373263468965888" class="input__hint input__hint_fallback_yes">Логин</label><span class="input__box"><input class="input__control input__input" placeholder="Логин" spellcheck="false" autocapitalize="none" autocorrect="off" tabindex="100" id="uniq373263468965888" name="login"/><span class="input__clear" unselectable="on">&nbsp;</span></span>
+                                      </span>
+                                    </div>
+                                    <div class="domik2__dropdown-row"><span class="input auth__password domik2__dropdown-input input_theme_bordergray input_size_xs input_type_password input_toolbar_yes input_auth_yes input_side_left input_forgot_yes i-bem" data-bem="{&quot;input&quot;:{}}"><label for="uniq4276788632851094" class="input__hint input__hint_fallback_yes">Пароль</label><span class="input__box"><input class="input__control input__input" placeholder="Пароль" tabindex="101" id="uniq4276788632851094" name="passwd" type="password"/><span class="input__clear" unselectable="on">&nbsp;</span><span class="input__forgot input__forgot_visible_yes" unselectable="on"><a class="button domik2__dropdown-forgot button_theme_bordergray button_size_xs button_side_right button_inline_yes i-bem" data-bem="{&quot;button&quot;:{}}" tabindex="107" title="вспомнить пароль" role="button" href="https://passport.yandex.ru/passport?mode=restore" onmousedown="cp('v14.mail.logout.domik.remember',this);"><span class="button__text">?</span></a>
+                                      </span>
+                                      </span>
+                                      </span>
+                                    </div>
+                                    <div class="domik2__dropdown-row domik2__dropdown-row_checkbox_yes"><span class="i-bem checkbox checkbox_theme_normal checkbox_size_xxs" onclick="return {'checkbox':{&quot;stat&quot;:&quot;v14.mail.logout.domik.other&quot;}}"><span class="checkbox__box"><input class="checkbox__control" tabindex="102" value="no" type="checkbox" name="twoweeks" id="cbid319494281429"v14.mail.logout.domik.other><i class="checkbox__tick"></i></span>
+                                      <label class="checkbox__label" for="cbid319494281429">Чужой компьютер</label>
+                                      </span>
+                                    </div>
+                                    <div class="domik2__dropdown-toggler domik2__toggler b-ico-arrow_up"></div>
+                                  </div>
+                                  <div class="domik2__dropdown-row domik2__dropdown-row_toolbar_yes domik2__dropdown-row_last_yes">
+                                    <div class="domik2__social"><span class="auth__social-link auth__social-icon b-ico b-ico-vk" onclick="return {'auth__social-link':{&quot;provider&quot;:&quot;vk&quot;}}" role="button" tabindex="103" title="ВКонтакте" aria-label="ВКонтакте"></span><span class="auth__social-link auth__social-icon b-ico b-ico-fb" onclick="return {'auth__social-link':{&quot;provider&quot;:&quot;fb&quot;}}" role="button" tabindex="103" title="Facebook" aria-label="Facebook"></span><span class="auth__social-link auth__social-icon b-ico b-ico-tw" onclick="return {'auth__social-link':{&quot;provider&quot;:&quot;tw&quot;}}" role="button" tabindex="103" title="Twitter" aria-label="Twitter"></span><span class="domik2__social-aux"><span class="auth__social-link auth__social-icon b-ico b-ico-mr" onclick="return {'auth__social-link':{&quot;provider&quot;:&quot;mr&quot;}}" role="button" tabindex="104" title="Mail.ru" aria-label="Mail.ru"></span><span class="auth__social-link auth__social-icon b-ico b-ico-gg" onclick="return {'auth__social-link':{&quot;provider&quot;:&quot;gg&quot;}}" role="button" tabindex="104" title="Google" aria-label="Google"></span><span class="auth__social-link auth__social-icon b-ico b-ico-ok" onclick="return {'auth__social-link':{&quot;provider&quot;:&quot;ok&quot;}}" role="button" tabindex="104" title="Одноклассники" aria-label="Одноклассники"></span><span class="auth__social-link auth__social-icon b-ico b-ico-qr" onclick="return {'auth__social-link':{&quot;url&quot;:&quot;https://passport.yandex.ru/auth?mode=qr&amp;retpath=https://mail.yandex.ru&quot;,&quot;provider&quot;:&quot;qr&quot;}}" role="button" tabindex="104" title="Я.Ключ" aria-label="Я.Ключ"></span></span>
+                                    </div>
+                                    <div class="domik2__submit"><span class="domik2__social-icon domik2__social-more b-ico b-ico-more" aria-label="ещё" title="ещё" tabindex="103" aria-checked="false" role="checkbox"></span>
+                                      <button class="button auth__button domik2__auth-button button_theme_bordergray button_size_m i-bem" data-bem="{&quot;button&quot;:{}}" tabindex="106" role="button" type="submit" onmousedown="cp('v14.mail.logout.domik.login');"><span class="button__text">Войти</span></button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="editable row gap gap_side_top"> </div>
+    <div class="editable row rows__row rows__row_main">
+      <div class="col main widgets i-bem" role="main" data-bem="{&quot;widgets&quot;:{&quot;uniqId&quot;:&quot;widgets&quot;,&quot;yu&quot;:&quot;4ac7e3b7bfbd954efc00b59f1753bae72e643b52a5420350cc7e6e39c94ed7c4:1482505553&quot;,&quot;Logged&quot;:0,&quot;domain&quot;:&quot;ru&quot;,&quot;locale&quot;:&quot;ru&quot;,&quot;layoutType&quot;:&quot;columns&quot;,&quot;hidePromo&quot;:0,&quot;geoid&quot;:&quot;213&quot;,&quot;statLogRoot&quot;:&quot;v14&quot;,&quot;settings&quot;:{},&quot;widgetStyle&quot;:{&quot;def&quot;:{&quot;bg&quot;:&quot;light&quot;,&quot;text&quot;:&quot;999&quot;,&quot;link&quot;:&quot;000&quot;,&quot;hover&quot;:&quot;ff0000&quot;,&quot;decor&quot;:&quot;1&quot;}},&quot;gsid&quot;:&quot;1482505553.22882.22896.18829&quot;}}">
+        <div class="container container__first container__line container_shrinkable_yes">
+          <div class="row first text_black_yes widgets__row widgets__row_tr_1">
+            <div class="col col_td_0 widgets__col widgets__col_td_1">
+              <div class="i-bem widget widget_mode_plain widgets__item b-widget-fixed" data-bem="{&quot;widget&quot;:{&quot;id&quot;:&quot;_topnews&quot;}}" id="wd-wrapper-_topnews">
+                <div id="wd-_topnews" class="b-widget-data b-wrapper b-wrapper-">
+                  <div class="news" role="complementary" aria-label="Новости">
+                    <div class="news__header">
+                      <div class="content-tabs i-bem" data-bem="{&quot;content-tabs&quot;:{&quot;live&quot;:true}}">
+                        <div class="content-tabs__head" role="tablist">
+                          <div class="content-tabs__head-item content-tabs__head-item_active_true" id="tabnews_news" data-stat="v14.news.news.tabs.select" data-tabs-stat={ "idx_id": "1482504574", "story_id": "eb44747c,4f69df61,217f4797,75bdfa28,0890342b", "tab_id": "glob_225", "msid": "1482505553.22882.22896.18829", "client":1}>
+                            <h1><a href="https://news.yandex.ru/?msid=1482505553.22882.22896.18829&mlid=1482504574.glob_225" class="link link_blue_yes content-tabs__link" tabindex="0" aria-selected="true" aria-controls="tabnews_newsc" role="tab" onmousedown="cp('v14.news.news.tabs.link',this);">Новости</a></h1></div>
+                          <div class="content-tabs__head-item content-tabs__head-item_active_false" id="tabnews_region" data-stat="v14.news.region.tabs.select" data-tabs-stat={ "idx_id": "1482504574", "story_id": "eb44747c,03bc90a7,683ab7bf,8e449bc6,5d6620c7", "tab_id": "geo_213", "msid": "1482505553.22882.22896.18829", "client":1}>
+                            <h1><a href="https://news.yandex.ru/Moscow?msid=1482505553.22882.22896.18829&mlid=1482504574.geo_213" class="link link_blue_yes content-tabs__link" tabindex="-1" aria-selected="false" aria-controls="tabnews_regionc" role="tab" onmousedown="cp('v14.news.region.tabs.link',this);">в Москве</a></h1></div>
+                          <div class="content-tabs__appendix"><span class="datetime text_gray_yes i-bem" data-bem="{&quot;datetime&quot;:{&quot;timestamp&quot;:&quot;December 23, 2016, 18:05:53&quot;}}"><span class="datetime__date"><span class="datetime__day">23 </span><span class="datetime__month">декабря, </span><span class="datetime__wday">пятница </span></span><span class="datetime__time"><a href="https://time.yandex.ru" class="link datetime__time-link link_gray_yes" onmousedown="cp('v14.news.time',this);"><span class="datetime__hour">18</span><span class="datetime__flicker">:</span><span class="datetime__min">05</span></a>
+                            </span>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="content-tabs__items content-tabs__items_active_true" role="tabpanel" id="tabnews_newsc" aria-labelledby="tabnews_news" aria-hidden="false">
+                          <ol class="list b-news-list">
+                            <li class="list__item"><a href="https://news.yandex.ru/yandsearch?cl4url=ria.ru/society/20161223/1484468611.html&lang=ru&from=main_portal&lr=213&msid=1482505553.22882.22896.18829&mlid=1482504574.glob_225.eb44747c" class="link list__item-content link_black_yes" aria-label="Представитель Лужкова опроверг информацию о его клинической смерти" onmousedown="cp('v14.news.news.links.1',this);">Представитель Лужкова опроверг информацию о его клинической смерти</a></li>
+                            <li class="list__item"><a href="https://news.yandex.ru/yandsearch?cl4url=www.gazeta.ru/sport/2016/12/23/a_10445501.shtml&lang=ru&from=main_portal&lr=213&msid=1482505553.22882.22896.18829&mlid=1482504574.glob_225.4f69df61" class="link list__item-content link_black_yes" aria-label="Шесть российских лыжников временно отстранены от соревнований" onmousedown="cp('v14.news.news.links.2',this);">Шесть российских лыжников временно отстранены от соревнований</a></li>
+                            <li class="list__item"><a href="https://news.yandex.ru/yandsearch?cl4url=ria.ru/politics/20161223/1484447308.html&lang=ru&from=main_portal&lr=213&msid=1482505553.22882.22896.18829&mlid=1482504574.glob_225.217f4797" class="link list__item-content link_black_yes" aria-label="Путин ответил на вопрос об участии в выборах-2018" onmousedown="cp('v14.news.news.links.3',this);">Путин ответил на вопрос об участии в выборах-2018</a></li>
+                            <li class="list__item"><a href="https://news.yandex.ru/yandsearch?cl4url=ria.ru/world/20161223/1484448933.html&lang=ru&from=main_portal&lr=213&msid=1482505553.22882.22896.18829&mlid=1482504574.glob_225.75bdfa28" class="link list__item-content link_black_yes" aria-label="Трамп заявил, что США в гонке вооружений превзойдут всех" onmousedown="cp('v14.news.news.links.4',this);">Трамп заявил, что США в гонке вооружений превзойдут всех</a></li>
+                            <li class="list__item list__item_last"><a href="https://news.yandex.ru/yandsearch?cl4url=lenta.ru/news/2016/12/23/pilots/&lang=ru&from=main_portal&lr=213&msid=1482505553.22882.22896.18829&mlid=1482504574.glob_225.0890342b" class="link list__item-content link_black_yes" aria-label="На борту захваченного лайнера остались угонщики и два пилота" onmousedown="cp('v14.news.news.links.5',this);">На борту захваченного лайнера остались угонщики и два пилота</a></li>
+                          </ol>
+                        </div>
+                        <div class="content-tabs__items content-tabs__items_active_false" role="tabpanel" id="tabnews_regionc" aria-labelledby="tabnews_region" aria-hidden="true">
+                          <ol class="list b-news-list">
+                            <li class="list__item"><a href="https://news.yandex.ru/yandsearch?cl4url=ria.ru/society/20161223/1484468611.html&lang=ru&from=reg_portal&lr=213&msid=1482505553.22882.22896.18829&mlid=1482504574.geo_213.eb44747c" class="link list__item-content link_black_yes" aria-label="Представитель Лужкова опроверг информацию о его клинической смерти" data-statlog="news.region.links.1">Представитель Лужкова опроверг информацию о его клинической смерти</a></li>
+                            <li class="list__item"><a href="https://news.yandex.ru/yandsearch?cl4url=ria.ru/incidents/20161223/1484472589.html&lang=ru&from=reg_portal&lr=213&msid=1482505553.22882.22896.18829&mlid=1482504574.geo_213.03bc90a7" class="link list__item-content link_black_yes" aria-label="Задержаны трое подозреваемых в убийстве девушки на юго-востоке Москвы" data-statlog="news.region.links.2">Задержаны трое подозреваемых в убийстве девушки на юго-востоке Москвы</a></li>
+                            <li class="list__item"><a href="https://news.yandex.ru/yandsearch?cl4url=lenta.ru/news/2016/12/23/japan/&lang=ru&from=reg_portal&lr=213&msid=1482505553.22882.22896.18829&mlid=1482504574.geo_213.683ab7bf" class="link list__item-content link_black_yes" aria-label="В полиции опровергли убийство иностранца в московском торговом центре" data-statlog="news.region.links.3">В полиции опровергли убийство иностранца в московском торговом центре</a></li>
+                            <li class="list__item"><a href="https://news.yandex.ru/yandsearch?cl4url=rg.ru/2016/12/23/reg-cfo/zhenshchina-upala-v-shahtu-lifta-v-moskve.html&lang=ru&from=reg_portal&lr=213&msid=1482505553.22882.22896.18829&mlid=1482504574.geo_213.8e449bc6" class="link list__item-content link_black_yes" aria-label="Женщина упала в шахту лифта в Москве" data-statlog="news.region.links.4">Женщина упала в шахту лифта в Москве</a></li>
+                            <li class="list__item list__item_last"><a href="https://news.yandex.ru/yandsearch?cl4url=rg.ru/2016/12/23/reg-cfo/pevca-mitiu-fomina-oshtrafovali-i-lishili-prav.html&lang=ru&from=reg_portal&lr=213&msid=1482505553.22882.22896.18829&mlid=1482504574.geo_213.5d6620c7" class="link list__item-content link_black_yes" aria-label="Певца Митю Фомина оштрафовали и лишили прав" data-statlog="news.region.links.5">Певца Митю Фомина оштрафовали и лишили прав</a></li>
+                          </ol>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="inline-stocks i-bem inline-stocks_new_yes" aria-label="Котировки" role="complementary" data-bem="{&quot;inline-stocks&quot;:{&quot;stocksUrl&quot;:&quot;/data/combined/?w=_stocks-1&amp;bll=stocks&amp;sens=1&quot;,&quot;editShow&quot;:null}}">
+                      <div class="inline-stocks__content text_black_yes">
+                        <style>
+                          .inline-stocks__nscale {
+                            display: none
+                          }
+                        </style>
+                        <div class="b-inline inline-stocks__item inline-stocks__item_id_1 hint__item"><a href="https://news.yandex.ru/quotes/1.html" class="link link_black_yes inline-stocks__link" onmousedown="cp('v14.news_rates_manual.id1',this);">USD ЦБ</a><span class="inline-stocks__value"><span class="inline-stocks__text"><span class="inline-stocks__item__baloon b-inline"><i class="inline-stocks__item__baloon__tail-bd"></i><i class="inline-stocks__item__baloon__tail"></i><span class="inline-stocks__item__baloon_inner">курс ЦБ РФ на 24/12</span></span>
+                          </span><span class="inline-stocks__value_inner">60,85</span></span><span class="inline-stocks__cell inline-stocks__cell_type_delta inline-stocks__cell_delta_small text_gray_yes" aria-hidden="true">−0,01</span>
+                          <div class="a11y-hidden inline-stocks__cell_type_delta-label">-0,01</div>
+                        </div>
+                        <div class="b-inline inline-stocks__item inline-stocks__item_id_23 hint__item"><a href="https://news.yandex.ru/quotes/23.html" class="link link_black_yes inline-stocks__link" onmousedown="cp('v14.news_rates_manual.id23',this);">EUR ЦБ</a><span class="inline-stocks__value"><span class="inline-stocks__text"><span class="inline-stocks__item__baloon b-inline"><i class="inline-stocks__item__baloon__tail-bd"></i><i class="inline-stocks__item__baloon__tail"></i><span class="inline-stocks__item__baloon_inner">курс ЦБ РФ на 24/12</span></span>
+                          </span><span class="inline-stocks__value_inner">63,54</span></span><span class="inline-stocks__cell inline-stocks__cell_type_delta inline-stocks__cell_delta_small text_gray_yes" aria-hidden="true">−0,02</span>
+                          <div class="a11y-hidden inline-stocks__cell_type_delta-label">-0,02</div>
+                        </div>
+                        <div class="b-inline inline-stocks__nowrap">
+                          <div class="b-inline inline-stocks__item inline-stocks__item_id_1006 hint__item"><a href="https://news.yandex.ru/quotes/1006.html" class="link link_black_yes inline-stocks__link" onmousedown="cp('v14.news_rates_manual.id1006',this);">Нефть</a><span class="inline-stocks__value"><span class="inline-stocks__text"><span class="inline-stocks__item__baloon b-inline"><i class="inline-stocks__item__baloon__tail-bd"></i><i class="inline-stocks__item__baloon__tail"></i><span class="inline-stocks__item__baloon_inner">цена на 23/12 18:00</span></span>
+                            </span><span class="inline-stocks__value_inner">54,90</span></span><span class="inline-stocks__cell inline-stocks__cell_type_delta inline-stocks__cell_delta_small text_gray_yes" aria-hidden="true">+0,20<span class="inline-stocks__cell_type_delta-prc">%</span></span>
+                            <div class="a11y-hidden inline-stocks__cell_type_delta-label">+0,20%</div>
+                          </div><span class="link inline-stocks__more link_pseudo_yes" title="ещё" tabindex="0" aria-haspopup="true" aria-expanded="false" role="button" onmousedown="cp('v14.news_rates_manual.more');"><img aria-hidden="true" class="b-icon b-ico-more" src="//yastatic.net/lego/_/La6qi18Z8LwgnZdsAr1qy1GwCwo.gif"/><span class="link__inner"></span></span>
+                        </div>
+                        <div class="inline-stocks__popup">
+                          <h1 class="inline-stocks__title">Котировки</h1>
+                          <div class="inline-stocks__tables"></div>
+                          <div class="inline-stocks__error">Данные недоступны</div>
+                          <div class="inline-stocks__loader">
+                            <div class="spin2 spin2_size_l spin2_progress_yes"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col col_td_1 widgets__col widgets__col_td_2">
+              <div class="i-bem widget widget_mode_plain widgets__item b-widget-fixed" data-bem="{&quot;widget&quot;:{&quot;id&quot;:&quot;_teaser&quot;}}" id="wd-wrapper-_teaser">
+                <div id="wd-_teaser" class="b-widget-data b-wrapper b-wrapper-">
+                  <div class="teaser i-bem" role="complementary" aria-label="Реклама" data-bem="{&quot;teaser&quot;:{}}">
+                    <div id="fff" class="editable teaser__content">
+                     <img class="" src="https://yabs.yandex.ru/count/63hQ0631xz440000gP808OwnrTE51OMTDYYL0fi7QvE8k1GZ1mU92QQ42Ogrs_P52zors_P52xsu52C71we2fQumA0gGe1y2tjttNVd______m_Ua2Jqz0cHk8Hl80IJXGsP1K6WaCG9hv342TcG9FIdZr2eiK1PSmUam0000ESChl3909rPX0Ed1h49ih300081k_LOqvNJOg3z0R_NPIC79m1WmV__________3yMF3zC2xW7Rz9cBxoKDVP07tuKDzSlWoueDoVRHKWwEIqLKVXW0" width="120" height="90" alt="Новогодние подарки на Яндекс.Маркете" />
+                      <h1 class="teaser__title"><a href="https://yandex.ru/clck/redir/dtype=clck/lid=v14.dist.teaser.link.yabs.title/sid=1482505553.22882.22896.18829/rnd=1482505553316/*data=url%3Dhttps%253A%252F%252Fyabs.yandex.ru%252Fcount%252F63hQ057QYua40000gP800OwnrTE51OMTDYYL0fi7QvE8k1GZ1mU92QQ42Ogrs_P52zors_P52xsu52C71we1fQumA0gGe1y2tjttNVd______m_Ua2Jqz0cHk8Hl80IJXGsP1KACaCG9e9342Q-Gn0dPa2JqfuzGgB50MNC7fC00003d3AxmoG2TMOG3fmQn2RAmm0020RlrMDELqsAW_G6_rsKZ1oS0OC7__________m_5Zm_J0ku1s_IPY-yb3NsG1z-53VNBuCkA3SdsqL8EZaj5L7eP" class="link link_blue_yes teaser__link" target="_blank"><span class="teaser__nowrap">Что подарить</span></a></h1>
+                      <div class="teaser__description"><span class="teaser__nowrap">Новогодние идеи</span>&#32;<span class="teaser__nowrap">на Яндекс.Маркете</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col gap"> </div>
+          </div>
+        </div>
+        <div class="container container__search container__line">
+          <div class="row second text_black_yes">
+            <div class="editable col col_home-logo">
+              <div class="home-logo">
+                <div class="home-logo__default" role="img" aria-label="Яндекс"></div>
+              </div>
+            </div>
+            <div class="col col_home-arrow">
+              <div class="home-arrow">
+                <div class="home-arrow__tabs">
+                  <div class="home-tabs i-bem" role="navigation" data-bem="{&quot;home-tabs&quot;:{&quot;href&quot;:{&quot;maps&quot;:&quot;https://yandex.ru/maps&quot;,&quot;market&quot;:&quot;https://market.yandex.ru/?clid=505&quot;,&quot;news&quot;:&quot;https://news.yandex.ru/&quot;,&quot;translate&quot;:&quot;https://translate.yandex.ru/&quot;,&quot;images&quot;:&quot;//yandex.ru/images/&quot;,&quot;video&quot;:&quot;//yandex.ru/video&quot;,&quot;music&quot;:&quot;https://music.yandex.ru/&quot;,&quot;blogs&quot;:&quot;//yandex.ru/blogs&quot;,&quot;yaca&quot;:&quot;https://yandex.ru/yaca/&quot;,&quot;pogoda&quot;:&quot;https://yandex.ru/pogoda&quot;,&quot;people&quot;:&quot;//yandex.ru/people&quot;,&quot;traffic&quot;:&quot;https://yandex.ru/maps/probki&quot;,&quot;rabota&quot;:&quot;https://rabota.yandex.ru/&quot;,&quot;fotki&quot;:&quot;http://fotki.yandex.ru/&quot;},&quot;search&quot;:{&quot;maps&quot;:&quot;https://yandex.ru/maps/?source=morda&amp;text=%s&quot;,&quot;market&quot;:&quot;https://market.yandex.ru/search.xml?clid=527&amp;cvredirect=2&amp;text=%s&quot;,&quot;news&quot;:&quot;https://news.yandex.ru/yandsearch?grhow=clutop&amp;rpt=nnews2&amp;text=%s&quot;,&quot;translate&quot;:&quot;https://translate.yandex.ru/?text=%s&quot;,&quot;images&quot;:&quot;//yandex.ru/images/search?text=%s&quot;,&quot;video&quot;:&quot;//yandex.ru/video/search?text=%s&quot;,&quot;music&quot;:&quot;https://music.yandex.ru/search?text=%s&quot;,&quot;blogs&quot;:&quot;//blogs.yandex.ru/search.xml?ft=blog&amp;text=%s&quot;,&quot;yaca&quot;:&quot;http://yaca.yandex.ru/yandsearch?rpt=rs2&amp;text=%s&quot;,&quot;pogoda&quot;:&quot;https://yandex.ru/pogoda/search?request=%s&quot;,&quot;people&quot;:&quot;//yandex.ru/yandsearch?filter=people&amp;text=%s&quot;,&quot;traffic&quot;:&quot;https://yandex.ru/maps?text=%s&quot;,&quot;rabota&quot;:&quot;https://rabota.yandex.ru/search.xml/?text=%s&quot;,&quot;fotki&quot;:&quot;http://fotki.yandex.ru/search.xml?text=%s&quot;}}}"><a href="https://yandex.ru/maps" class="link link_blue_yes home-tabs__link home-tabs__search" data-id="maps" onmousedown="cp('v14.tabs.maps',this);">Карты</a><a href="https://market.yandex.ru/?clid=505" class="link link_blue_yes home-tabs__link home-tabs__search" data-id="market" onmousedown="cp('v14.tabs.market',this);">Маркет</a><a href="https://news.yandex.ru/" class="link link_blue_yes home-tabs__link home-tabs__search" data-id="news" onmousedown="cp('v14.tabs.news',this);">Новости</a><a href="https://translate.yandex.ru/" class="link link_blue_yes home-tabs__link home-tabs__search" data-id="translate" onmousedown="cp('v14.tabs.translate',this);">Переводчик</a><a href="//yandex.ru/images/" class="link link_blue_yes home-tabs__link home-tabs__search" data-id="images" onmousedown="cp('v14.tabs.images',this);">Картинки</a><a href="//yandex.ru/video" class="link link_blue_yes home-tabs__link home-tabs__search" data-id="video" onmousedown="cp('v14.tabs.video',this);">Видео</a><a href="https://music.yandex.ru/" class="link link_blue_yes home-tabs__link i-adaptive__1 home-tabs__search" data-id="music" data-statlog="tabs.music">Музыка</a>
+                    <div class="dropdown-menu  dropdown i-bem" data-bem="{&quot;dropdown-menu&quot;:{}}"><a class="link  i-bem link_blue_yes home-tabs__link home-tabs__more dropdown-menu__switcher link_pseudo_yes" href="https://yandex.ru/all" data-bem="{&quot;link&quot;:{}}" aria-expanded="false" aria-haspopup="true" onmousedown="cp('v14.tabs.more');"><span class="link__inner">ещё</span></a>
+                      <div class="i-bem popup dropdown-menu__popup dropdown-menu__popup_extra_yes dropdown__popup popup_theme_ffffff popup_autoclosable_yes popup_adaptive_yes popup_animate_yes" data-bem="{&quot;popup&quot;:{&quot;disableoutside&quot;:&quot;yes&quot;}}" role="menu">
+                        <div class="popup__under"></div><i class="popup__tail"></i>
+                        <div class="popup__content">
+                          <div class="services-more">
+                            <div class="services-more__top i-bem columns columns_count_3" data-bem="{&quot;columns&quot;:{}}">
+                              <div class="services-more__item " role="menuitem"><a href="//avia.yandex.ru/?utm_source=yamain&utm_medium=popup&utm_campaign=allmordaru" class="link home-tabs__more-link link_black_yes" data-id="avia" data-statlog="tabsPopup.avia">Авиабилеты</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="http://auto.ru/?from=tab-yandex-glavnaya" class="link home-tabs__more-link link_black_yes" data-id="autoru" data-statlog="tabsPopup.autoru">Авто.ру</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="https://afisha.yandex.ru/" class="link home-tabs__more-link link_black_yes" data-id="afisha" data-statlog="tabsPopup.afisha">Афиша</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="//yandex.ru/blogs" class="link home-tabs__more-link link_black_yes home-tabs__search" data-id="blogs" data-statlog="tabsPopup.blogs">Блоги</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="https://money.yandex.ru/" class="link home-tabs__more-link link_black_yes" data-id="money" data-statlog="tabsPopup.money">Деньги</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="https://disk.yandex.ru/?source=services-main" class="link home-tabs__more-link link_black_yes" data-id="disk" data-statlog="tabsPopup.disk">Диск</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="https://yandex.ru/yaca/" class="link home-tabs__more-link link_black_yes home-tabs__search" data-id="yaca" data-statlog="tabsPopup.yaca">Каталог</a></div>
+                              <div class="services-more__item  i-adaptive__1" role="menuitem"><a href="https://music.yandex.ru/" class="link home-tabs__more-link link_black_yes home-tabs__search" data-id="music" data-statlog="tabsPopup.music">Музыка</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="//realty.yandex.ru/?from=morda_tab" class="link home-tabs__more-link link_black_yes" data-id="realty" data-statlog="tabsPopup.realty">Недвижимость</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="https://yandex.ru/pogoda" class="link home-tabs__more-link link_black_yes home-tabs__search" data-id="pogoda" data-statlog="tabsPopup.pogoda">Погода</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="//yandex.ru/people" class="link home-tabs__more-link link_black_yes home-tabs__search" data-id="people" data-statlog="tabsPopup.people">Поиск людей</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="https://mail.yandex.ru/" class="link home-tabs__more-link link_black_yes" data-id="mail" data-statlog="tabsPopup.mail">Почта</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="https://yandex.ru/maps/probki" class="link home-tabs__more-link link_black_yes home-tabs__search" data-id="traffic" data-statlog="tabsPopup.traffic">Пробки</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="https://travel.yandex.ru/?from=morda&utm_source=yandex_morda_tab&utm_medium=cpm&utm_campaign=yandex&utm_content=tab_exp" class="link home-tabs__more-link link_black_yes" data-id="travel" data-statlog="tabsPopup.travel">Путешествия</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="https://rabota.yandex.ru/" class="link home-tabs__more-link link_black_yes home-tabs__search" data-id="rabota" data-statlog="tabsPopup.rabota">Работа</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="https://radio.yandex.ru/" class="link home-tabs__more-link link_black_yes" data-id="radio" data-statlog="tabsPopup.radio">Радио</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="https://rasp.yandex.ru/" class="link home-tabs__more-link link_black_yes" data-id="rasp" data-statlog="tabsPopup.rasp">Расписания</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="https://taxi.yandex.ru" class="link home-tabs__more-link link_black_yes" data-id="taxi" data-statlog="tabsPopup.taxi">Такси</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="https://tv.yandex.ru/" class="link home-tabs__more-link link_black_yes" data-id="tv" data-statlog="tabsPopup.tv">Телепрограмма</a></div>
+                              <div class="services-more__item " role="menuitem"><a href="http://fotki.yandex.ru/" class="link home-tabs__more-link link_black_yes home-tabs__search" data-id="fotki" data-statlog="tabsPopup.fotki">Фотки</a></div>
+                            </div>
+                            <div class="services-more__bottom">
+                              <div class="services-more__item services-more__item_bottom" role="menuitem"><a href="//mobile.yandex.ru/?from=desktop_morda_more" class="link home-tabs__more-link link_black_yes" data-id="mobile" data-statlog="tabsPopup.mobile">Для&nbsp;мобильного</a></div>
+                              <div class="services-more__item services-more__item_bottom" role="menuitem"><a href="http://soft.yandex.ru/?from=prov_all" class="link home-tabs__more-link link_black_yes" data-id="soft" data-statlog="tabsPopup.soft">Программы</a></div>
+                              <div class="services-more__item services-more__item_bottom" role="menuitem"><a href="//yandex.ru/all" class="link home-tabs__more-link link_black_yes" data-id="all" data-statlog="tabsPopup.all">Все&nbsp;сервисы</a></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="home-arrow__search-wrapper">
+                  <div class="home-arrow__search">
+                    <form class="search2 suggest2-form suggest2-form__node suggest2-counter i-bem suggest2-form_stats_yes" action="https://yandex.ru/search/" role="search" aria-label="Поиск в интернете" onclick="return {&quot;suggest2-form&quot;:{},&quot;suggest2-counter&quot;:{&quot;service&quot;:&quot;morda_ru_desktop&quot;,&quot;host&quot;:&quot;//yandex.ru/clck&quot;,&quot;path&quot;:&quot;jclck&quot;,&quot;submitBySelect&quot;:true,&quot;preventSubmit&quot;:true,&quot;suggestReqID&quot;:true,&quot;params&quot;:{&quot;dtype&quot;:&quot;stred&quot;,&quot;pid&quot;:&quot;0&quot;,&quot;cid&quot;:&quot;2873&quot;}},&quot;search2&quot;:{&quot;cleanOnSubmit&quot;:false,&quot;nl&quot;:true,&quot;serpArg&quot;:&quot;all&quot;}}">
+                      <input type="hidden" name="lr" value="213" />
+                      <input type="hidden" name="msid" value="1482505553.22882.22896.18829" />
+                      <div class="search2__input"><span class="input suggest2-form__input input_size_ws-head input_theme_websearch input_search2-clear-hide_yes input_ahead_yes input_autofocus_capture input_keyboard_yes input_clear_yes i-bem" data-bem="{&quot;input&quot;:{&quot;live&quot;:false,&quot;autoFocus&quot;:true}}"><span class="input__box"><input class="input__control input__input" tabindex="2" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-autocomplete="list" aria-label="Запрос" id="text" maxlength="400" name="text"/><span class="input__clear" unselectable="on">&nbsp;</span>
+                        <div class="keyboard-loader input__keyboard-button i-bem b-opacity b-opacity-hold-ie keyboard-loader_lang_ru" data-bem="{&quot;keyboard-loader&quot;:{&quot;name&quot;:&quot;keyboard-loader&quot;,&quot;statOpen&quot;:&quot;v14.keyboard.open&quot;,&quot;statClose&quot;:&quot;v14.keyboard.close&quot;}}"><i class="b-ico keyboard-loader__icon b-ico-kbd"></i></div>
+                        </span><span class="input__samples text_black_yes">Найдётся всё.&nbsp;<span class="input__sample-what">Например,&nbsp;</span><span class="link input__sample link_gray_yes link_pseudo_yes" tabindex="0" onmousedown="cp('v14.example.all');"><span class="link__inner"><span class="input__sample-first-word">какой</span> сегодня праздник</span>
+                        </span>
+                        </span>
+                        </span>
+                      </div>
+                      <div class="search2__button">
+                        <button class="button suggest2-form__button button_theme_websearch button_size_ws-head i-bem" data-bem="{&quot;button&quot;:{}}" tabindex="-1" role="button" type="submit"><span class="button__text">Найти</span></button>
+                      </div>
+                      <div class="i-bem popup suggest2 suggest2_theme_flat suggest2_size_m suggest2_adaptive_yes suggest2_type_advanced suggest2_ahead_yes popup_adaptive_yes popup_animate_no popup_autoclosable_yes popup_theme_ffffff" data-bem="{&quot;popup&quot;:{&quot;directions&quot;:&quot;bottom-left&quot;},&quot;suggest2&quot;:{&quot;url&quot;:&quot;//suggest.yandex.ru/suggest-ya.cgi&quot;,&quot;data&quot;:{&quot;srv&quot;:&quot;morda_ru_desktop&quot;,&quot;wiz&quot;:&quot;TrWth&quot;,&quot;lr&quot;:&quot;213&quot;,&quot;uil&quot;:&quot;ru&quot;,&quot;fact&quot;:1,&quot;v&quot;:4,&quot;icon&quot;:1,&quot;hl&quot;:1,&quot;html&quot;:1,&quot;bemjson&quot;:1,&quot;yu&quot;:&quot;2295153751404393861&quot;},&quot;onFocus&quot;:&quot;show&quot;,&quot;aheadFromServer&quot;:true,&quot;submitBySelect&quot;:true,&quot;requestOnEmptyInput&quot;:true},&quot;suggest2-detect&quot;:{}}">
+                        <div class="popup__under"></div>
+                        <div class="popup__content"> </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <div class="home-arrow__promo-wrapper">
+                  <div class="home-arrow__promo">
+                    <div class="yabrowser-promo yabrowser-promo_install_sms i-bem" data-bem="{&quot;yabrowser-promo&quot;:{}}"><span class="yabrowser-promo__text"><a href="https://browser.yandex.ru/mobile/zen/?banerid=6400000000&zih=1" class="link yabrowser-promo__icon-link link_black_yes" aria-hidden="true" tabindex="-1"><img class="yabrowser-promo__icon" src="//yastatic.net/morda-logo/i/promo_sms/yabro.png" width="NaN" height="18"></a><a href="https://browser.yandex.ru/mobile/zen/?banerid=6400000000&zih=1" class="link link_black_yes yabrowser-promo__text-link">Мобильный Яндекс.Браузер</a><div class="i-bem popup yabrowser-promo__sms-popup popup_type_modal popup_position_absolute popup_animate_yes popup_adaptive_yes popup_autoclosable_yes popup_theme_ffffff" data-bem="{&quot;popup&quot;:[],&#34;yabrowser-promo__install_sms&#34;:{}}" data-sms_link="//yandex.ru/geohelper/yasms" data-captcha_link="//yandex.ru/geohelper/captcha"><div class="popup__under"></div><div class="popup__content"><div class="yabrowser-promo__sms-left"><div class="yabrowser-promo__sms-title">Мобильный Яндекс.Браузер</div><div class="yabrowser-promo__sms-desc">Защитит от угроз в интернете, составит персональную ленту интересных публикаций и ускорит загрузку сайтов при медленном соединении</div><form class="yabrowser-promo__sms-form"><div class="yabrowser-promo__sms-form-desc">Получить ссылку на телефон</div><div class="yabrowser-promo__sms-captcha-container"><div class="yabrowser-promo__sms-captcha-left"><img class="yabrowser-promo__sms-captcha-img" /><i class="yabrowser-promo__sms-captcha-reload b-ico-yabrowser-promo__captcha_reload"></i></div><div class="yabrowser-promo__sms-captcha-right"><div class="yabrowser-promo__sms-captcha-desc">Введите текст с картинки:</div><div><span class="input yabrowser-promo__sms-captcha-input input_size_m input_theme_normal i-bem" data-bem="{&quot;input&quot;:{}}"><span class="input__box"><input class="input__control input__input" maxlength="6"/></span></span>
+                    </div>
+                  </div>
+                </div>
+                <div><span class="input yabrowser-promo__sms-input input_size_m input_theme_normal input_has-clear_yes i-bem" data-bem="{&quot;input&quot;:{}}"><label for="uniq6278857209254056" class="input__hint input__hint_fallback_yes">7 123 4567890</label><span class="input__box"><input class="input__control input__input" placeholder="7 123 4567890" type="tel" maxlength="13" id="uniq6278857209254056"/><span class="input__clear" unselectable="on">&nbsp;</span></span>
+                  </span>
+                  <button class="button2 yabrowser-promo__sms-send button2_disabled_yes button2_size_m button2_theme_action i-bem" data-bem="{&quot;button2&quot;:{}}" role="button" type="button" disabled="disabled"><span class="button2__text">Получить</span></button>
+                </div>
+                </form><a class="link link_blue_yes yabrowser-promo__sms-direct-link" href="https://browser.yandex.ru/mobile/zen/?banerid=6400000000&zih=1" data-statlog="dist.searchlink.browser.popup.about">Подробнее о Яндекс.Браузере для мобильных</a></div>
+              <div class="yabrowser-promo__sms-right">
+                <div class="yabrowser-promo__sms-img"></div>
+              </div><i class="yabrowser-promo__sms-close b-ico-yabrowser-promo__sms-close"></i>
+              <div class="yabrowser-promo__sms-spinner">
+                <div class="spin2 spin2_size_l spin2_progress_yes"></div>
+              </div>
+              <div class="yabrowser-promo__sms-done">
+                <div class="yabrowser-promo__sms-done-title">СМС отправлена</div>
+                <div class="yabrowser-promo__sms-done-text">На указанный вами номер была отправлена СМС со ссылкой на приложение. Обратите внимание, что иногда СМС приходит с некоторой задержкой.</div>
+              </div>
+            </div>
+          </div>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  <div class="container container__heap container__line heap heap_direction_column">
+    <div class="row text_black_yes heap__row widgets__row widgets__row_tr_2">
+      <div class="col text_black_yes heap__item widgets__col widgets__col_td_3">
+        <div class="i-bem widget widget_mode_plain widgets__item b-widget-fixed" data-bem="{&quot;widget&quot;:{&quot;id&quot;:&quot;_weather&quot;}}" id="wd-wrapper-_weather">
+          <div id="wd-_weather" class="b-widget-data b-wrapper b-wrapper-">
+            <div class="weather" role="complementary" aria-label="Погода">
+              <h1><a href="https://yandex.ru/pogoda/moscow/" class="link link_blue_yes" onmousedown="cp('v14.weather.title',this);">Погода</a><a href="https://yandex.ru/pogoda/moscow/" class="link link_black_yes" aria-label="-2 °C, пасмурно" onmousedown="cp('v14.weather.grade',this);"><i class="b-ico weather__icon weather__icon_ovc" title="пасмурно"></i>-2 °C</a></h1>
+              <div class="weather__item"><a href="https://yandex.ru/pogoda/moscow/" class="link link_black_yes" aria-label="ночью -1 °C" onmousedown="cp('v14.weather.grade_soon',this);">Ночью&#160;-1</a>,&#32;&#160;<a href="https://yandex.ru/pogoda/moscow/" class="link link_black_yes" aria-label="утром 0 °C" onmousedown="cp('v14.weather.grade_later',this);">утром&#160;0</a></div>
+              <div class="weather__item"><a href="https://yandex.ru/pogoda/moscow/" class="link link_black_yes" onmousedown="cp('v14.weather.alert',this);">В выходные возможен снег</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="i-bem widget widget_mode_plain widgets__item b-widget-fixed" data-bem="{&quot;widget&quot;:{&quot;id&quot;:&quot;_services&quot;}}" id="wd-wrapper-_services">
+          <div id="wd-_services" class="b-widget-data b-wrapper b-wrapper-">
+            <div class="services" aria-label="Посещаемое" role="complementary">
+              <h1><a href="https://yandex.ru/all" class="link link_blue_yes" onmousedown="cp('v14.sites.header',this);">Посещаемое</a></h1>
+              <ul class="services__main">
+                <li class="services__main-item"><a href="https://market.yandex.ru/?clid=506" class="link link_bold_yes link_black_yes" onmousedown="cp('v14.sites.market.title',this);">Маркет</a><span aria-hidden="true">&nbsp;—&nbsp;</span><a href="https://market.yandex.ru/catalog/6427100/list?how=aprice&pricefrom=2000&in-stock=1&clid=514&utm_source=face&utm_medium=cpc&utm_term=pads&utm_campaign=ru_targeted" class="link link_black_yes" onmousedown="cp('v14.sites.market.subtitle',this);">планшеты от 2000 руб.</a></li>
+                <li class="services__main-item"><a href="https://auto.ru/?from=morda&utm_source=yandex_list_service&utm_medium=cpm&utm_campaign=q3_yls_r1_title&utm_content=d3-wrdtth-21334_r1&utm_term=probeg-do-30-000-km_d3-wrdtth-21334" class="link link_bold_yes link_black_yes" onmousedown="cp('v14.sites.autoru.title',this);">Авто.ру</a><span aria-hidden="true">&nbsp;—&nbsp;</span><a href="https://auto.ru/dilery/cars/used/?km_age_to=30000&from=morda&utm_source=yandex_list_service&utm_medium=cpm&utm_campaign=q3_yls_r1_subtitle&utm_content=d3-wrdtth-21334_r1&utm_term=probeg-do-30-000-km_d3-wrdtth-21334" class="link link_black_yes" onmousedown="cp('v14.sites.autoru.subtitle',this);">пробег до 30 000 км</a></li>
+                <li class="services__main-item"><a href="https://realty.yandex.ru/moskva_i_moskovskaya_oblast/kupit/novostrojka/?sort=PRICE&priceMin=6500000&priceMax=7500000&from=morda&utm_source=yandex_sign&utm_medium=cpm&utm_campaign=newbuilding_mskmo&utm_content=ot_6_5_mln_do_7_5_mln_mskmo" class="link link_bold_yes link_black_yes" onmousedown="cp('v14.sites.realty.title',this);">Недвижимость</a><span aria-hidden="true">&nbsp;—&nbsp;</span><a href="https://realty.yandex.ru/moskva_i_moskovskaya_oblast/kupit/novostrojka/?sort=PRICE&priceMin=6500000&priceMax=7500000&from=morda&utm_source=yandex_sign&utm_medium=cpm&utm_campaign=newbuilding_mskmo&utm_content=ot_6_5_mln_do_7_5_mln_mskmo" class="link link_black_yes" onmousedown="cp('v14.sites.realty.subtitle',this);">от 6,5 млн до 7,5 млн</a></li>
+                <li class="services__main-item"><a href="https://rabota.yandex.ru/search?rid=1&text=%D0%B4%D0%B5%D0%BB%D0%BE%D0%BC%20%D0%BC%D0%BE%D1%80%D0%BE%D0%B7%D0%BE%D0%BC&from=morda&utm_source=yandex_sign&utm_medium=cpm&utm_campaign=vakansia_mskmo&utm_content=Ded_Moroz_mskmo" class="link link_bold_yes link_black_yes" onmousedown="cp('v14.sites.rabota.title',this);">Работа</a><span aria-hidden="true">&nbsp;—&nbsp;</span><a href="https://rabota.yandex.ru/search?rid=1&text=%D0%B4%D0%B5%D0%BB%D0%BE%D0%BC%20%D0%BC%D0%BE%D1%80%D0%BE%D0%B7%D0%BE%D0%BC&from=morda&utm_source=yandex_sign&utm_medium=cpm&utm_campaign=vakansia_mskmo&utm_content=Ded_Moroz_mskmo" class="link link_black_yes" onmousedown="cp('v14.sites.rabota.subtitle',this);">Дед Мороз</a></li>
+                <li class="services__main-item"><a href="https://music.yandex.ru/look/best2016?utm_source=yandex_service_list&utm_medium=display&utm_campaign=title" class="link link_bold_yes link_black_yes" onmousedown="cp('v14.sites.music.title',this);">Музыка</a><span aria-hidden="true">&nbsp;—&nbsp;</span><a href="https://music.yandex.ru/look/best2016?utm_source=yandex_service_list&utm_medium=display&utm_campaign=best2017" class="link link_black_yes" onmousedown="cp('v14.sites.music.subtitle',this);">главное за год</a></li>
+                <li class="services__main-item"><a href="https://taxi.yandex.ru/?utm_source=yandex_service_list&utm_medium=display&utm_term=1000_link_ru&utm_content=msk&utm_campaign=performance" class="link link_bold_yes link_black_yes" onmousedown="cp('v14.sites.taxi.title',this);">Такси</a><span aria-hidden="true">&nbsp;—&nbsp;</span><a href="https://taxi.yandex.ru/?utm_source=yandex_service_list&utm_medium=display&utm_term=1000_text_ru&utm_content=msk&utm_campaign=performance" class="link link_black_yes" onmousedown="cp('v14.sites.taxi.subtitle',this);">тысячи машин на линии</a></li>
+                <li class="services__main-item"><a href="https://avia.yandex.ru/?utm_source=yamain&utm_medium=block_morda&utm_campaign=mos" class="link link_bold_yes link_black_yes" onmousedown="cp('v14.sites.avia.title',this);">Авиабилеты</a><span aria-hidden="true">&nbsp;—&nbsp;</span><a href="https://avia.yandex.ru/city/mow/?utm_source=yamain&utm_medium=block_morda&utm_campaign=mos" class="link link_black_yes" onmousedown="cp('v14.sites.avia.subtitle',this);">из Москвы</a></li>
+              </ul>
+              <ul class="services__additional"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col text_black_yes heap__item widgets__col widgets__col_td_4">
+        <div class="i-bem widget widget_mode_plain widgets__item b-widget-fixed" data-bem="{&quot;widget&quot;:{&quot;id&quot;:&quot;_traffic&quot;}}" id="wd-wrapper-_traffic">
+          <div id="wd-_traffic" class="b-widget-data b-wrapper b-wrapper-">
+            <div class="traffic i-bem" data-bem="{&quot;traffic&quot;:{}}" role="complementary" aria-label="Пробки">
+              <h1><a href="https://yandex.ru/maps/213/moscow/probki" class="link link_blue_yes" onmousedown="cp('v14.traffic.title',this);">Пробки</a><a href="https://yandex.ru/maps/213/moscow/probki" class="link link_black_yes" onmousedown="cp('v14.traffic.ball',this);"><i class="b-ico traffic__icon b-ico-traffic-rd"></i>8 баллов</a></h1>
+              <div class="traffic__forecast"><span class="traffic__forecast__title">Прогноз</span><span class="traffic__forecast__item"><div class="traffic__forecast__item__value traffic__forecast__item__value_7">7</div><span class="traffic__forecast__item__time text_gray_yes">19&thinsp;ч</span></span><span class="traffic__forecast__item"><div class="traffic__forecast__item__value traffic__forecast__item__value_5">5</div><span class="traffic__forecast__item__time text_gray_yes">20</span></span><span class="traffic__forecast__item"><div class="traffic__forecast__item__value traffic__forecast__item__value_3">3</div><span class="traffic__forecast__item__time text_gray_yes">21</span></span><span class="traffic__forecast__item"><div class="traffic__forecast__item__value traffic__forecast__item__value_2">2</div><span class="traffic__forecast__item__time text_gray_yes">22</span></span><span class="traffic__forecast__item"><div class="traffic__forecast__item__value traffic__forecast__item__value_2">2</div><span class="traffic__forecast__item__time text_gray_yes">23</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="i-bem widget widget_mode_plain widgets__item b-widget-fixed" data-bem="{&quot;widget&quot;:{&quot;id&quot;:&quot;_tv&quot;}}" id="wd-wrapper-_tv">
+          <div id="wd-_tv" class="b-widget-data b-wrapper b-wrapper-">
+            <div class="tv stream-control i-bem" data-bem="{&quot;stream-control&quot;:{}}" aria-label="Телепрограмма" role="complementary">
+              <h1><a href="https://tv.yandex.ru/213/" class="link link_blue_yes" onmousedown="cp('v14.tv.title.link',this);">Телепрограмма</a><button class="button tv__stream-button stream-control__link button_size_s button_theme_gradient i-bem" data-bem="{&quot;button&quot;:{}}" data-stream="https://www.1tv.ru/embedlive" data-stream-from="tv_button" data-stream-stat="v14.tv.stream.button" role="button" type="button"><span class="button__text">Эфир<span class="tv__stream-button-icon"></span></span></button></h1>
+              <ul class="list tv-list">
+                <li class="list__item b-content_list__item"><span class="time">17:50</span><span class="title"><a href="https://tv.yandex.ru/213/program/2411492?eventId=93883266" class="link tv-program__item link_black_yes" title="ЕвроТур. Обзор матчей недели" onmousedown="cp('v14.tv.links.0',this);">ЕвроТур. Обзор матчей…</a> <span class="tv-list__channel"><a href="https://tv.yandex.ru/213/channels/1593" class="link tv-channel__item link_gray_yes" onmousedown="cp('v14.tv.channel.0',this);">Матч!</a></span></span>
+                </li>
+                <li class="list__item b-content_list__item"><span class="time">19:00</span><span class="title"><a href="https://tv.yandex.ru/213/program/1514793?eventId=93595440" class="link tv-program__item link_black_yes" title="Понаехали тут (1-я и 2-я серии)" onmousedown="cp('v14.tv.links.1',this);">Понаехали тут</a> <span class="tv-list__channel"><a href="https://tv.yandex.ru/213/channels/304" class="link tv-channel__item link_gray_yes" onmousedown="cp('v14.tv.channel.1',this);">Домашний</a></span></span>
+                </li>
+                <li class="list__item b-content_list__item"><span class="time">19:00</span><span class="title"><a href="https://tv.yandex.ru/213/program/5940?eventId=93602332" class="link tv-program__item link_black_yes" title="След (Серьезные отношения)" onmousedown="cp('v14.tv.links.2',this);">След</a> <span class="tv-list__channel"><a href="https://tv.yandex.ru/213/channels/427" class="link tv-channel__item link_gray_yes" onmousedown="cp('v14.tv.channel.2',this);">Пятый канал</a></span></span>
+                </li>
+                <li class="list__item b-content_list__item"><span class="time">19:25</span><span class="title"><a href="https://tv.yandex.ru/213/program/2596835?eventId=93760087" class="link tv-program__item link_black_yes" title="Футбол. Суперкубок Италии. Прямая трансляция. «Ювентус» - «Милан»" onmousedown="cp('v14.tv.links.3',this);">Футбол. Суперкубок…</a> <span class="tv-list__channel"><a href="https://tv.yandex.ru/213/channels/1593" class="link tv-channel__item link_gray_yes" onmousedown="cp('v14.tv.channel.3',this);">Матч!</a></span></span>
+                </li>
+                <li class="list__item b-content_list__item"><span class="time">19:30</span><span class="title"><a href="https://tv.yandex.ru/213/program/2599980?eventId=93760367" class="link tv-program__item link_black_yes" onmousedown="cp('v14.tv.links.4',this);">Жанна Д'Арк</a> <span class="tv-list__channel"><a href="https://tv.yandex.ru/213/channels/1598" class="link tv-channel__item link_gray_yes" onmousedown="cp('v14.tv.channel.4',this);">Че</a></span></span>
+                </li>
+                <li class="list__item b-content_list__item"><span class="time">20:00</span><span class="title"><a href="https://tv.yandex.ru/213/program/2091953?eventId=93594915" class="link tv-program__item link_black_yes" title="Морские дьяволы. Смерч-3 («Закрытое производство», 1-я и 2-я серии)" onmousedown="cp('v14.tv.links.5',this);">Морские дьяволы. Смерч-3</a> <span class="tv-list__channel"><a href="https://tv.yandex.ru/213/channels/162" class="link tv-channel__item link_gray_yes" onmousedown="cp('v14.tv.channel.5',this);">НТВ</a></span></span>
+                </li>
+                <li class="list__item b-content_list__item"><a href="https://tv.yandex.ru/special/nyplayer2017?utm_source=yamain&utm_medium=informer&utm_campaign=nyplayer2017&utm_content=utm_content=1" class="link link_black_yes link_bold_yes link-tvpromo b-afisha__promo_type_tvpromo" onmousedown="cp('v14.tv.tvpromo',this);">Фильмы к празднику онлайн</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col text_black_yes heap__item widgets__col widgets__col_td_5">
+        <div class="i-bem widget widget_mode_plain widgets__item b-widget-fixed" data-bem="{&quot;widget&quot;:{&quot;id&quot;:&quot;_geo&quot;}}" id="wd-wrapper-_geo">
+          <div id="wd-_geo" class="b-widget-data b-wrapper b-wrapper-">
+            <div class="region" role="complementary" aria-label="Карта Москвы">
+              <h1 class="region__title"><a href="https://yandex.ru/tune/geo/?retpath=https%3A%2F%2Fyandex.ru%2F%3Fdomredir%3D1&amp;nosync=1" class="link b-inline region__setup region__setup_icon" title="Изменить город" target="_self" onmousedown="cp('v14.maps.setup.region',this);"><i class="b-ico b-ico-setup_g"></i></a><a href="https://yandex.ru/maps/?utm_source=geoblock_maps_moscow" class="link link_blue_yes" onmousedown="cp('v14.maps.title.regular',this);">Карта <span class="region__cityname"><span class="region__cityname_text">Москвы</span></span></a></h1>
+              <div class="region__links"><a href="//metro.yandex.ru/moscow" class="link link_black_yes link_bold_yes region__link" onmousedown="cp('v14.maps.links.metro.moscow',this);">Метро</a><a href="https://taxi.yandex.ru/?from=mtaxi_geoblock_msk" class="link link_black_yes link_bold_yes region__link" onmousedown="cp('v14.maps.links.taxi.taxi_msk',this);">Такси</a><a href="https://rasp.yandex.ru/?utm_source=yamain&utm_medium=geoblock&utm_campaign=default" class="link link_black_yes link_bold_yes region__link" onmousedown="cp('v14.maps.links.rasp.rasp',this);">Расписания</a><a href="https://avia.yandex.ru/?utm_source=yamain&utm_medium=geoblock&utm_campaign=aviaru" class="link link_black_yes link_bold_yes region__link" onmousedown="cp('v14.maps.links.informer.aviabilety_krypta',this);">Авиабилеты</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="i-bem widget widget_mode_plain widgets__item b-widget-fixed" data-bem="{&quot;widget&quot;:{&quot;id&quot;:&quot;_afisha&quot;}}" id="wd-wrapper-_afisha">
+          <div id="wd-_afisha" class="b-widget-data b-wrapper b-wrapper-">
+            <div class="afisha" aria-label="Афиша" role="complementary">
+              <h1><a href="https://afisha.yandex.ru/?city=moscow&utm_source=yamain&utm_medium=yamain_afisha" class="link link_blue_yes" onmousedown="cp('v14.afisha.title.link',this);">Афиша</a></h1>
+              <div class="b-afisha">
+                <div class="b-afisha__premiere"><a href="https://afisha.yandex.ru/events/5582645fcc1c7237e8d74096?city=moscow&amp;utm_source=yamain&amp;utm_medium=yamain_afisha" class="link link_black_yes b-afisha__item" onmousedown="cp('v14.afisha.new',this);">Дед Мороз. Битва магов</a><span class="b-afisha__premiere_day text_gray_yes">премьера завтра</span></div>
+                <ul class="list b-afisha-list">
+                  <li class="list__item"><a href="https://afisha.yandex.ru/events/5587e3bfcc1c7211b4ea8170?city=moscow&amp;utm_source=yamain&amp;utm_medium=yamain_afisha" class="link link_black_yes b-afisha__item" title="Изгой-один: Звёздные войны. Истории" onmousedown="cp('v14.afisha.links.link0',this);">Изгой-один: Звёздные…</a> <span class="b-afisha__genre text_gray_yes">фантастика</span></li>
+                  <li class="list__item"><a href="https://afisha.yandex.ru/events/558a8eaa7abde91ca7c03824?city=moscow&amp;utm_source=yamain&amp;utm_medium=yamain_afisha" class="link link_black_yes b-afisha__item" onmousedown="cp('v14.afisha.links.link1',this);">Пассажиры</a> <span class="b-afisha__genre text_gray_yes">премьера</span></li>
+                  <li class="list__item"><a href="https://afisha.yandex.ru/events/5824103dca15c7d276d332cb?city=moscow&amp;utm_source=yamain&amp;utm_medium=yamain_afisha" class="link link_black_yes b-afisha__item" onmousedown="cp('v14.afisha.links.link2',this);">Ёлки 5</a> <span class="b-afisha__genre text_gray_yes">премьера</span></li>
+                  <li class="list__item"><a href="https://afisha.yandex.ru/events/55be1474cc1c727e35cab070?city=moscow&amp;utm_source=yamain&amp;utm_medium=yamain_afisha" class="link link_black_yes b-afisha__item" onmousedown="cp('v14.afisha.links.link3',this);">Призрачная красота</a> <span class="b-afisha__genre text_gray_yes">драма</span></li>
+                  <li class="list__item"><a href="https://afisha.yandex.ru/events/5587e3eacc1c7211b4ea8433?city=moscow&amp;utm_source=yamain&amp;utm_medium=yamain_afisha" class="link link_black_yes b-afisha__item" onmousedown="cp('v14.afisha.links.link4',this);">Моана</a> <span class="b-afisha__genre text_gray_yes">приключения</span></li>
+                  <li class="list__item list__item_promo"><a href="https://afisha.yandex.ru/events?tag=concert&utm_source=yamain&utm_medium=informer" class="link link_black_yes link_bold_yes" onmousedown="cp('v14.afisha.promo.title',this);">Концерты</a> – <a href="https://afisha.yandex.ru/events/582327e8cc1c72b548a6ce31?city=moscow&utm_source=yamain&utm_medium=informer" class="link link_black_yes link_bold_yes" onmousedown="cp('v14.afisha.promo.eventconcert',this);">Рождественская оратория</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  <div class="row gap gap_side_bottom"> </div>
+  <div class="rows__bg"></div>
+  <div class="row rows__row rows__row_last">
+    <div class="col footer" role="contentinfo">
+      <div class="container foot text_gray_yes">
+        <div class="row foot__row">
+          <div class="col foot__business business">
+            <div class=""><a href="https://direct.yandex.ru/?from=maintest_ru_razmestitrekl" class="link link_gray_yes business__link" onmousedown="cp('v14.business.direct.title',this);">Директ</a>&#160;&#8212;&#160;<a href="https://direct.yandex.ru/?from=maintest_ru_razmestitrekl" class="link link_gray_yes business__sublink" onmousedown="cp('v14.business.direct.link.maintest_ru_razmestitrekl',this);">разместить рекламу</a><a href="https://metrika.yandex.ru/?utm_source=yandexru.v14&utm_medium=web&utm_campaign=static" class="link link_gray_yes business__link" onmousedown="cp('v14.business.metrika',this);">Метрика</a><a href="https://yandex.ru/adv/?from=main_bottom" class="link link_gray_yes business__link" onmousedown="cp('v14.business.adv',this);">Реклама</a><a href="https://kassa.yandex.ru/?_openstat=promo;yandex;" class="link link_gray_yes business__link" onmousedown="cp('v14.business.kassa',this);">Касса</a></div>
+          </div>
+          <div class="col foot__company-links company-links">
+            <div><a href="https://yandex.ru/support/" class="link link_gray_yes company-links__item company-links__help" title="Помощь" onmousedown="cp('v14.foot.help',this);"><i class="b-ico b-ico-help"></i><i class="b-ico b-ico-help b-ico_hover"></i></a><a href="https://feedback2.yandex.ru/default/" class="link link_gray_yes company-links__item company-links__feedback" title="Служба поддержки" onmousedown="cp('v14.foot.support',this);"><i class="b-ico b-ico-feedback"></i><i class="b-ico b-ico-feedback b-ico_hover"></i></a><a href="https://yandex.ru/jobs" class="link link_gray_yes company-links__item" onmousedown="cp('v14.foot.vacancies',this);">Вакансии</a><a href="https://yandex.ru/blog/company/" class="link link_gray_yes company-links__item" onmousedown="cp('v14.foot.blog',this);">Блог</a><a href="https://yandex.ru/company/" class="link link_gray_yes company-links__item" onmousedown="cp('v14.foot.company',this);">Компания</a><a href="https://yandex.com/company/" class="link link_gray_yes company-links__item" onmousedown="cp('v14.foot.about',this);">About</a>&copy;&#160;Яндекс</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="resources__bem-init-wrapper">
+
+    <div class="b-time-banner b-time-banner_theme_pc b-time-banner_shown_no i-bem" role="complementary" data-bem="{&quot;b-time-banner&quot;:{&quot;alert&quot;:{&quot;from_ts&quot;:1482678353,&quot;show_url&quot;:&quot;https://yabs.yandex.ru/count/63hQ0FXThDG40000gP800OwnrTE51OMTDYYHk8Hl80IJXGsam0000ESChl3909rPX0Ed1hlrMDELqsAW_G71__________yFxW7l0TlqcOll9Grza0Vro-3BYWt9zj5I3evBHLHv2m00=h0Tr2vK7cm5kPJW1YgpGCTcb1OYuho471wQ42P2W7mBUtG7Ua2JqGR41ih100081ljYl8GVd063J0i80tuKDxW5z1m00&quot;,&quot;close_url&quot;:&quot;https://yabs.yandex.ru/count/814/1886526200&quot;,&quot;show&quot;:1,&quot;till_ts&quot;:1482332753,&quot;flag_name&quot;:&quot;wrong_date_alert&quot;,&quot;text&quot;:&quot;Дата на вашем компьютере %local_date не совпадает с текущей %current_date. Из-за этого у вас могут возникнуть сложности с входом на некоторые сайты.&quot;},&quot;fatal&quot;:false,&quot;timestamp&quot;:&quot;1482505553&quot;,&quot;helpUrl&quot;:&quot;//help.yandex.ru/common/support/date-time.xml#mac-os&quot;}}">
+      <div class="b-time-banner__content block__centered block__spaces">
+        <div class="b-time-banner__width">
+          <div class="b-time-banner__inner"></div>
+        </div>
+        <div class="b-time-banner__close-container"><span class="b-time-banner__close"></span></div>
+      </div>
+    </div>
+
+
+
+
+  </div>
+
+  <style>
+    .home-mooa {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 32px;
+      height: 32px;
+      -webkit-transition: width .15s, height .15s;
+      transition: width .15s, height .15s;
+      background: #f3f1ed;
+      -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, .15);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .15);
+      line-height: 1.2
+    }
+    
+    .home-mooa_expanded_yes {
+      width: 700px;
+      height: 300px
+    }
+    
+    .home-mooa__toggler {
+      position: absolute;
+      bottom: 0;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      background: url(//yastatic.net/web4/_/MAJOMyTB0JDnYPPtg8Cl4xqg6nQ.png) no-repeat center;
+      -webkit-user-select: none;
+      user-select: none
+    }
+    
+    .home-mooa__toggler:hover {
+      -webkit-filter: brightness(1.3);
+      filter: brightness(1.3)
+    }
+    
+    .home-mooa_disabled_yes .home-mooa__toggler {
+      -webkit-filter: grayscale(1);
+      filter: grayscale(1)
+    }
+    
+    .home-mooa__content {
+      display: none;
+      height: 300px
+    }
+    
+    .home-mooa__content .content-tabs {
+      margin-top: 15px;
+      margin-left: 40px
+    }
+    
+    .home-mooa__content .content-tabs__items {
+      height: 250px;
+      overflow: auto
+    }
+    
+    .home-mooa__item {
+      margin-bottom: 5px;
+      padding: 3px 0
+    }
+    
+    .home-mooa_expanded_yes .home-mooa__content {
+      display: block
+    }
+    
+    .home-mooa__item_selected_yes {
+      background: #bbb
+    }
+    
+    .home-mooa__item_activated_yes {
+      background: #ffdb4d
+    }
+  </style>
+
+  <div class="home-mooa i-bem" data-bem="{&quot;home-mooa&quot;:{&quot;url&quot;:&quot;https://yandex.ru/portal/experiments/list&quot;}}">
+    <div class="home-mooa__toggler"></div>
+    <div class="home-mooa__content">
+      <div class="content-tabs i-bem" data-bem="{&quot;content-tabs&quot;:{&quot;live&quot;:true}}">
+        <div class="content-tabs__head" role="tablist">
+          <div class="content-tabs__head-item content-tabs__head-item_active_true" id="tab273982">
+            <h1><a href="#" class="link link_blue_yes content-tabs__link link_pseudo_yes" tabindex="0" aria-selected="true" aria-controls="tab273982c" role="tab">ALL</a></h1></div>
+          <div class="content-tabs__head-item content-tabs__head-item_active_false" id="tab928548">
+            <h1><a href="#" class="link link_blue_yes content-tabs__link link_pseudo_yes" tabindex="-1" aria-selected="false" aria-controls="tab928548c" role="tab">HOME</a></h1></div>
+        </div>
+        <div class="content-tabs__items content-tabs__items_active_true" role="tabpanel" id="tab273982c" aria-labelledby="tab273982" aria-hidden="false"></div>
+        <div class="content-tabs__items content-tabs__items_active_false" role="tabpanel" id="tab928548c" aria-labelledby="tab928548" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</div>

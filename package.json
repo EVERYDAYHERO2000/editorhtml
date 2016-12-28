@@ -1,0 +1,26 @@
+{
+  "name": "sketch-to-web",
+  "version": "0.0.1",
+  "description": "WYSIWYG html editor for designers.",
+  "keywords": ["wysiwyg", "html", "design"],
+  "main": "index.html",
+  "author": "Ilya Aralin",
+  "maintainers": [{
+    "name": "Ilya Aralin",
+    "email": "ilyaflare@gmail.com"
+  }],
+  "window": {
+    "toolbar": true,
+    "frame": true,
+    "width": 1200,
+    "height": 640,
+    "min_width": 700,
+    "min_height": 500,
+    "resizable": true,
+    "show_in_taskbar": true
+  },
+  "licenses": [{
+      "type": "GPLv2"
+  }]
+
+}
