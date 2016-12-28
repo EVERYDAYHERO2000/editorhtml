@@ -93,7 +93,7 @@ $(function () {
       height: $selectedElement.css('height'),
       left: $helpers.scrollLeft() + selectedRect.left + 'px',
       top: $helpers.scrollTop() + selectedRect.top + 'px',
-      //transform: $selectedElement.css('transform')
+      transform: $selectedElement.css('transform')
     }).draggable({
       start: function (event, ui) {
         updateSelectedElement(event, ui);
