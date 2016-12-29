@@ -11,15 +11,20 @@ $(function () {
     $helpers.append($helpers__virtualbody);
     $documents.append($helpers);
 
-
+    
 
     $documents__content.on('mouseup', function (e) {
       $selectedElement = ($(e.target).is('.editable')) ? $(e.target) : $(e.target).parents('.editable').first();
-
       app.e.selectLayer($selectedElement);
-
-
     });
+    
+    $(window).on('resize', function(){
+      if ($selectedElement){
+        //updateSelectedElement();
+        app.f.virtualbodySizeDetector();
+      }
+    });
+    
 
     $helpers.on('scroll', function () {
 
@@ -134,6 +139,9 @@ $(function () {
       }
 
     }).resizable({
+      minWidth: 0,
+      minHeight: 0,
+      
       handles: 'all',
       start: function (event, ui) {
 
