@@ -169,8 +169,6 @@ li {
   position: absolute;
 }
 .documents__browser {
-  width: 100%;
-  height: 100%;
   border: none;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -335,7 +333,7 @@ li {
 .helpers__box .ui-resizable-handle {
   width: @editableHandlesSize;
   height: @editableHandlesSize;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.8);
   outline: 1px solid @selectedColor;
   position: absolute;
 }
@@ -441,22 +439,36 @@ li {
 }
 
 .helpers {
-  width: 100%;
-  height: 100%;
-  overflow:auto;
+  overflow:scroll;
   position: absolute;
   top:0;
   left:0;
   pointer-events:all;
 }
 
-.helpers_lock {
-  background: rgba(255, 0, 0, 0.31);
+.documents__browser {
+  width: 100%;
+  height: 100%;
+}
+
+.helpers  {
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.helpers_scrolloff {
+  overflow: hidden;
+  width: calc(100% ~"-" 12px);
+  height: calc(100% ~"-" 12px);
 }
 
 .helpers__virtualbody {
   overflow: hidden;
   pointer-events:none;
+  min-width: 100%;
+  position: absolute;
 }
 
 .helpers__box {

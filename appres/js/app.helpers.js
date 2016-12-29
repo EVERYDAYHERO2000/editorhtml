@@ -4,11 +4,13 @@ $(function () {
     var $documents = app.e.$documents;
     var $documents__content = app.e.$documents__content;
     var $selectedElement = app.e.$selectedElement;
+    var $documents__browser = app.e.$documents__browser;
     var $helpers = app.e.$helpers = $('<div class="helpers"></div>');
     var $helpers__virtualbody = app.e.$helpers__virtualbody = $('<div class="helpers__virtualbody"></div>');
 
     $helpers.append($helpers__virtualbody);
     $documents.append($helpers);
+
 
 
     $documents__content.on('mouseup', function (e) {
@@ -41,36 +43,59 @@ $(function () {
 
         app.e.selectLayer($(elems[0]));
       }
+    })
+    $helpers__virtualbody.on('mousedown', function(){
+      $helpers.addClass('helpers_scrolloff');
+      
+    })
+    $(document).on('mouseup',function(){
+      $helpers.removeClass('helpers_scrolloff');
+      
     });
 
-    
+
 
     app.f.virtualbodySizeDetector();
 
   }
 
-  app.f.virtualbodySizeDetector = function() {
+  app.f.virtualbodySizeDetector = function () {
 
-      var $documents__content = app.e.$documents__content;
-      var $selectedElement = app.e.$selectedElement;
-      var $helpers = app.e.$helpers;
-      var $helpers__virtualbody = app.e.$helpers__virtualbody;
+    var $documents__content = app.e.$documents__content;
+    var $selectedElement = app.e.$selectedElement;
+    var $helpers = app.e.$helpers;
+    var $helpers__virtualbody = app.e.$helpers__virtualbody;
 
-      if ($helpers.attr('.helpers_lock') !== 'false') {
-        if ($documents__content.outerWidth() !== $helpers__virtualbody.outerWidth() ||
+    if ($helpers.attr('.helpers_lock') !== 'false') {
+      if ($documents__content.outerWidth() !== $helpers__virtualbody.outerWidth() ||
         $documents__content.outerHeight() !== $helpers__virtualbody.outerHeight()) {
         
+        if ($selectedElement) app.e.selectLayer($selectedElement);      
+        
+        
+        
         $helpers__virtualbody.css({
-          width: $documents__content.outerWidth() - 12 + 'px',
-          height: $documents__content.outerHeight() - 12 + 'px'
+          'max-width': $documents__content.outerWidth() + 'px',
+          'max-height': $documents__content.outerHeight() + 'px',
+          'min-width': $documents__content.outerWidth() + 'px',
+          'min-height': $documents__content.outerHeight() + 'px'
         })
-
-        if ($selectedElement) app.e.selectLayer($selectedElement);
+        
+        /*console.log($helpers__virtualbody[0])
+        console.log('helper W: ' + $helpers__virtualbody.css('width'));
+        console.log('helper H: ' + $helpers__virtualbody.css('height'));
+        console.log($documents__content[0])
+        console.log('doc W: ' + $documents__content.outerWidth());
+        console.log('doc H: ' + $documents__content.outerHeight());
+        console.log('')
+        */
+        
+        
       }
     }
-      //setTimeout(virtualbodySizeDetector, 500);
-    }
-  
+    //setTimeout(virtualbodySizeDetector, 500);
+  }
+
   app.f.slectElement = function (elem) {
 
     var $documents__content = app.e.$documents__content;
@@ -81,13 +106,13 @@ $(function () {
     var $helpers__box = $('<div class="helpers__box"></div>');
     var selectedRect = $selectedElement[0].getBoundingClientRect();
 
-    
+
     $helpers__virtualbody.html('').append($helpers__box);
-    
-    
-    
-    
-    
+
+
+
+
+
     $helpers__box.css({
       width: $selectedElement.css('width'),
       height: $selectedElement.css('height'),
@@ -97,12 +122,12 @@ $(function () {
     }).draggable({
       start: function (event, ui) {
         updateSelectedElement(event, ui);
-        
+
       },
       drag: function (event, ui) {
         updateSelectedElement(event, ui);
-        
-      },   
+
+      },
       stop: function (event, ui) {
         updateSelectedElement(event, ui);
         app.f.virtualbodySizeDetector();
@@ -111,7 +136,7 @@ $(function () {
     }).resizable({
       handles: 'all',
       start: function (event, ui) {
-        
+
         updateSelectedElement(event, ui)
       },
       stop: function (event, ui) {
@@ -127,12 +152,12 @@ $(function () {
       angle: 0,
       wheelRotate: false,
       start: function (event, ui) {
-        
+
         updateSelectedElement(event, ui)
       },
       rotate: updateSelectedElement,
       stop: function (event, ui) {
-        
+
         updateSelectedElement(event, ui);
       },
     });
@@ -162,16 +187,16 @@ $(function () {
 
 
 
-      top = selectedHelperPosition.top - tmax + $documents__content.scrollTop();
-      left = selectedHelperPosition.left - lmax + $documents__content.scrollLeft();
+      top = selectedHelperPosition.top - tmax; // + $documents__content.scrollTop();
+      left = selectedHelperPosition.left - lmax; // + $documents__content.scrollLeft();
 
 
 
       width = $helpers__box.outerWidth();
       height = $helpers__box.outerHeight();
 
-      
-      
+
+
       $selectedElement.css({
         position: 'absolute',
         left: left + 'px',

@@ -49,10 +49,6 @@ $(function () {
           id: 'project'
           },
         {
-          name: TEXT['assets'][L],
-          id: 'assets'
-        },
-        {
           name: TEXT['history'][L],
           id: 'history'
           }

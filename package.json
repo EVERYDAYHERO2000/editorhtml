@@ -17,7 +17,8 @@
     "min_width": 700,
     "min_height": 500,
     "resizable": true,
-    "show_in_taskbar": true
+    "show_in_taskbar": true,
+    "icon": "appres/icon/1con-16.png"
   },
   "licenses": [{
       "type": "GPLv2"
