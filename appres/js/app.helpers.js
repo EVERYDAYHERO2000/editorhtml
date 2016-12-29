@@ -107,23 +107,32 @@ $(function () {
     var $selectedElement = app.e.$selectedElement = elem;
     var $helpers = app.e.$helpers;
     var $helpers__virtualbody = app.e.$helpers__virtualbody;
-
+    
     var $helpers__box = $('<div class="helpers__box"></div>');
+    var transform = $selectedElement.css('transform');
+    $selectedElement.css({
+      'transform' : 'none'
+    });
+    
     var selectedRect = $selectedElement[0].getBoundingClientRect();
+    
 
-
+    
+    
     $helpers__virtualbody.html('').append($helpers__box);
 
-
-
-
+    //
+    
+    //
 
     $helpers__box.css({
-      width: $selectedElement.css('width'),
-      height: $selectedElement.css('height'),
+      width: selectedRect.width + 'px',
+      height: selectedRect.height + 'px',
+      //left: $helpers.scrollLeft() + selectedRect.left + 'px',
+      //top: $helpers.scrollTop() + selectedRect.top + 'px',
       left: $helpers.scrollLeft() + selectedRect.left + 'px',
       top: $helpers.scrollTop() + selectedRect.top + 'px',
-      transform: $selectedElement.css('transform')
+      transform: transform
     }).draggable({
       start: function (event, ui) {
         updateSelectedElement(event, ui);
@@ -151,7 +160,10 @@ $(function () {
         updateSelectedElement(event, ui);
         app.f.virtualbodySizeDetector();
       },
-      resize: updateSelectedElement
+      resize: function (event, ui){
+        
+        updateSelectedElement(event, ui);
+      }
     }).rotatable({
       otationCenterX: 50.0,
       rotationCenterY: 50.0,
@@ -160,7 +172,7 @@ $(function () {
       angle: 0,
       wheelRotate: false,
       start: function (event, ui) {
-
+    
         updateSelectedElement(event, ui)
       },
       rotate: updateSelectedElement,
@@ -169,22 +181,30 @@ $(function () {
         updateSelectedElement(event, ui);
       },
     });
+    
+    $selectedElement.css({
+      'transform' : transform
+    });
+    
 
     function updateSelectedElement(event, ui) {
 
       var top, bottom, left, right, width, height;
       var $parent = $selectedElement.parents();
+      var transform = $helpers__box.css('transform');
       var selectedHelperPosition = $helpers__box.position();
 
-
+      $helpers__box.css({
+        'transform' : 'none'
+      })
 
       var l = [0],
         lmax, t = [0],
         tmax;
       $parent.each(function (i, e) {
         if ($(e).css('position') !== 'static') {
-          l.push($(e).offset().left);
-          t.push($(e).offset().top);
+          l.push( $(e).offset().left );
+          t.push( $(e).offset().top );
         }
       }).get();
 
@@ -197,11 +217,13 @@ $(function () {
 
       top = selectedHelperPosition.top - tmax; // + $documents__content.scrollTop();
       left = selectedHelperPosition.left - lmax; // + $documents__content.scrollLeft();
+      //top = parseInt( $helpers__box.css('top') ) - tmax; // + $documents__content.scrollTop();
+      //left = parseInt( $helpers__box.css('left') ) - lmax; // + $documents__content.scrollLeft();
 
-
-
-      width = $helpers__box.outerWidth();
-      height = $helpers__box.outerHeight();
+      //width = $helpers__box.outerWidth();
+      //height = $helpers__box.outerHeight();
+      width = parseInt( $helpers__box.css('width') );
+      height = parseInt( $helpers__box.css('height') )
 
 
 
@@ -211,8 +233,13 @@ $(function () {
         top: top + 'px',
         width: width + 'px',
         height: height + 'px',
-        transform: $helpers__box.css('transform')
+        transform: transform
       })
+      
+      $helpers__box.css({
+        'transform' : transform
+      })
+      
     }
 
   }
