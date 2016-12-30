@@ -13,10 +13,7 @@ $(function () {
 
     
 
-    $documents__content.on('mouseup', function (e) {
-      $selectedElement = ($(e.target).is('.editable')) ? $(e.target) : $(e.target).parents('.editable').first();
-      app.f.selectLayer($selectedElement);
-    });
+    
     
     $(window).on('resize', function(){
       if ($selectedElement){
@@ -50,14 +47,7 @@ $(function () {
         app.f.slectElement($(elems[0]));
       }
     })
-    $helpers__virtualbody.on('mousedown', function(){
-      $helpers.addClass('helpers_scrolloff');
-      
-    })
-    $(document).on('mouseup',function(){
-      $helpers.removeClass('helpers_scrolloff');
-      
-    });
+    
 
 
 
@@ -66,7 +56,8 @@ $(function () {
   }
 
   app.f.virtualbodySizeDetector = function () {
-
+    
+    var $documents__browser = app.e.$documents__browser;
     var $documents__content = app.e.$documents__content;
     var $selectedElement = app.e.$selectedElement;
     var $helpers = app.e.$helpers;
@@ -79,6 +70,10 @@ $(function () {
         if ($selectedElement) app.f.selectLayer($selectedElement);      
         
         
+        $documents__browser.css({
+          'width' : $documents__content.outerWidth() + 'px',
+          'height': $documents__content.outerHeight() + 'px',
+        })
         
         $helpers__virtualbody.css({
           'max-width': $documents__content.outerWidth() + 'px',
@@ -135,6 +130,7 @@ $(function () {
       top: $helpers.scrollTop() + selectedRect.top + 'px',
       transform: transform
     }).draggable({
+      scroll: false,
       start: function (event, ui) {
         updateSelectedElement(event, ui);
 
