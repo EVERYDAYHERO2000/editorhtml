@@ -1,37 +1,40 @@
 "use strict";
 $(function () {
   app.f.setHelpers = function () {
+    
     var $documents = app.e.$documents;
     var $documents__content = app.e.$documents__content;
     var $selectedElement = app.e.$selectedElement;
     var $documents__browser = app.e.$documents__browser;
     var $helpers = app.e.$helpers = $('<div class="helpers"></div>');
-    var $helpers__virtualbody = app.e.$helpers__virtualbody = $('<div class="helpers__virtualbody"></div>');
-
-    $helpers.append($helpers__virtualbody);
+    
     $documents.append($helpers);
 
     
-
-    
-    
     $(window).on('resize', function(){
-      if ($selectedElement){
-        //updateSelectedElement();
+     // if ($selectedElement){
         app.f.virtualbodySizeDetector();
-      }
+      //}
     });
     
-
-    $helpers.on('scroll', function () {
-
-      $documents__content.scrollTop($(this).scrollTop());
-      $documents__content.scrollLeft($(this).scrollLeft());
-    }).on('click', function (e) {
+    /*
+      Выбираем объект из элементов под курсором с классом .editable
+    */
+    $documents__content.on('mouseup', function(e){
+      
+      $selectedElement = ( $(e.target).is('.editable') ) ? $(e.target) : $(e.target).parents('.editable').first();
+      app.f.selectLayer( $selectedElement );
+      app.f.slectElement( $selectedElement );
+      
+    });
+    /*
+    $helpers.on('click', function (e) {
       if (!$(e.target).is('.ui-resizable-handle, .ui-rotatable-handle')) {
+        console.clear();
         var elems = $documents__content.find('.editable').map(function (i, el) {
           var rect = el.getBoundingClientRect()
-
+          
+          
           if (
             e.pageY > rect.top &&
             e.pageY < rect.top + rect.height &&
@@ -43,16 +46,12 @@ $(function () {
 
         }).get().reverse();
 
-        app.f.selectLayer($(elems[0]));
-        app.f.slectElement($(elems[0]));
+        app.f.selectLayer( $(elems[0]) );
+        app.f.slectElement( $(elems[0]) );
       }
     })
-    
-
-
-
+   */ 
     app.f.virtualbodySizeDetector();
-
   }
 
   app.f.virtualbodySizeDetector = function () {
@@ -61,11 +60,11 @@ $(function () {
     var $documents__content = app.e.$documents__content;
     var $selectedElement = app.e.$selectedElement;
     var $helpers = app.e.$helpers;
-    var $helpers__virtualbody = app.e.$helpers__virtualbody;
+    
 
-    if ($helpers.attr('.helpers_lock') !== 'false') {
-      if ($documents__content.outerWidth() !== $helpers__virtualbody.outerWidth() ||
-        $documents__content.outerHeight() !== $helpers__virtualbody.outerHeight()) {
+    //if ($helpers.attr('.helpers_lock') !== 'false') {
+    //  if ($documents__content.outerWidth() !== $helpers.outerWidth() ||
+    //    $documents__content.outerHeight() !== $helpers.outerHeight()) {
         
         if ($selectedElement) app.f.selectLayer($selectedElement);      
         
@@ -75,12 +74,13 @@ $(function () {
           'height': $documents__content.outerHeight() + 'px',
         })
         
-        $helpers__virtualbody.css({
-          'max-width': $documents__content.outerWidth() + 'px',
-          'max-height': $documents__content.outerHeight() + 'px',
-          'min-width': $documents__content.outerWidth() + 'px',
-          'min-height': $documents__content.outerHeight() + 'px'
+        $helpers.css({
+          'width' : $documents__browser.outerWidth() + 'px',
+          'height': $documents__browser.outerHeight() + 'px',
         })
+        
+        console.log($documents__browser.css('width'),$helpers.css('width') )
+        
         
         /*console.log($helpers__virtualbody[0])
         console.log('helper W: ' + $helpers__virtualbody.css('width'));
@@ -92,8 +92,8 @@ $(function () {
         */
         
         
-      }
-    }
+    //  }
+    //}
     //setTimeout(virtualbodySizeDetector, 500);
   }
 
@@ -102,7 +102,7 @@ $(function () {
     var $documents__content = app.e.$documents__content;
     var $selectedElement = app.e.$selectedElement = elem;
     var $helpers = app.e.$helpers;
-    var $helpers__virtualbody = app.e.$helpers__virtualbody;
+    
     
     var $helpers__box = $('<div class="helpers__box"></div>');
     var transform = $selectedElement.css('transform');
@@ -115,7 +115,7 @@ $(function () {
 
     
     
-    $helpers__virtualbody.html('').append($helpers__box);
+    $helpers.html('').append($helpers__box);
 
     //
     
