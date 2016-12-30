@@ -15,7 +15,7 @@ $(function () {
 
     $documents__content.on('mouseup', function (e) {
       $selectedElement = ($(e.target).is('.editable')) ? $(e.target) : $(e.target).parents('.editable').first();
-      app.e.selectLayer($selectedElement);
+      app.f.selectLayer($selectedElement);
     });
     
     $(window).on('resize', function(){
@@ -46,7 +46,8 @@ $(function () {
 
         }).get().reverse();
 
-        app.e.selectLayer($(elems[0]));
+        app.f.selectLayer($(elems[0]));
+        app.f.slectElement($(elems[0]));
       }
     })
     $helpers__virtualbody.on('mousedown', function(){
@@ -75,7 +76,7 @@ $(function () {
       if ($documents__content.outerWidth() !== $helpers__virtualbody.outerWidth() ||
         $documents__content.outerHeight() !== $helpers__virtualbody.outerHeight()) {
         
-        if ($selectedElement) app.e.selectLayer($selectedElement);      
+        if ($selectedElement) app.f.selectLayer($selectedElement);      
         
         
         

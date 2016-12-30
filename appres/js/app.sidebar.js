@@ -138,11 +138,14 @@ $(function () {
 
   }
   
-  app.e.selectLayer = function(elem){
+  app.f.selectLayer = function(elem){
     $('#sidebarTabs-layers').find('li').each(function () {
         if ($(this).data('node')[0] === elem[0]) {
           //console.log($(this).data('node')[0],$(this)[0])
-          $(this).find('div').first().mouseup();
+          
+          $(this).find('div').addClass('ui-sortable-selected');
+        } else {
+          $(this).find('div').removeClass('ui-sortable-selected');
         }
       });
   }
