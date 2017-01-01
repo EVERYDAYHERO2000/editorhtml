@@ -124,11 +124,11 @@ $(function () {
       toleranceElement: '> div'
     });
 
-    $DOM.find('.ui-sortable-handle').on('mouseup', function (e) {
+    $DOM.find('.ui-sortable-handle').on('click', function (e) {
       $DOM.find('div').removeClass('ui-sortable-selected');
       $(this).addClass('ui-sortable-selected');
       
-      app.f.slectElement( $(this).parent().data('node') );
+      app.f.selectElement( $(this).parent().data('node') );
       
       
       
