@@ -88,7 +88,7 @@ $(function () {
 
     var S_transform = $selectedElement.css('transform');
     var H_transform;
-    var angle = getAngle( $selectedElement.css('transform') );
+    var angle = getAngle($selectedElement.css('transform'));
 
     $selectedElement.css({
       'transform': 'none'
@@ -195,30 +195,30 @@ $(function () {
       },
       rotate: updateSelectedElement,
       stop: function (event, ui) {
-        
+
         updateSelectedElement();
       },
     });
 
-    function getAngle(tr){
+    function getAngle(tr) {
       console.log(tr)
       tr = (tr === 'none') ? 'matrix(1,0,0,1,0,0)' : tr;
 
-// rotation matrix - http://en.wikipedia.org/wiki/Rotation_matrix
+      // rotation matrix - http://en.wikipedia.org/wiki/Rotation_matrix
 
-var values = tr.split('(')[1].split(')')[0].split(',');
-var a = values[0];
-var b = values[1];
-var c = values[2];
-var d = values[3];
+      var values = tr.split('(')[1].split(')')[0].split(',');
+      var a = values[0];
+      var b = values[1];
+      var c = values[2];
+      var d = values[3];
 
-var scale = Math.sqrt(a*a + b*b);
+      var scale = Math.sqrt(a * a + b * b);
 
-var sin = b/scale;
-// next line works for 30deg but not 130deg (returns 50);
-// var angle = Math.round(Math.asin(sin) * (180/Math.PI));
-var angle = Math.atan2(b, a);
-      
+      var sin = b / scale;
+      // next line works for 30deg but not 130deg (returns 50);
+      // var angle = Math.round(Math.asin(sin) * (180/Math.PI));
+      var angle = Math.atan2(b, a);
+
       return angle
     }
 
@@ -251,7 +251,7 @@ var angle = Math.atan2(b, a);
 
     }
 
-    
+
 
   }
 
