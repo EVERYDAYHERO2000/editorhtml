@@ -15,9 +15,9 @@ $(function () {
     var $selectedElement = app.e.$selectedElement;
     var $documents__browser = app.e.$documents__browser;
     var $helpers = app.e.$helpers = $('<div class="helpers"></div>');
-    
+
     $documents__content.find('.editable').css({
-      'border' : 'red 1px solid'
+      'outline': 'red 1px solid'
     })
 
     $documents.append($helpers);
@@ -72,52 +72,95 @@ $(function () {
 
   }
 
+
+
+
+
+
   app.f.selectElement = function (elem) {
 
     var $documents__content = app.e.$documents__content;
     var $documents__browser = app.e.$documents__browser;
     var $selectedElement = app.e.$selectedElement = elem;
     var $helpers = app.e.$helpers;
-
-
+    var $parent = $selectedElement.parents();
     var $helpers__box = $('<div class="helpers__box"></div>');
-    var transform = $selectedElement.css('transform');
-    
+
+    var S_transform = $selectedElement.css('transform');
+    var H_transform;
+    var angle = getAngle( $selectedElement.css('transform') );
+
     $selectedElement.css({
       'transform': 'none'
     });
 
-    var selectedRect = $selectedElement[0].getBoundingClientRect();
-
-
-
-
     $helpers.html('').append($helpers__box);
+    $selectedElement.css('box-sizing', 'border-box');
 
-    //
+    var H_selectedPosition;
+    var S_selectedPosition = $selectedElement.position();
 
-    //
+    var H_top;
+    var H_bottom;
+    var H_left;
+    var H_right;
+    var H_width;
+    var H_height;
+
+    var S_top;
+    var S_bottom;
+    var S_left;
+    var S_right;
+    var S_width;
+    var S_height;
+
+    var l = [0];
+    var lmax;
+    var t = [0];
+    var tmax;
+
+    $parent.each(function (i, e) {
+      if ($(e).css('position') !== 'static') {
+        l.push($(e).offset().left);
+        t.push($(e).offset().top);
+      }
+    }).get();
+
+    lmax = Math.max.apply(Math, l);
+    tmax = Math.max.apply(Math, t);
+
+    H_top = S_selectedPosition.top + tmax;
+    H_left = S_selectedPosition.left + lmax;
+    H_width = parseInt($selectedElement.css('width'));
+    H_height = parseInt($selectedElement.css('height'))
 
     $helpers__box.css({
-      width: selectedRect.width + 'px',
-      height: selectedRect.height + 'px',
-      left: selectedRect.left + 'px',
-      top: selectedRect.top + 'px',
-      transform: transform
-    }).draggable({
+      width: H_width + 'px',
+      height: H_height + 'px',
+      left: H_left + 'px',
+      top: H_top + 'px',
+      transform: S_transform
+    });
+
+    $selectedElement.css({
+      'transform': S_transform
+    });
+
+
+    $helpers__box.draggable({
       scroll: false,
       start: function (event, ui) {
         $documents__browser.addClass('documents__browser_disabled');
-        updateSelectedElement(event, ui);
+        //updateSelectedElement();
 
       },
       drag: function (event, ui) {
-        updateSelectedElement(event, ui);
+        updateSelectedElement();
 
       },
       stop: function (event, ui) {
 
-        updateSelectedElement(event, ui);
+        updateSelectedElement();
         app.f.virtualbodySizeDetector();
       }
 
@@ -128,89 +171,87 @@ $(function () {
       handles: 'all',
       start: function (event, ui) {
         $documents__browser.addClass('documents__browser_disabled');
-        updateSelectedElement(event, ui)
+        //updateSelectedElement()
       },
       stop: function (event, ui) {
 
-        updateSelectedElement(event, ui);
+        updateSelectedElement();
         app.f.virtualbodySizeDetector();
       },
       resize: function (event, ui) {
 
-        updateSelectedElement(event, ui);
+        updateSelectedElement();
       }
     }).rotatable({
       otationCenterX: 50.0,
       rotationCenterY: 50.0,
       enable: true,
       snap: false,
-      angle: 0,
+      angle: angle,
       wheelRotate: false,
       start: function (event, ui) {
         $documents__browser.addClass('documents__browser_disabled');
-        updateSelectedElement(event, ui)
+        updateSelectedElement()
       },
       rotate: updateSelectedElement,
       stop: function (event, ui) {
-
-        updateSelectedElement(event, ui);
+        
+        updateSelectedElement();
       },
     });
 
-    $selectedElement.css({
-      'transform': transform
-    });
+    function getAngle(tr){
+      console.log(tr)
+      tr = (tr === 'none') ? 'matrix(1,0,0,1,0,0)' : tr;
 
+// rotation matrix - http://en.wikipedia.org/wiki/Rotation_matrix
 
-    function updateSelectedElement(event, ui) {
+var values = tr.split('(')[1].split(')')[0].split(',');
+var a = values[0];
+var b = values[1];
+var c = values[2];
+var d = values[3];
 
-      var top, bottom, left, right, width, height;
-      var $parent = $selectedElement.parents();
-      var transform = $helpers__box.css('transform');
-      var selectedHelperPosition = $helpers__box.position();
+var scale = Math.sqrt(a*a + b*b);
 
+var sin = b/scale;
+// next line works for 30deg but not 130deg (returns 50);
+// var angle = Math.round(Math.asin(sin) * (180/Math.PI));
+var angle = Math.atan2(b, a);
+      
+      return angle
+    }
+
+    function updateSelectedElement() {
+
+      H_transform = $helpers__box.css('transform');
       $helpers__box.css({
         'transform': 'none'
       });
 
-      var l = [0],
-        lmax, t = [0],
-        tmax;
-      $parent.each(function (i, e) {
-        if ($(e).css('position') !== 'static') {
-          l.push($(e).offset().left);
-          t.push($(e).offset().top);
-        }
-      }).get();
+      H_selectedPosition = $helpers__box.position();
 
-
-      lmax = Math.max.apply(Math, l);
-      tmax = Math.max.apply(Math, t);
-
-
-
-
-      top = selectedHelperPosition.top - tmax;
-      left = selectedHelperPosition.left - lmax;
-      width = parseInt($helpers__box.css('width'));
-      height = parseInt($helpers__box.css('height'))
-
-      $selectedElement.css('box-sizing','border-box');
+      S_top = H_selectedPosition.top - tmax;
+      S_left = H_selectedPosition.left - lmax;
+      S_width = parseInt($helpers__box.css('width'));
+      S_height = parseInt($helpers__box.css('height'))
 
       $selectedElement.css({
         position: 'absolute',
-        left: left + 'px',
-        top: top + 'px',
-        width: width + 'px',
-        height: height + 'px',
-        transform: transform
-      })
+        left: S_left + 'px',
+        top: S_top + 'px',
+        width: S_width + 'px',
+        height: S_height + 'px',
+        transform: H_transform
+      });
 
       $helpers__box.css({
-        'transform': transform
-      })
+        'transform': H_transform
+      });
 
     }
+
+    
 
   }
 

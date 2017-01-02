@@ -3,7 +3,7 @@ $(function () {
     
   app.f.create = function () {
     document.title = app.settings.title;
-    console.clear();
+    //console.clear();
 
     app.e.$app = $('<div class="app"><div class="app__menu"></div><div class="app__frame"></div></div>');
     app.e.$frame__tools = $('<div class="frame__tools"></div>');
