@@ -33,6 +33,9 @@ $(function () {
     /*
       Выбираем объект из элементов под курсором с классом .editable
     */
+    
+    
+    
     $documents__content.on('mouseup', function (e) {
 
       $selectedElement = ($(e.target).is('.editable')) ? $(e.target) : $(e.target).parents('.editable').first();
@@ -86,19 +89,26 @@ $(function () {
     var $parent = $selectedElement.parents();
     var $helpers__box = $('<div class="helpers__box"></div>');
 
+    $helpers.html('').append($helpers__box);
+    
     var S_transform = $selectedElement.css('transform');
     var H_transform;
-    var angle = getAngle($selectedElement.css('transform'));
+    
+    var H_angle = getAngle( S_transform );
+    var S_angle;
 
     $selectedElement.css({
-      'transform': 'none'
+      'transform': 'none',
+      'box-sizing': 'border-box'
     });
-
-    $helpers.html('').append($helpers__box);
-    $selectedElement.css('box-sizing', 'border-box');
 
     var H_selectedPosition;
     var S_selectedPosition = $selectedElement.position();
+    
+    var H_origin_x;
+    var H_origin_y;
+    var S_origin_x;
+    var S_origin_y;
 
     var H_top;
     var H_bottom;
@@ -118,30 +128,42 @@ $(function () {
     var lmax;
     var t = [0];
     var tmax;
+    var r = [0];
+    var rsum = 0;
 
     $parent.each(function (i, e) {
       if ($(e).css('position') !== 'static') {
         l.push($(e).offset().left);
         t.push($(e).offset().top);
+        r.push( getAngle( $(e).css('transform') ) )
       }
     }).get();
 
     lmax = Math.max.apply(Math, l);
     tmax = Math.max.apply(Math, t);
+    
+    for(var i = 0; i < r.length; i++){
+      rsum += r[i];
+    }
+    
 
-    H_top = S_selectedPosition.top + tmax;
-    H_left = S_selectedPosition.left + lmax;
-    H_width = parseInt($selectedElement.css('width'));
-    H_height = parseInt($selectedElement.css('height'))
-
+    H_top = parseInt($selectedElement[0].style.top) + tmax;
+    H_left = parseInt($selectedElement[0].style.left) + lmax;
+    H_width = parseInt($selectedElement[0].style.width)//.css('width'));
+    H_height = parseInt($selectedElement[0].style.height)//.css('height'));
+    H_origin_x = H_left + H_width / 2;
+    H_origin_y = H_top + H_height / 2;
+    
     $helpers__box.css({
       width: H_width + 'px',
       height: H_height + 'px',
       left: H_left + 'px',
       top: H_top + 'px',
-      transform: S_transform
+      transform: S_transform,
+      'transform-origin' : H_origin_x + 'px ' + H_origin_y + 'px 0px'
     });
-
+    
+    
     $selectedElement.css({
       'transform': S_transform
     });
@@ -151,10 +173,11 @@ $(function () {
       scroll: false,
       start: function (event, ui) {
         $documents__browser.addClass('documents__browser_disabled');
-        //updateSelectedElement();
+        updateSelectedElement();
 
       },
       drag: function (event, ui) {
+        
         updateSelectedElement();
 
       },
@@ -182,12 +205,15 @@ $(function () {
 
         updateSelectedElement();
       }
-    }).rotatable({
-      otationCenterX: 50.0,
-      rotationCenterY: 50.0,
-      enable: true,
+    })
+    
+    
+    
+    $selectedElement.find('.inner').first().rotatable({
+      rotationCenterX: '50%',
+      rotationCenterY: '50%',
       snap: false,
-      angle: angle,
+      angle: 0,
       wheelRotate: false,
       start: function (event, ui) {
         $documents__browser.addClass('documents__browser_disabled');
@@ -199,12 +225,21 @@ $(function () {
         updateSelectedElement();
       },
     });
+    
+    $selectedElement.find('.ui-rotatable-handle').css({
+      width: '10px',
+      height: '10px',
+      background: '#ffffff',
+      border: '1px red solid',
+      'border-radius': '50%',
+      position: 'absolute',
+      top: '-20px',
+      left: '-20px'
+    });  
 
     function getAngle(tr) {
-      console.log(tr)
+      
       tr = (tr === 'none') ? 'matrix(1,0,0,1,0,0)' : tr;
-
-      // rotation matrix - http://en.wikipedia.org/wiki/Rotation_matrix
 
       var values = tr.split('(')[1].split(')')[0].split(',');
       var a = values[0];
@@ -213,10 +248,7 @@ $(function () {
       var d = values[3];
 
       var scale = Math.sqrt(a * a + b * b);
-
       var sin = b / scale;
-      // next line works for 30deg but not 130deg (returns 50);
-      // var angle = Math.round(Math.asin(sin) * (180/Math.PI));
       var angle = Math.atan2(b, a);
 
       return angle
@@ -225,30 +257,38 @@ $(function () {
     function updateSelectedElement() {
 
       H_transform = $helpers__box.css('transform');
+      
       $helpers__box.css({
         'transform': 'none'
       });
+      $selectedElement.css({
+        'transform': 'none'
+      });           
 
       H_selectedPosition = $helpers__box.position();
 
-      S_top = H_selectedPosition.top - tmax;
-      S_left = H_selectedPosition.left - lmax;
-      S_width = parseInt($helpers__box.css('width'));
-      S_height = parseInt($helpers__box.css('height'))
-
+      S_top = parseInt($helpers__box[0].style.top) - tmax;
+      S_left = parseInt($helpers__box[0].style.left) - lmax;
+      S_width = parseInt($helpers__box[0].style.width)//.css('width'));
+      S_height = parseInt($helpers__box[0].style.height)//.css('height'));
+      S_origin_x = S_left + S_width / 2;
+      S_origin_y = S_top + S_height / 2;
+      S_angle = getAngle( H_transform ) - rsum;
+      
       $selectedElement.css({
         position: 'absolute',
         left: S_left + 'px',
         top: S_top + 'px',
         width: S_width + 'px',
         height: S_height + 'px',
-        transform: H_transform
+        transform: 'rotate(' + S_angle + 'rad)'
       });
 
       $helpers__box.css({
         'transform': H_transform
       });
 
+      
     }
 
 

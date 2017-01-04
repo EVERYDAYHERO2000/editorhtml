@@ -11,7 +11,7 @@ $(function () {
     $documents__browser.on('load', function () {
       app.e.$documents__content = $documents__browser.contents();
 
-      $.get('../appres/template/page/page1.html', function (data) {
+      $.get('../appres/template/page/adobe.html', function (data) {
         var $documentBody = app.e.$documents__content.find('body').html(data);
 
 
