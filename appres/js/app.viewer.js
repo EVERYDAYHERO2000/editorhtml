@@ -129,7 +129,7 @@ $(function () {
     //
     //
     $helpers__box.on('mousedown', function (e) {
-
+      $helpers.addClass('helpers__active');
       if ($(e.target).is('.helpers__box')) {
         $helpers.append($helpers__drag);
         $helpers__drag.css({
@@ -167,6 +167,7 @@ $(function () {
     $(window).on('mouseup', function (e) {
       drag = false;
       resize = false;
+      $helpers.removeClass('helpers__active');
       $helpers__drag.remove();
       $helpers__resize.remove();
       $('.ui-resizable-handle-active').removeClass('ui-resizable-handle-active');
@@ -177,6 +178,7 @@ $(function () {
     //
     //
     $(window).on('mousemove', function (e) {
+      console.log(1212)
       if (drag === true) {
         $helpers__drag.css({
           left: e.pageX - shiftX + 'px',
@@ -202,79 +204,112 @@ $(function () {
           top: e.pageY - shiftY + 'px'
         });
 
+        var $active = $('.ui-resizable-handle-active');
         var dragRect = $helpers__resize.offset();
-        var activRect = $('.ui-resizable-handle-active').offset();
-        var nRect = $('.ui-resizable-n').offset();
-        var eRect = $('.ui-resizable-e').offset();
-        var sRect = $('.ui-resizable-s').offset();
-        var wRect = $('.ui-resizable-w').offset();
-        var neRect = $('.ui-resizable-ne').offset();
-        var seRect = $('.ui-resizable-se').offset();
-        var swRect = $('.ui-resizable-sw').offset();
-        var nwRect = $('.ui-resizable-nw').offset();
+        var activRect = $active.offset();
+
+        var corner = 3;
 
         var stepX = dragRect.left - activRect.left;
         var stepY = dragRect.top - activRect.top;
 
-        $('.ui-resizable-handle-active').css({
-          left: parseInt($('.ui-resizable-handle-active').css('left')) + stepX + 'px',
-          top: parseInt($('.ui-resizable-handle-active').css('top')) + stepY + 'px'
-        });
 
-        if ($('.ui-resizable-handle-active').is('.ui-resizable-n')) {
-// верхняя сторона
-          $helpers__box.css({
-            height :  parseInt( $('.ui-resizable-s').css('top') ) - 3 - parseInt( $('.ui-resizable-n').css('top') ) + 3 + 'px'
-          });          
-          
-        } else if ($('.ui-resizable-handle-active').is('.ui-resizable-e')) {
-// правая сторона  
-          $helpers__box.css({
-            width :  parseInt( $('.ui-resizable-e').css('left') ) - 3 - parseInt( $('.ui-resizable-w').css('left') ) + 3 + 'px'
+
+        if ( $active.is('.ui-resizable-n') ) {
+          // верхняя сторона
+          $active.css({
+            top: parseInt( $active.css('top') ) + stepY + 'px'
           });
 
-        } else if ($('.ui-resizable-handle-active').is('.ui-resizable-s')) {
-// нижняя сторона
           $helpers__box.css({
-            height :  parseInt( $('.ui-resizable-s').css('top') ) - 3 - parseInt( $('.ui-resizable-n').css('top') ) + 3 + 'px'
-          }); 
-          
-        } else if ($('.ui-resizable-handle-active').is('.ui-resizable-w')) {
-// левая сторона  
-          $helpers__box.css({
-            width :  parseInt( $('.ui-resizable-e').css('left') ) - 3 - parseInt( $('.ui-resizable-w').css('left') ) + 3 + 'px'
+            top: parseInt($helpers__box.css('top')) + parseInt( $active.css('top') ) + corner + 'px',
+            height: parseInt($('.ui-resizable-s').css('top')) - corner - parseInt($('.ui-resizable-n').css('top')) + corner + 'px'
           });
-          
-        } else if ($('.ui-resizable-handle-active').is('.ui-resizable-ne')) {
-// верхний правый угол ?
-          $helpers__box.css({
-            width :  parseInt( $('.ui-resizable-ne').css('left') ) - 3 - parseInt( $('.ui-resizable-sw').css('left') ) + 3 + 'px',
-            //height : parseInt( $('.ui-resizable-ne').css('top') ) + 3 - parseInt( $('.ui-resizable-sw').css('top') ) + 3 + 'px',
-          });
-          
-        } else if ($('.ui-resizable-handle-active').is('.ui-resizable-se')) {
-// нижний правый угол
-          $helpers__box.css({
-            width :  parseInt( $('.ui-resizable-se').css('left') ) - 3 - parseInt( $('.ui-resizable-nw').css('left') ) + 3 + 'px',
-            height : parseInt( $('.ui-resizable-se').css('top') ) - 3 - parseInt( $('.ui-resizable-nw').css('top') ) + 3 + 'px',
-          });          
 
-        } else if ($('.ui-resizable-handle-active').is('.ui-resizable-sw')) {
-// нижней левый угол ?
-          $helpers__box.css({
-            width :  parseInt( $('.ui-resizable-ne').css('left') ) + 3 - parseInt( $('.ui-resizable-sw').css('left') ) + 3 + 'px',
-            //height : parseInt( $('.ui-resizable-ne').css('top') ) + 3 - parseInt( $('.ui-resizable-sw').css('top') ) - 3 + 'px',
+        } else if ( $active.is('.ui-resizable-e') ) {
+          // правая сторона  
+          $active.css({
+            left: parseInt( $active.css('left') ) + stepX + 'px'
           });
-        } else if ($('.ui-resizable-handle-active').is('.ui-resizable-nw')) {
-// верхний левый угол
+
           $helpers__box.css({
-            width :  parseInt( $('.ui-resizable-se').css('left') ) + 3 - parseInt( $('.ui-resizable-nw').css('left') ) + 3 + 'px',
-            height : parseInt( $('.ui-resizable-se').css('top') ) + 3 - parseInt( $('.ui-resizable-nw').css('top') ) + 3 + 'px',
+            width: parseInt($('.ui-resizable-e').css('left')) - corner - parseInt($('.ui-resizable-w').css('left')) + corner + 'px'
+          });
+
+        } else if ( $active.is('.ui-resizable-s') ) {
+          // нижняя сторона
+          $active.css({
+            top: parseInt( $active.css('top') ) + stepY + 'px'
+          });
+
+          $helpers__box.css({
+            height: parseInt($('.ui-resizable-s').css('top')) - corner - parseInt($('.ui-resizable-n').css('top')) + corner + 'px'
+          });
+
+        } else if ( $active.is('.ui-resizable-w') ) {
+          // левая сторона
+          $active.css({
+            left: parseInt( $active.css('left')) + stepX + 'px'
+          });
+
+          $helpers__box.css({
+            left: parseInt( $helpers__box.css('left') ) + parseInt( $active.css('left') ) + corner + 'px',
+            width: parseInt($('.ui-resizable-e').css('left')) - corner - parseInt($('.ui-resizable-w').css('left')) + corner + 'px'
+          });
+
+        } else if ( $active.is('.ui-resizable-ne')) {
+          // верхний правый угол ?
+
+          $active.css({
+            left: parseInt( $active.css('left')) + stepX + 'px',
+            top: parseInt( $active.css('top')) + stepY + 'px'
+          });
+
+          $helpers__box.css({
+            width: parseInt($('.ui-resizable-ne').css('left')) - corner - parseInt($('.ui-resizable-sw').css('left')) + corner + 'px',
+            height: parseInt($('.ui-resizable-sw').css('top')) - corner - parseInt($('.ui-resizable-ne').css('top')) + corner + 'px',
+          });
+
+        } else if ( $active.is('.ui-resizable-se')) {
+          // нижний правый угол
+          $active.css({
+            left: parseInt( $active.css('left')) + stepX + 'px',
+            top: parseInt( $active.css('top')) + stepY + 'px'
+          });
+
+          $helpers__box.css({
+            width: parseInt($('.ui-resizable-se').css('left')) - corner - parseInt($('.ui-resizable-nw').css('left')) + corner + 'px',
+            height: parseInt($('.ui-resizable-se').css('top')) - corner - parseInt($('.ui-resizable-nw').css('top')) + corner + 'px',
+          });
+
+        } else if ( $active.is('.ui-resizable-sw')) {
+          // нижней левый угол ?
+          $active.css({
+            left: parseInt( $active.css('left')) + stepX + 'px',
+            top: parseInt( $active.css('top')) + stepY + 'px'
+          });
+
+          $helpers__box.css({
+            width: parseInt($('.ui-resizable-ne').css('left')) + corner - parseInt($('.ui-resizable-sw').css('left')) + corner + 'px',
+            height: parseInt($('.ui-resizable-sw').css('top')) - corner - parseInt($('.ui-resizable-ne').css('top')) + corner + 'px',
+          });
+        } else if ( $active.is('.ui-resizable-nw')) {
+          // верхний левый угол
+          $active.css({
+            left: parseInt( $active.css('left')) + stepX + 'px',
+            top: parseInt( $active.css('top')) + stepY + 'px'
+          });
+
+          $helpers__box.css({
+            top: parseInt( $helpers__box.css('top') ) + parseInt( $active.css('top') ) + corner + 'px',
+            left: parseInt( $helpers__box.css('left') ) + parseInt( $active.css('left') ) + corner + 'px',
+            width: parseInt($('.ui-resizable-se').css('left')) - corner - parseInt($('.ui-resizable-nw').css('left')) + corner + 'px',
+            height: parseInt($('.ui-resizable-se').css('top')) - corner - parseInt($('.ui-resizable-nw').css('top')) + corner + 'px',
           });
 
         }
 
-
+        update();
 
       }
 
