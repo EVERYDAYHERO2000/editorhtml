@@ -58,6 +58,7 @@ $(function () {
     var width = ($documents__content.outerWidth() >= $documents.outerWidth()) ? $documents__content.outerWidth() : $documents.outerWidth();
     var height = ($documents__content.outerHeight() >= $documents.outerHeight()) ? $documents__content.outerHeight() : $documents.outerHeight();
 
+
     $documents__browser.attr({
       'width': width,
       'height': height
@@ -80,10 +81,10 @@ $(function () {
     var $selectedElement = app.e.$selectedElement = elem;
     var $parents = $selectedElement.parents();
     var $helpers = app.e.$helpers;
-    var $helpers__box = $('<div class="elem helpers__box"><div class="ui-resizable-handle ui-resizable-n"></div><div class="ui-resizable-handle ui-resizable-e"></div><div class="ui-resizable-handle ui-resizable-s"></div><div class="ui-resizable-handle ui-resizable-w"></div><div class="ui-resizable-handle ui-resizable-ne"></div><div class="ui-resizable-handle ui-resizable-se"></div><div class="ui-resizable-handle ui-resizable-sw"></div><div class="ui-resizable-handle ui-resizable-nw"></div><div class="ui-rotatable-handle"></div></div>');
-    var $helpers__drag = $('<div class="elem helpers__drag"></div>');
-    var $helpers__parent = $('<div class="elem helpers__parent"></div>');
-    var $helpers__resize = $('<div class="elem helpers__resize"></div>');
+    var $helpers__box = $('<div class="helpers__box"><div data="n" class="ui-resizable-handle ui-resizable-n"></div><div data="e" class="ui-resizable-handle ui-resizable-e"></div><div data="s" class="ui-resizable-handle ui-resizable-s"></div><div data="w" class="ui-resizable-handle ui-resizable-w"></div><div data="ne" class="ui-resizable-handle ui-resizable-ne"></div><div data="se" class="ui-resizable-handle ui-resizable-se"></div><div data="sw" class="ui-resizable-handle ui-resizable-sw"></div><div data="nw" class="ui-resizable-handle ui-resizable-nw"></div><div class="ui-rotatable-handle"></div></div>');
+    var $helpers__drag = $('<div class="helpers__drag"></div>');
+    var $helpers__parent = $('<div class="helpers__parent"></div>');
+    var $helpers__resize = $('<div class="helpers__resize"></div>');
 
     $helpers.html('');
 
@@ -121,16 +122,22 @@ $(function () {
       'transform-origin': $selectedElement.css('transform-origin')
     });
 
-    var drag = false;
-    var resize = false;
-    var shiftX, shiftY;
+    var event = null;
+    var shiftX;
+    var shiftY;
+    var scrollX = false;
+    var scrollY = false;
 
     //
     //
     //
     $helpers__box.on('mousedown', function (e) {
       $helpers.addClass('helpers__active');
+      scrollX = $documents.scrollLeft();
+      scrollY = $documents.scrollTop();
+
       if ($(e.target).is('.helpers__box')) {
+        event = 'drag';
         $helpers.append($helpers__drag);
         $helpers__drag.css({
           'position': 'absolute',
@@ -139,37 +146,49 @@ $(function () {
           'top': $documents.scrollTop() + $helpers__box.offset().top - $documents.offset().top + 'px',
           'left': $documents.scrollLeft() + $helpers__box.offset().left - $documents.offset().left + 'px'
         });
-        drag = true;
+
         shiftX = e.pageX - $documents.scrollLeft() - $helpers__drag.offset().left + $documents.offset().left;
         shiftY = e.pageY - $documents.scrollTop() - $helpers__drag.offset().top + $documents.offset().top;
 
+
+
       } else if ($(e.target).is('.ui-resizable-handle')) {
-        $helpers.append($helpers__resize);
+        event = 'resize';
         $(e.target).addClass('ui-resizable-handle-active');
-        $helpers__resize.css({
-          'position': 'absolute',
-          'width': $(e.target).css('width'),
-          'height': $(e.target).css('height'),
-          'top': $documents.scrollTop() + $(e.target).offset().top - $documents.offset().top + 'px',
-          'left': $documents.scrollLeft() + $(e.target).offset().left - $documents.offset().left + 'px'
+
+
+
+        var $active;
+
+        $active = $helpers__resize.clone().appendTo($helpers).attr('data', $(e).attr('data')).addClass('active');
+        $active.css({
+            'position': 'absolute',
+            'width': $('.ui-resizable-handle-active').css('width'),
+            'height': $('.ui-resizable-handle-active').css('height'),
+            'top': $documents.scrollTop() + $('.ui-resizable-handle-active').offset().top - $documents.offset().top + 'px',
+            'left': $documents.scrollLeft() + $('.ui-resizable-handle-active').offset().left - $documents.offset().left + 'px'
         });
-        resize = true;
-        shiftX = e.pageX - $documents.scrollLeft() - $helpers__resize.offset().left + $documents.offset().left;
-        shiftY = e.pageY - $documents.scrollTop() - $helpers__resize.offset().top + $documents.offset().top;
+        
+        
 
+        
+        
+        
+        shiftX = e.pageX - $documents.scrollLeft() - $active.offset().left + $documents.offset().left;
+        shiftY = e.pageY - $documents.scrollTop() - $active.offset().top + $documents.offset().top;
       }
-
     });
 
     //
     //
     //
     $(window).on('mouseup', function (e) {
-      drag = false;
-      resize = false;
+      event = null;
+      scrollX = false;
+      scrollY = false;
       $helpers.removeClass('helpers__active');
       $helpers__drag.remove();
-      $helpers__resize.remove();
+      $('.helpers__resize').remove();
       $('.ui-resizable-handle-active').removeClass('ui-resizable-handle-active');
       app.f.virtualbodySizeDetector();
     });
@@ -177,9 +196,18 @@ $(function () {
     //
     //
     //
+    $documents.on('scroll', function (e) {
+      if (scrollX !== false) $documents.scrollLeft(scrollX);
+      if (scrollY !== false) $documents.scrollTop(scrollY);
+    });
+
+    //
+    //
+    //
     $(window).on('mousemove', function (e) {
-      console.log(1212)
-      if (drag === true) {
+
+      if (event === 'drag') {
+
         $helpers__drag.css({
           left: e.pageX - shiftX + 'px',
           top: e.pageY - shiftY + 'px'
@@ -190,91 +218,139 @@ $(function () {
         var stepX = dragRect.left - boxRect.left;
         var stepY = dragRect.top - boxRect.top;
 
+        var maxr = 0;
+
+        $('.helpers__parent').each(function (i, e) {
+          maxr += getRotationDegrees($(e));
+        })
+
+
+        var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr );
+
+
+
         $helpers__box.css({
-          left: parseInt($helpers__box.css('left')) + stepX + 'px',
-          top: parseInt($helpers__box.css('top')) + stepY + 'px'
+          left: Math.round(parseInt($helpers__box.css('left')) + xy[0]) + 'px',
+          top: Math.round(parseInt($helpers__box.css('top')) + xy[1]) + 'px'
         });
+
+
 
         update();
       }
 
-      if (resize === true) {
-        $helpers__resize.css({
+      if (event === 'resize') {
+
+        var $activeHelper = $('.helpers__resize.active');
+        var $activePoint = $('.ui-resizable-handle-active');
+
+
+        $activeHelper.css({
           left: e.pageX - shiftX + 'px',
           top: e.pageY - shiftY + 'px'
         });
 
-        var $active = $('.ui-resizable-handle-active');
-        var dragRect = $helpers__resize.offset();
-        var activRect = $active.offset();
-
         var corner = 3;
+        var maxr = 0;
 
-        var stepX = dragRect.left - activRect.left;
-        var stepY = dragRect.top - activRect.top;
+        $('.helpers__parent').each(function (i, e) {
+          maxr += getRotationDegrees($(e));
+        })
 
+        var pointRect = $activePoint.offset();
+        var helperRect = $activeHelper.offset();
+        
+        var stepX = helperRect.left - pointRect.left;
+        var stepY = helperRect.top - pointRect.top;
+        
+        var xp = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr);
+        var xy = rotate(0, 0, Math.round(xp[0]), Math.round(xp[1]), getRotationDegrees($helpers__box));
+        
 
+        
+        
+        
 
-        if ( $active.is('.ui-resizable-n') ) {
+        /*
+        $activePoint.css({
+          left: parseInt($activePoint.css('left')) + xy[0] + 'px',
+          top: parseInt($activePoint.css('top')) + xy[1] + 'px'
+        });
+        */
+        
+        
+        
+        
+        if ($activePoint.is('.ui-resizable-n')) {
           // верхняя сторона
-          $active.css({
-            top: parseInt( $active.css('top') ) + stepY + 'px'
+          $activePoint.css({
+            top: parseInt($activePoint.css('top')) + xy[1] + 'px'
           });
 
-          $helpers__box.css({
-            top: parseInt($helpers__box.css('top')) + parseInt( $active.css('top') ) + corner + 'px',
-            height: parseInt($('.ui-resizable-s').css('top')) - corner - parseInt($('.ui-resizable-n').css('top')) + corner + 'px'
+          //console.log( parseInt($helpers__box.css('height')), $helpers__box[0].style.height )
+          //console.log( parseInt($('.ui-resizable-s').css('top')) - parseInt($('.ui-resizable-n').css('top')) )
+          //console.log( parseInt($helpers__box[0].style.height) - parseInt($('.ui-resizable-n').css('top')) )
+          
+          
+          $helpers__box.css({ 
+            top: parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
+            
+            height: parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px',
+            //bottom: parseInt($helpers__box.css('bottom')) + 'px',
+           // height: 'auto',
           });
 
-        } else if ( $active.is('.ui-resizable-e') ) {
-          // правая сторона  
-          $active.css({
-            left: parseInt( $active.css('left') ) + stepX + 'px'
+        } else if ($activePoint.is('.ui-resizable-e')) {
+// правая сторона !!! 
+          $activePoint.css({
+            left: parseInt($activePoint.css('left')) + xy[0] + 'px'
           });
 
           $helpers__box.css({
             width: parseInt($('.ui-resizable-e').css('left')) - corner - parseInt($('.ui-resizable-w').css('left')) + corner + 'px'
           });
 
-        } else if ( $active.is('.ui-resizable-s') ) {
-          // нижняя сторона
-          $active.css({
-            top: parseInt( $active.css('top') ) + stepY + 'px'
+        } else if ($activePoint.is('.ui-resizable-s')) {
+// нижняя сторона !!!
+          $activePoint.css({
+            top: parseInt($activePoint.css('top')) + xy[1] + 'px'
           });
 
           $helpers__box.css({
             height: parseInt($('.ui-resizable-s').css('top')) - corner - parseInt($('.ui-resizable-n').css('top')) + corner + 'px'
           });
 
-        } else if ( $active.is('.ui-resizable-w') ) {
+        } else if ($activePoint.is('.ui-resizable-w')) {
           // левая сторона
-          $active.css({
-            left: parseInt( $active.css('left')) + stepX + 'px'
+          $activePoint.css({
+            left: parseInt($activePoint.css('left')) + xy[0] + 'px'
           });
 
           $helpers__box.css({
-            left: parseInt( $helpers__box.css('left') ) + parseInt( $active.css('left') ) + corner + 'px',
+            left: parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + corner + 'px',
             width: parseInt($('.ui-resizable-e').css('left')) - corner - parseInt($('.ui-resizable-w').css('left')) + corner + 'px'
           });
 
-        } else if ( $active.is('.ui-resizable-ne')) {
+        } else if ($activePoint.is('.ui-resizable-ne')) {
           // верхний правый угол ?
 
-          $active.css({
-            left: parseInt( $active.css('left')) + stepX + 'px',
-            top: parseInt( $active.css('top')) + stepY + 'px'
+          $activePoint.css({
+            left: parseInt($activePoint.css('left')) + xy[0] + 'px',
+            top: parseInt($activePoint.css('top')) + xy[1] + 'px'
           });
 
+          
           $helpers__box.css({
+            top: parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + corner + 'px',
             width: parseInt($('.ui-resizable-ne').css('left')) - corner - parseInt($('.ui-resizable-sw').css('left')) + corner + 'px',
             height: parseInt($('.ui-resizable-sw').css('top')) - corner - parseInt($('.ui-resizable-ne').css('top')) + corner + 'px',
           });
 
-        } else if ( $active.is('.ui-resizable-se')) {
-          // нижний правый угол
-          $active.css({
-            left: parseInt( $active.css('left')) + stepX + 'px',
-            top: parseInt( $active.css('top')) + stepY + 'px'
+        } else if ($activePoint.is('.ui-resizable-se')) {
+// нижний правый угол !!!
+          $activePoint.css({
+            left: parseInt($activePoint.css('left')) + xy[0] + 'px',
+            top: parseInt($activePoint.css('top')) + xy[1] + 'px'
           });
 
           $helpers__box.css({
@@ -282,38 +358,84 @@ $(function () {
             height: parseInt($('.ui-resizable-se').css('top')) - corner - parseInt($('.ui-resizable-nw').css('top')) + corner + 'px',
           });
 
-        } else if ( $active.is('.ui-resizable-sw')) {
+        } else if ($activePoint.is('.ui-resizable-sw')) {
           // нижней левый угол ?
-          $active.css({
-            left: parseInt( $active.css('left')) + stepX + 'px',
-            top: parseInt( $active.css('top')) + stepY + 'px'
+          $activePoint.css({
+            left: parseInt($activePoint.css('left')) + xy[0] + 'px',
+            top: parseInt($activePoint.css('top')) + xy[1] + 'px'
           });
 
           $helpers__box.css({
-            width: parseInt($('.ui-resizable-ne').css('left')) + corner - parseInt($('.ui-resizable-sw').css('left')) + corner + 'px',
+            
+            width: parseInt($('.ui-resizable-ne').css('left')) - corner - parseInt($('.ui-resizable-sw').css('left')) + corner + 'px',
             height: parseInt($('.ui-resizable-sw').css('top')) - corner - parseInt($('.ui-resizable-ne').css('top')) + corner + 'px',
           });
-        } else if ( $active.is('.ui-resizable-nw')) {
+        } else if ($activePoint.is('.ui-resizable-nw')) {
           // верхний левый угол
-          $active.css({
-            left: parseInt( $active.css('left')) + stepX + 'px',
-            top: parseInt( $active.css('top')) + stepY + 'px'
+          $activePoint.css({
+            left: parseInt($activePoint.css('left')) + xy[0] + 'px',
+            top: parseInt($activePoint.css('top')) + xy[1] + 'px'
           });
+          
+
 
           $helpers__box.css({
-            top: parseInt( $helpers__box.css('top') ) + parseInt( $active.css('top') ) + corner + 'px',
-            left: parseInt( $helpers__box.css('left') ) + parseInt( $active.css('left') ) + corner + 'px',
-            width: parseInt($('.ui-resizable-se').css('left')) - corner - parseInt($('.ui-resizable-nw').css('left')) + corner + 'px',
-            height: parseInt($('.ui-resizable-se').css('top')) - corner - parseInt($('.ui-resizable-nw').css('top')) + corner + 'px',
+            top: parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
+            left: parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
+            height: parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px',
+            width: parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px',
           });
+          console.log( $helpers__box.css('left'), $activePoint.css('left'))
+          
 
         }
+        
+        $('.ui-resizable-ne, .ui-resizable-se, .ui-resizable-sw, .ui-resizable-nw, .ui-resizable-n, .ui-resizable-e, .ui-resizable-s, .ui-resizable-w ').removeAttr('style');
+        
+        
+update();
 
-        update();
+
+
+
 
       }
 
+
     });
+
+    function even_odd(num) {
+       if (Math.floor(num) % 2 == 0) {
+           return num
+       }
+      
+       return num - 1
+    }
+
+    function rotate(cx, cy, x, y, angle) {
+      var radians = (Math.PI / 180) * angle,
+        cos = Math.cos(radians),
+        sin = Math.sin(radians),
+        nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
+        ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+      return [nx, ny];
+    }
+
+    function getRotationDegrees(obj) {
+      var matrix = obj.css("-webkit-transform") || obj.css("transform");
+      if (matrix !== 'none') {
+        var values = matrix.split('(')[1].split(')')[0].split(',');
+        var a = values[0];
+        var b = values[1];
+        var angle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
+        
+      } else {
+        var angle = 0;
+      }
+      
+      return (angle < 0) ? angle += 360 : angle;
+    }
+
 
     function update() {
 
