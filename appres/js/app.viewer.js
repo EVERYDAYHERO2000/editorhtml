@@ -103,7 +103,7 @@ $(function () {
           'top': parseInt(e.style.top) + 'px',
           'left': parseInt(e.style.left) + 'px',
           'transform': $(e).css('transform'),
-          'transform-origin': $(e).css('transform-origin')
+          'transform-origin': '50% 50% 0'//$(e).css('transform-origin')
         });
       }
     });
@@ -119,7 +119,7 @@ $(function () {
       'top': parseInt(elem.style.top) + 'px',
       'left': parseInt(elem.style.left) + 'px',
       'transform': $selectedElement.css('transform'),
-      'transform-origin': $selectedElement.css('transform-origin')
+      'transform-origin': '50% 50% 0'//$selectedElement.css('transform-origin')
     });
 
     var event = null;
@@ -263,11 +263,17 @@ $(function () {
         var stepX = helperRect.left - pointRect.left;
         var stepY = helperRect.top - pointRect.top;
         
-        var xp = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr);
-        var xy = rotate(0, 0, Math.round(xp[0]), Math.round(xp[1]), getRotationDegrees($helpers__box));
+        var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr + getRotationDegrees($helpers__box));
+        //var xy = rotate(0, 0, Math.round(xp[0]), Math.round(xp[1]), getRotationDegrees($helpers__box));
         
-
         
+        console.log(maxr + getRotationDegrees($helpers__box))
+        
+        xy[0] = Math.round(xy[0]);
+        xy[1] = Math.round(xy[1]);
+        
+        var helperBoxCoord = rotate(0, 0, parseInt($helpers__box.css('left')), parseInt($helpers__box.css('top')), maxr);
+          
         
         
 
@@ -278,115 +284,110 @@ $(function () {
         });
         */
         
+        var transformOrigin = function(){
+          var trO = $helpers__box.css('transform-origin').split(' ');
+          trO[0] = parseInt(trO[0]);
+          trO[1] = parseInt(trO[1]);
+          return trO
+        }();
+        
         
         
         
         if ($activePoint.is('.ui-resizable-n')) {
-          // верхняя сторона
+// верхняя сторона
           $activePoint.css({
-            top: parseInt($activePoint.css('top')) + xy[1] + 'px'
+            top: parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
           });
 
-          //console.log( parseInt($helpers__box.css('height')), $helpers__box[0].style.height )
-          //console.log( parseInt($('.ui-resizable-s').css('top')) - parseInt($('.ui-resizable-n').css('top')) )
-          //console.log( parseInt($helpers__box[0].style.height) - parseInt($('.ui-resizable-n').css('top')) )
-          
-          
           $helpers__box.css({ 
             top: parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
-            
-            height: parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px',
-            //bottom: parseInt($helpers__box.css('bottom')) + 'px',
-           // height: 'auto',
+            height: parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px'
           });
-
+          
         } else if ($activePoint.is('.ui-resizable-e')) {
-// правая сторона !!! 
+// правая сторона
           $activePoint.css({
-            left: parseInt($activePoint.css('left')) + xy[0] + 'px'
+            left: parseInt($activePoint.css('left')) + xy[0] + corner + 'px'
           });
 
           $helpers__box.css({
-            width: parseInt($('.ui-resizable-e').css('left')) - corner - parseInt($('.ui-resizable-w').css('left')) + corner + 'px'
+            width: parseInt($activePoint.css('left'))  + 'px'
           });
 
         } else if ($activePoint.is('.ui-resizable-s')) {
-// нижняя сторона !!!
+// нижняя сторона
           $activePoint.css({
-            top: parseInt($activePoint.css('top')) + xy[1] + 'px'
+            top: parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
           });
 
           $helpers__box.css({
-            height: parseInt($('.ui-resizable-s').css('top')) - corner - parseInt($('.ui-resizable-n').css('top')) + corner + 'px'
+            height: parseInt($activePoint.css('top'))  + 'px'
           });
 
         } else if ($activePoint.is('.ui-resizable-w')) {
-          // левая сторона
+// левая сторона
           $activePoint.css({
-            left: parseInt($activePoint.css('left')) + xy[0] + 'px'
+            left: parseInt($activePoint.css('left')) + xy[0] + corner + 'px'
           });
 
           $helpers__box.css({
-            left: parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + corner + 'px',
-            width: parseInt($('.ui-resizable-e').css('left')) - corner - parseInt($('.ui-resizable-w').css('left')) + corner + 'px'
+            left: parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',            
+            width: parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px',
           });
 
         } else if ($activePoint.is('.ui-resizable-ne')) {
-          // верхний правый угол ?
-
+// верхний правый угол
           $activePoint.css({
-            left: parseInt($activePoint.css('left')) + xy[0] + 'px',
-            top: parseInt($activePoint.css('top')) + xy[1] + 'px'
+            left: parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
+            top: parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
           });
-
-          
-          $helpers__box.css({
-            top: parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + corner + 'px',
-            width: parseInt($('.ui-resizable-ne').css('left')) - corner - parseInt($('.ui-resizable-sw').css('left')) + corner + 'px',
-            height: parseInt($('.ui-resizable-sw').css('top')) - corner - parseInt($('.ui-resizable-ne').css('top')) + corner + 'px',
-          });
-
-        } else if ($activePoint.is('.ui-resizable-se')) {
-// нижний правый угол !!!
-          $activePoint.css({
-            left: parseInt($activePoint.css('left')) + xy[0] + 'px',
-            top: parseInt($activePoint.css('top')) + xy[1] + 'px'
-          });
-
-          $helpers__box.css({
-            width: parseInt($('.ui-resizable-se').css('left')) - corner - parseInt($('.ui-resizable-nw').css('left')) + corner + 'px',
-            height: parseInt($('.ui-resizable-se').css('top')) - corner - parseInt($('.ui-resizable-nw').css('top')) + corner + 'px',
-          });
-
-        } else if ($activePoint.is('.ui-resizable-sw')) {
-          // нижней левый угол ?
-          $activePoint.css({
-            left: parseInt($activePoint.css('left')) + xy[0] + 'px',
-            top: parseInt($activePoint.css('top')) + xy[1] + 'px'
-          });
-
-          $helpers__box.css({
-            
-            width: parseInt($('.ui-resizable-ne').css('left')) - corner - parseInt($('.ui-resizable-sw').css('left')) + corner + 'px',
-            height: parseInt($('.ui-resizable-sw').css('top')) - corner - parseInt($('.ui-resizable-ne').css('top')) + corner + 'px',
-          });
-        } else if ($activePoint.is('.ui-resizable-nw')) {
-          // верхний левый угол
-          $activePoint.css({
-            left: parseInt($activePoint.css('left')) + xy[0] + 'px',
-            top: parseInt($activePoint.css('top')) + xy[1] + 'px'
-          });
-          
-
 
           $helpers__box.css({
             top: parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
-            left: parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
             height: parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px',
-            width: parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px',
+            left: parseInt($helpers__box.css('left')) + 'px',            
+            width: parseInt($activePoint.css('left')) + 'px'
           });
-          console.log( $helpers__box.css('left'), $activePoint.css('left'))
+
+        } else if ($activePoint.is('.ui-resizable-se')) {
+// нижний правый угол
+          $activePoint.css({
+            left: parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
+            top: parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+          });
+
+          $helpers__box.css({
+            width: parseInt($activePoint.css('left')) + 'px',
+            height: parseInt($activePoint.css('top')) + 'px'
+          });
+
+        } else if ($activePoint.is('.ui-resizable-sw')) {
+// нижней левый угол
+          $activePoint.css({
+            left: parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
+            top: parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+          });
+
+          $helpers__box.css({
+            left: parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',            
+            width: parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px',
+            height: parseInt($activePoint.css('top')) + 'px'
+            
+          });
+        } else if ($activePoint.is('.ui-resizable-nw')) {
+// верхний левый угол
+          $activePoint.css({
+            left: parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
+            top: parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+          });
           
+          $helpers__box.css({
+            top: parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
+            left: parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px', 
+            height: parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px',
+            width: parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px'
+          });
 
         }
         
@@ -395,22 +396,10 @@ $(function () {
         
 update();
 
-
-
-
-
       }
-
-
     });
 
-    function even_odd(num) {
-       if (Math.floor(num) % 2 == 0) {
-           return num
-       }
-      
-       return num - 1
-    }
+
 
     function rotate(cx, cy, x, y, angle) {
       var radians = (Math.PI / 180) * angle,
@@ -432,8 +421,8 @@ update();
       } else {
         var angle = 0;
       }
-      
-      return (angle < 0) ? angle += 360 : angle;
+      return angle
+      //return (angle < 0) ? angle += 360 : angle;
     }
 
 
