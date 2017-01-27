@@ -23,14 +23,13 @@ $(function () {
     });
 
     $(document).on('mouseup', function () {
+      
       $documents__browser.removeClass('documents__browser_disabled');
     });
 
     /*
       Выбираем объект из элементов под курсором с классом .editable
     */
-
-
 
     $documents__content.on('mouseup', function (e) {
 
@@ -89,10 +88,11 @@ $(function () {
     var $selectedElement = app.e.$selectedElement = elem;
     var $parents = $selectedElement.parents();
     var $helpers = app.e.$helpers;
-    var $helpers__box = $('<div class="helpers__box"><div data="n" class="ui-resizable-handle ui-resizable-n"></div><div data="e" class="ui-resizable-handle ui-resizable-e"></div><div data="s" class="ui-resizable-handle ui-resizable-s"></div><div data="w" class="ui-resizable-handle ui-resizable-w"></div><div data="ne" class="ui-resizable-handle ui-resizable-ne"></div><div data="se" class="ui-resizable-handle ui-resizable-se"></div><div data="sw" class="ui-resizable-handle ui-resizable-sw"></div><div data="nw" class="ui-resizable-handle ui-resizable-nw"></div><div class="ui-rotatable-handle"></div></div>');
+    var $helpers__box = $('<div class="helpers__box"><div data="n" class="ui-resizable-handle ui-resizable-n"></div><div data="e" class="ui-resizable-handle ui-resizable-e"></div><div data="s" class="ui-resizable-handle ui-resizable-s"></div><div data="w" class="ui-resizable-handle ui-resizable-w"></div><div data="ne" class="ui-resizable-handle ui-resizable-ne"></div><div data="se" class="ui-resizable-handle ui-resizable-se"></div><div data="sw" class="ui-resizable-handle ui-resizable-sw"></div><div data="nw" class="ui-resizable-handle ui-resizable-nw"></div></div>');
     var $helpers__drag = $('<div class="helpers__drag"></div>');
     var $helpers__parent = $('<div class="helpers__parent"></div>');
     var $helpers__resize = $('<div class="helpers__resize"></div>');
+    var $helpers__rotate = $('<div class="helpers__rotate"></div>');
 
     $helpers.html('');
     $helpers.removeClass('parent-coord');
@@ -135,13 +135,37 @@ $(function () {
     var event = null;
     var shiftX;
     var shiftY;
+    var rotation;
     var scrollX = false;
     var scrollY = false;
 
+    
+    $helpers__box.rotatable({
+      angle : getRotationDegrees($helpers__box, 'rad'), 
+      wheelRotate: false,
+      rotationCenterX : 50, 
+      rotationCenterY : 50,
+      start: function(e, ui) {
+        $('.helpers').addClass('helpers__active')
+        //event = 'rotate';
+        update();
+      },
+      rotate: function(e, ui) {
+        update();
+      },
+      stop: function(e, ui) {
+        //event = null;
+        update();
+        
+      }
+       
+    })
     //
     //
     //
     $helpers__box.on('mousedown', function (e) {
+      
+      
       $helpers.addClass('helpers__active');
       scrollX = $documents.scrollLeft();
       scrollY = $documents.scrollTop();
@@ -160,17 +184,14 @@ $(function () {
         shiftX = e.pageX - $documents.scrollLeft() - $helpers__drag.offset().left + $documents.offset().left;
         shiftY = e.pageY - $documents.scrollTop() - $helpers__drag.offset().top + $documents.offset().top;
 
-
-
+        
+      
+        
       } else if ($(e.target).is('.ui-resizable-handle')) {
         event = 'resize';
         $(e.target).addClass('ui-resizable-handle-active');
 
-
-
-        var $active;
-
-        $active = $helpers__resize.clone().appendTo($helpers).attr('data', $(e).attr('data')).addClass('active');
+        var $active = $helpers__resize.clone().appendTo($helpers).attr('data', $(e).attr('data')).addClass('active');
         $active.css({
           'position': 'absolute',
           'width': $('.ui-resizable-handle-active').css('width'),
@@ -178,11 +199,6 @@ $(function () {
           'top': $documents.scrollTop() + $('.ui-resizable-handle-active').offset().top - $documents.offset().top + 'px',
           'left': $documents.scrollLeft() + $('.ui-resizable-handle-active').offset().left - $documents.offset().left + 'px'
         });
-
-
-
-
-
 
         shiftX = e.pageX - $documents.scrollLeft() - $active.offset().left + $documents.offset().left;
         shiftY = e.pageY - $documents.scrollTop() - $active.offset().top + $documents.offset().top;
@@ -199,8 +215,10 @@ $(function () {
       $helpers.removeClass('helpers__active');
       $helpers__drag.remove();
       $('.helpers__resize').remove();
+      $('.helpers__rotate').remove();
       $('.ui-resizable-handle-active').removeClass('ui-resizable-handle-active');
       app.f.virtualbodySizeDetector();
+      
     });
 
     //
@@ -215,7 +233,8 @@ $(function () {
     //
     //
     $(window).on('mousemove', function (e) {
-
+      
+      
       if (event === 'drag') {
 
         $helpers__drag.css({
@@ -249,6 +268,8 @@ $(function () {
         update();
       }
 
+    
+      
       if (event === 'resize') {
 
         var $activeHelper = $('.helpers__resize.active');
@@ -398,16 +419,21 @@ $(function () {
       return [nx, ny];
     }
 
-    function getRotationDegrees(obj) {
+    function getRotationDegrees(obj , unit) {
       var matrix = obj.css("-webkit-transform") || obj.css("transform");
+      var angle;
       if (matrix !== 'none') {
         var values = matrix.split('(')[1].split(')')[0].split(',');
         var a = values[0];
         var b = values[1];
-        var angle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
-
+        
+        if (unit === 'rad'){
+          angle = Math.atan2(b, a);
+        } else {
+          angle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
+        }
       } else {
-        var angle = 0;
+        angle = 0;
       }
       return angle
         //return (angle < 0) ? angle += 360 : angle;
