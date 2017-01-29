@@ -41,6 +41,7 @@ $(function () {
       } else {
         $selectedElement = null;
         $helpers.html('');
+
         //$helpers.removeClass('parent-coord');
         $('#sidebarTabs-layers li div').removeClass('ui-sortable-selected');
       }
@@ -101,44 +102,40 @@ $(function () {
     $($parents.get().reverse()).each(function (i, e) {
       if (i > 1) {
 
-        var $parentnode = $helpers__parent.clone().appendTo($tree);
-        $tree = $parentnode;
-
-        $parentnode.css({
+        $tree = $helpers__parent.clone().appendTo($tree);
+        $tree.css({
           'position': 'absolute',
           'width': parseInt(e.style.width) + 'px',
           'height': parseInt(e.style.height) + 'px',
           'top': parseInt(e.style.top) + 'px',
           'left': parseInt(e.style.left) + 'px',
           'transform': $(e).css('transform'),
-          'transform-origin': '50% 50% 0' //$(e).css('transform-origin')
+          'transform-origin': '50% 50% 0'
         });
       }
     });
 
     $tree.append($helpers__box);
 
-    var elem = $selectedElement[0];
-
     $helpers__box.parent().addClass('parent-coord')
-    
+        
     $helpers__box.css({
       'position': 'absolute',
-      'width': parseInt(elem.style.width) + 'px',
-      'height': parseInt(elem.style.height) + 'px',
-      'top': parseInt(elem.style.top) + 'px',
-      'left': parseInt(elem.style.left) + 'px',
+      'width': parseInt($selectedElement[0].style.width) + 'px',
+      'height': parseInt($selectedElement[0].style.height) + 'px',
+      'top': parseInt($selectedElement[0].style.top) + 'px',
+      'left': parseInt($selectedElement[0].style.left) + 'px',
       'transform': $selectedElement.css('transform'),
-      'transform-origin': '50% 50% 0' //$selectedElement.css('transform-origin')
+      'transform-origin': '50% 50% 0'
     });
 
     var event = null;
     var shiftX;
     var shiftY;
-    var rotation;
     var scrollX = false;
     var scrollY = false;
-
+    var $elem;
+    var $rect;
     
     $helpers__box.rotatable({
       angle : getRotationDegrees($helpers__box, 'rad'), 
@@ -146,63 +143,57 @@ $(function () {
       rotationCenterX : 50, 
       rotationCenterY : 50,
       start: function(e, ui) {
-        $('.helpers').addClass('helpers__active')
-        //event = 'rotate';
-        update();
+        $helpers.addClass('helpers__active');
+        event = 'rotate';
       },
       rotate: function(e, ui) {
         update();
       },
       stop: function(e, ui) {
-        //event = null;
+        event = null;
+        $helpers.removeClass('helpers__active');
         update();
-        
       }
        
-    })
+    });
+    
     //
     //
     //
     $helpers__box.on('mousedown', function (e) {
       
-      
       $helpers.addClass('helpers__active');
       scrollX = $documents.scrollLeft();
       scrollY = $documents.scrollTop();
       
+      
+      
       if ($(e.target).is('.helpers__box')) {
+        
         event = 'drag';
         $helpers.append($helpers__drag);
-        $helpers__drag.css({
-          'position': 'absolute',
-          'width': $helpers__box.css('width'),
-          'height': $helpers__box.css('height'),
-          'top': $documents.scrollTop() + $helpers__box.offset().top - $documents.offset().top + 'px',
-          'left': $documents.scrollLeft() + $helpers__box.offset().left - $documents.offset().left + 'px'
-        });
+        $elem = $helpers__box;
+        $rect = $helpers__drag;
 
-        shiftX = e.pageX - $documents.scrollLeft() - $helpers__drag.offset().left + $documents.offset().left;
-        shiftY = e.pageY - $documents.scrollTop() - $helpers__drag.offset().top + $documents.offset().top;
-
-        
-      
-        
       } else if ($(e.target).is('.ui-resizable-handle')) {
+        
         event = 'resize';
-        $(e.target).addClass('ui-resizable-handle-active');
-
-        var $active = $helpers__resize.clone().appendTo($helpers).attr('data', $(e).attr('data')).addClass('active');
-        $active.css({
-          'position': 'absolute',
-          'width': $('.ui-resizable-handle-active').css('width'),
-          'height': $('.ui-resizable-handle-active').css('height'),
-          'top': $documents.scrollTop() + $('.ui-resizable-handle-active').offset().top - $documents.offset().top + 'px',
-          'left': $documents.scrollLeft() + $('.ui-resizable-handle-active').offset().left - $documents.offset().left + 'px'
-        });
-
-        shiftX = e.pageX - $documents.scrollLeft() - $active.offset().left + $documents.offset().left;
-        shiftY = e.pageY - $documents.scrollTop() - $active.offset().top + $documents.offset().top;
+        $helpers.append($helpers__resize);
+        $elem = $(e.target).addClass('ui-resizable-handle-active');
+        $rect = $helpers__resize; 
+        
       }
+      
+      $rect.css({
+          'width': $elem.css('width'),
+          'height': $elem.css('height'),
+          'top': $documents.scrollTop() + $elem.offset().top - $documents.offset().top + 'px',
+          'left': $documents.scrollLeft() + $elem.offset().left - $documents.offset().left + 'px'
+      });
+
+      shiftX = e.pageX - $documents.scrollLeft() - $rect.offset().left + $documents.offset().left;
+      shiftY = e.pageY - $documents.scrollTop() - $rect.offset().top + $documents.offset().top;
+      
     });
 
     //
@@ -214,8 +205,8 @@ $(function () {
       scrollY = false;
       $helpers.removeClass('helpers__active');
       $helpers__drag.remove();
-      $('.helpers__resize').remove();
-      $('.helpers__rotate').remove();
+      $helpers__resize.remove();
+      $helpers__rotate.remove();
       $('.ui-resizable-handle-active').removeClass('ui-resizable-handle-active');
       app.f.virtualbodySizeDetector();
       
@@ -254,16 +245,13 @@ $(function () {
         })
 
 
-        var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr);
-
+        var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr, true);
 
 
         $helpers__box.css({
-          left: Math.round(parseInt($helpers__box.css('left')) + xy[0]) + 'px',
-          top: Math.round(parseInt($helpers__box.css('top')) + xy[1]) + 'px'
+          left: parseInt($helpers__box.css('left')) + xy[0] + 'px',
+          top: parseInt($helpers__box.css('top')) + xy[1] + 'px'
         });
-
-
 
         update();
       }
@@ -272,7 +260,7 @@ $(function () {
       
       if (event === 'resize') {
 
-        var $activeHelper = $('.helpers__resize.active');
+        var $activeHelper = $('.helpers__resize');
         var $activePoint = $('.ui-resizable-handle-active');
 
 
@@ -281,7 +269,7 @@ $(function () {
           top: e.pageY - shiftY + 'px'
         });
 
-        var corner = 3;
+        var corner =  3;
         var maxr = 0;
 
         $('.helpers__parent').each(function (i, e) {
@@ -294,14 +282,7 @@ $(function () {
         var stepX = helperRect.left - pointRect.left;
         var stepY = helperRect.top - pointRect.top;
 
-        var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr + getRotationDegrees($helpers__box));
-        
-        xy[0] = Math.round(xy[0]);
-        xy[1] = Math.round(xy[1]);
-
-
-
-
+        var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr + getRotationDegrees($helpers__box), true);
 
         if ($activePoint.is('.ui-resizable-n')) {
           // верхняя сторона
@@ -402,21 +383,20 @@ $(function () {
 
         $('.ui-resizable-ne, .ui-resizable-se, .ui-resizable-sw, .ui-resizable-nw, .ui-resizable-n, .ui-resizable-e, .ui-resizable-s, .ui-resizable-w ').removeAttr('style');
 
-
         update();
 
       }
     });
 
 
-
-    function rotate(cx, cy, x, y, angle) {
+    function rotate(cx, cy, x, y, angle, round) {
       var radians = (Math.PI / 180) * angle,
         cos = Math.cos(radians),
         sin = Math.sin(radians),
         nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
         ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
-      return [nx, ny];
+      
+        return (round)?[ Math.round(nx),  Math.round(ny) ] : [nx, ny];
     }
 
     function getRotationDegrees(obj , unit) {
@@ -427,16 +407,12 @@ $(function () {
         var a = values[0];
         var b = values[1];
         
-        if (unit === 'rad'){
-          angle = Math.atan2(b, a);
-        } else {
-          angle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
-        }
+        angle = (unit === 'rad') ? Math.atan2(b, a) : Math.round(Math.atan2(b, a) * (180 / Math.PI));
+          
       } else {
         angle = 0;
       }
       return angle
-        //return (angle < 0) ? angle += 360 : angle;
     }
 
 
