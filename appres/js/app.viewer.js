@@ -60,12 +60,18 @@ $(function () {
     var $helpers = app.e.$helpers;
 
 
-
     if ($selectedElement) app.f.selectLayer($selectedElement);
+    
+    var w = 0;
+    var h = 0;
+    $documents__content.find('.editable').each(function(i,e){
+      var offset = $(e).offset();
+      w = ( $(e).outerWidth() + offset.left > w ) ? $(e).outerWidth() + offset.left : w;
+      h = ( $(e).outerHeight() + offset.top > h ) ? $(e).outerHeight() + offset.top : h;
+    });
 
-    var width = ($documents__content.outerWidth() >= $documents.outerWidth()) ? $documents__content.outerWidth() : $documents.outerWidth();
-    var height = ($documents__content.outerHeight() >= $documents.outerHeight()) ? $documents__content.outerHeight() : $documents.outerHeight();
-
+    var width = (w >= $documents.outerWidth()) ? w : $documents.outerWidth();
+    var height = (h >= $documents.outerHeight()) ? h : $documents.outerHeight();
 
     $documents__browser.attr({
       'width': width,
@@ -95,8 +101,7 @@ $(function () {
     var $helpers__resize = $('<div class="helpers__resize"></div>');
     var $helpers__rotate = $('<div class="helpers__rotate"></div>');
 
-    $helpers.html('');
-    $helpers.removeClass('parent-coord');
+    $helpers.html('').removeClass('parent-coord');
     var $tree = $helpers;
 
     $($parents.get().reverse()).each(function (i, e) {
@@ -104,7 +109,6 @@ $(function () {
 
         $tree = $helpers__parent.clone().appendTo($tree);
         $tree.css({
-          'position': 'absolute',
           'width': parseInt(e.style.width) + 'px',
           'height': parseInt(e.style.height) + 'px',
           'top': parseInt(e.style.top) + 'px',
@@ -120,7 +124,6 @@ $(function () {
     $helpers__box.parent().addClass('parent-coord')
         
     $helpers__box.css({
-      'position': 'absolute',
       'width': parseInt($selectedElement[0].style.width) + 'px',
       'height': parseInt($selectedElement[0].style.height) + 'px',
       'top': parseInt($selectedElement[0].style.top) + 'px',

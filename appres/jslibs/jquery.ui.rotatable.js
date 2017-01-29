@@ -168,7 +168,7 @@ $.widget("ui.rotatable", $.ui.mouse, {
             this.stopRotate(event);
             return false;
         }
-
+        
         var rotateAngle = this.getRotateAngle(event);
         var previousRotateAngle = this.elementCurrentAngle;
         this.elementCurrentAngle = rotateAngle;
@@ -189,7 +189,7 @@ $.widget("ui.rotatable", $.ui.mouse, {
             this.elementCurrentAngle = rotateAngle;
         }
 
-        this.performRotation(rotateAngle);
+        //this.performRotation(rotateAngle);
 
         if (previousRotateAngle != rotateAngle) {
             this.hasRotated = true;
