@@ -225,6 +225,15 @@ $(function () {
     //
     $(window).on('mousemove', function (e) {
       
+      if (event){
+        var maxr = 0;
+
+        $('.helpers__parent').each(function (i, e) {
+          maxr += getRotationDegrees($(e));
+        })
+      
+      }
+      
       
       if (event === 'drag') {
 
@@ -233,20 +242,13 @@ $(function () {
           top: e.pageY - shiftY + 'px'
         });
 
-        var dragRect = $helpers__drag.offset();
-        var boxRect = $helpers__box.offset();
-        var stepX = dragRect.left - boxRect.left;
-        var stepY = dragRect.top - boxRect.top;
-
-        var maxr = 0;
-
-        $('.helpers__parent').each(function (i, e) {
-          maxr += getRotationDegrees($(e));
-        })
-
+        var ghostRect = $helpers__drag.offset();
+        var realRect = $helpers__box.offset();
+        
+        var stepX = ghostRect.left - realRect.left;
+        var stepY = ghostRect.top - realRect.top;
 
         var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr, true);
-
 
         $helpers__box.css({
           left: parseInt($helpers__box.css('left')) + xy[0] + 'px',
@@ -260,27 +262,20 @@ $(function () {
       
       if (event === 'resize') {
 
-        var $activeHelper = $('.helpers__resize');
         var $activePoint = $('.ui-resizable-handle-active');
-
-
-        $activeHelper.css({
+        
+        $helpers__resize.css({
           left: e.pageX - shiftX + 'px',
           top: e.pageY - shiftY + 'px'
         });
 
         var corner =  3;
-        var maxr = 0;
 
-        $('.helpers__parent').each(function (i, e) {
-          maxr += getRotationDegrees($(e));
-        })
+        var ghostRect = $helpers__resize.offset();
+        var realRect = $activePoint.offset();
 
-        var pointRect = $activePoint.offset();
-        var helperRect = $activeHelper.offset();
-
-        var stepX = helperRect.left - pointRect.left;
-        var stepY = helperRect.top - pointRect.top;
+        var stepX = ghostRect.left - realRect.left;
+        var stepY = ghostRect.top - realRect.top;
 
         var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr + getRotationDegrees($helpers__box), true);
 
