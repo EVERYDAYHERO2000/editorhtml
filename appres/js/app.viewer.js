@@ -27,6 +27,11 @@ $(function () {
       $documents__browser.removeClass('documents__browser_disabled');
     });
 
+    
+    $documents__content.find('body *:not(".editable")').css({
+      'pointer-events' : 'none'
+    })
+    
     /*
       Выбираем объект из элементов под курсором с классом .editable
     */
