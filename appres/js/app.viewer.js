@@ -102,7 +102,6 @@ $(function () {
     var $helpers__drag = $('<div class="helpers__drag"></div>');
     var $helpers__parent = $('<div class="helpers__parent"></div>');
     var $helpers__resize = $('<div class="helpers__resize"></div>');
-    var $helpers__rotate = $('<div class="helpers__rotate"></div>');
     
     var event = null;
     var shiftX;
@@ -167,7 +166,6 @@ $(function () {
        
     });
               
-    
     //
     //
     //
@@ -217,7 +215,6 @@ $(function () {
       $helpers.removeClass('helpers__active');
       $helpers__drag.remove();
       $helpers__resize.remove();
-      $helpers__rotate.remove();
       $('.ui-resizable-handle-active').removeClass('ui-resizable-handle-active');
       app.f.virtualbodySizeDetector();
       
@@ -377,7 +374,7 @@ $(function () {
 
         }
 
-        $('.ui-resizable-ne, .ui-resizable-se, .ui-resizable-sw, .ui-resizable-nw, .ui-resizable-n, .ui-resizable-e, .ui-resizable-s, .ui-resizable-w ').removeAttr('style');
+        $('.helpers .ui-resizable-handle').removeAttr('style');
 
         update();
 

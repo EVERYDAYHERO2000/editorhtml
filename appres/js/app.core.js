@@ -16,7 +16,7 @@ $(function () {
     app.e.$documents__content;
     app.e.$selectedElement;
     app.e.$helpers;
-    app.e.$helpers__virtualbody
+    app.e.$helpers__virtualbody;
     
     $('head').append('<link rel="shortcut icon" href="/appres/icon/icon-16.png" type="image/x-icon"><link rel="icon" href="/appres/icon/icon-16.png" type="image/x-icon" sizes="16x16"><link rel="icon" href="/appres/icon/icon-32.png" type="image/x-icon" sizes="32x32">');
     
