@@ -23,7 +23,6 @@ $(function () {
     });
 
     $(document).on('mouseup', function () {
-      
       $documents__browser.removeClass('documents__browser_disabled');
     });
 
@@ -47,7 +46,6 @@ $(function () {
         $selectedElement = null;
         $helpers.html('');
 
-        //$helpers.removeClass('parent-coord');
         $('#sidebarTabs-layers li div').removeClass('ui-sortable-selected');
       }
       
@@ -105,7 +103,16 @@ $(function () {
     var $helpers__parent = $('<div class="helpers__parent"></div>');
     var $helpers__resize = $('<div class="helpers__resize"></div>');
     var $helpers__rotate = $('<div class="helpers__rotate"></div>');
-
+    
+    var event = null;
+    var shiftX;
+    var shiftY;
+    var scrollX = false;
+    var scrollY = false;
+    var $elem;
+    var $rect;
+    var maxr = 0;
+    
     $helpers.html('').removeClass('parent-coord');
     var $tree = $helpers;
 
@@ -121,9 +128,12 @@ $(function () {
           'transform': $(e).css('transform'),
           'transform-origin': '50% 50% 0'
         });
+        
+        maxr += getRotationDegrees($tree);
       }
     });
 
+    
     $tree.append($helpers__box);
 
     $helpers__box.parent().addClass('parent-coord')
@@ -136,14 +146,6 @@ $(function () {
       'transform': $selectedElement.css('transform'),
       'transform-origin': '50% 50% 0'
     });
-
-    var event = null;
-    var shiftX;
-    var shiftY;
-    var scrollX = false;
-    var scrollY = false;
-    var $elem;
-    var $rect;
     
     $helpers__box.rotatable({
       angle : getRotationDegrees($helpers__box, 'rad'), 
@@ -164,6 +166,7 @@ $(function () {
       }
        
     });
+              
     
     //
     //
@@ -232,17 +235,7 @@ $(function () {
     //
     //
     $(window).on('mousemove', function (e) {
-      
-      if (event){
-        var maxr = 0;
-
-        $('.helpers__parent').each(function (i, e) {
-          maxr += getRotationDegrees($(e));
-        })
-      
-      }
-      
-      
+            
       if (event === 'drag') {
 
         $helpers__drag.css({

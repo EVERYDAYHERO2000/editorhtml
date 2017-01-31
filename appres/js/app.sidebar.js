@@ -121,7 +121,20 @@ $(function () {
     $DOM.nestedSortable({
       handle: 'div',
       items: 'li',
-      toleranceElement: '> div'
+      toleranceElement: '> div',
+      relocate: function(e,ui){
+        
+        //$documents__content.find('body').html('');
+        
+        $DOM.find('.ui-sortable-handle').each(function(i,e){
+          
+          var $parent = ( $( $(e).parents('li')[1] ).data('node') ) ? $( $(e).parents('li')[1] ).data('node') : $documents__content.find('body');
+          
+          $parent.append( $($(e).closest('li')[0]).data('node') );
+        });
+        
+        app.f.selectElement( $(ui.item[0]).data('node') );
+      } 
     });
 
     $DOM.find('.ui-sortable-handle').on('click', function (e) {
