@@ -18,6 +18,8 @@ $(function () {
 
     $documents.append($helpers);
 
+    
+    
     $(window).resize(function () {
       app.f.virtualbodySizeDetector();
     });
@@ -29,7 +31,10 @@ $(function () {
     
     $documents__content.find('body *:not(".editable")').css({
       'pointer-events' : 'none'
-    })
+    });
+    $documents__content.find('*').css({
+      'user-select' : 'none'
+    });
     
     /*
       Выбираем объект из элементов под курсором с классом .editable
@@ -98,7 +103,16 @@ $(function () {
     var $selectedElement = app.e.$selectedElement = elem;
     var $parents = $selectedElement.parents();
     var $helpers = app.e.$helpers;
-    var $helpers__box = $('<div class="helpers__box"><div data="n" class="ui-resizable-handle ui-resizable-n"></div><div data="e" class="ui-resizable-handle ui-resizable-e"></div><div data="s" class="ui-resizable-handle ui-resizable-s"></div><div data="w" class="ui-resizable-handle ui-resizable-w"></div><div data="ne" class="ui-resizable-handle ui-resizable-ne"></div><div data="se" class="ui-resizable-handle ui-resizable-se"></div><div data="sw" class="ui-resizable-handle ui-resizable-sw"></div><div data="nw" class="ui-resizable-handle ui-resizable-nw"></div></div>');
+    var $helpers__box = $('<div class="helpers__box">'+
+      '<div data="n" class="ui-resizable-handle ui-resizable-n"><div class="ui-resizable-handle-area"></div></div>'+
+      '<div data="e" class="ui-resizable-handle ui-resizable-e"><div class="ui-resizable-handle-area"></div></div>'+
+      '<div data="s" class="ui-resizable-handle ui-resizable-s"><div class="ui-resizable-handle-area"></div></div>'+
+      '<div data="w" class="ui-resizable-handle ui-resizable-w"><div class="ui-resizable-handle-area"></div></div>'+
+      '<div data="ne" class="ui-resizable-handle ui-resizable-ne"><div class="ui-resizable-handle-area"></div></div>'+
+      '<div data="se" class="ui-resizable-handle ui-resizable-se"><div class="ui-resizable-handle-area"></div></div>'+
+      '<div data="sw" class="ui-resizable-handle ui-resizable-sw"><div class="ui-resizable-handle-area"></div></div>'+
+      '<div data="nw" class="ui-resizable-handle ui-resizable-nw"><div class="ui-resizable-handle-area"></div></div>'+
+      '</div>');
     var $helpers__drag = $('<div class="helpers__drag"></div>');
     var $helpers__parent = $('<div class="helpers__parent"></div>');
     var $helpers__resize = $('<div class="helpers__resize"></div>');
@@ -165,17 +179,33 @@ $(function () {
       }
        
     });
-              
+       
+    
     //
     //
     //
+    var clicks = 0;
     $helpers__box.on('mousedown', function (e) {
+      
+      e.preventDefault();
+      clicks++;
+      
+      setTimeout(function() {
+        clicks = 0;
+      }, 400);
+      
+      
+      if (clicks === 2) {
+                console.log(1)
+                clicks = 0;
+                return;
+            } else {
+                console.log(0)
+            
       
       $helpers.addClass('helpers__active');
       scrollX = $documents.scrollLeft();
       scrollY = $documents.scrollTop();
-      
-      
       
       if ($(e.target).is('.helpers__box')) {
         
@@ -184,11 +214,11 @@ $(function () {
         $elem = $helpers__box;
         $rect = $helpers__drag;
 
-      } else if ($(e.target).is('.ui-resizable-handle')) {
+      } else if ($(e.target).is('.ui-resizable-handle-area')) {
         
         event = 'resize';
         $helpers.append($helpers__resize);
-        $elem = $(e.target).addClass('ui-resizable-handle-active');
+        $elem = $(e.target).parent().addClass('ui-resizable-handle-active');
         $rect = $helpers__resize; 
         
       }
@@ -203,6 +233,7 @@ $(function () {
       shiftX = e.pageX - $documents.scrollLeft() - $rect.offset().left + $documents.offset().left;
       shiftY = e.pageY - $documents.scrollTop() - $rect.offset().top + $documents.offset().top;
       
+      }        
     });
 
     //

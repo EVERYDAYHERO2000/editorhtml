@@ -328,6 +328,12 @@ li {
   top: 0 - @editableHandlesSize / 2;
   left: 0 - @editableHandlesSize / 2;
 }
+.helpers .ui-resizable-handle-area {
+  width: @editableHandlesSize + 4px;
+  height: @editableHandlesSize + 4px;
+  transform: translate(-2px,-2px);
+}
+
 .selected {
   outline: 1px solid @selectedColor;
 }

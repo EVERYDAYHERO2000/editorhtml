@@ -3,7 +3,8 @@ $(function () {
     
   app.f.create = function () {
     document.title = app.settings.title;
-    //console.clear();
+    console.clear();
+    
 
     app.e.$app = $('<div class="app"><div class="app__menu"></div><div class="app__frame"></div></div>');
     app.e.$frame__tools = $('<div class="frame__tools"></div>');
@@ -18,7 +19,7 @@ $(function () {
     app.e.$helpers;
     app.e.$helpers__virtualbody;
     
-    $('head').append('<link rel="shortcut icon" href="/appres/icon/icon-16.png" type="image/x-icon"><link rel="icon" href="/appres/icon/icon-16.png" type="image/x-icon" sizes="16x16"><link rel="icon" href="/appres/icon/icon-32.png" type="image/x-icon" sizes="32x32">');
+    $('head').append('<link rel="shortcut icon" href="/appres/icon/icon-16.png" type="image/x-icon"><link rel="icon" href="/appres/icon/icon-16.png" type="image/x-icon" sizes="16x16"><link rel="icon" href="/appres/icon/icon-32.png" type="image/x-icon" sizes="32x32"><meta name="viewport" content="user-scalable=NO, width=device-width, initial-scale=1.0">');
     
 
     $('body').append(app.e.$app);
