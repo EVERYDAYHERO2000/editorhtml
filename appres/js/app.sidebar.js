@@ -124,7 +124,7 @@ $(function () {
       toleranceElement: '> div',
       relocate: function(e,ui){
         
-        //$documents__content.find('body').html('');
+
         
         $DOM.find('.ui-sortable-handle').each(function(i,e){
           
@@ -149,6 +149,10 @@ $(function () {
 
     });
 
+  }
+  
+  app.f.deselectLayer = function(){
+    $('#sidebarTabs-layers li div').removeClass('ui-sortable-selected');
   }
   
   app.f.selectLayer = function(elem){
