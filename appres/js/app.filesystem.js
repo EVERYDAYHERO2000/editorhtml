@@ -41,6 +41,7 @@ $(function () {
 
         app.f.getDocumentTree();
         app.f.setHelpers();
+        app.f.setStatusBar();
         app.f.setUndoManager();
       });
 

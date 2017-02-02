@@ -40,6 +40,8 @@ $(function () {
     app.f.setSidebar();
 
     app.f.loadProject();
+    
+    
 
   }
   
