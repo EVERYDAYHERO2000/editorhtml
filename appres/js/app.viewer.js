@@ -58,8 +58,9 @@ $(function () {
     var $documents__content = app.e.$documents__content;
     var $selectedElement = app.e.$selectedElement;
     var $helpers = app.e.$helpers;
-
-
+    var zoom = app.settings.window.zoom;
+    
+    
     if ($selectedElement) app.f.selectLayer($selectedElement);
 
     var w = 0;
@@ -74,8 +75,8 @@ $(function () {
     var height = (h >= $documents.outerHeight()) ? h : $documents.outerHeight();
 
     $documents__browser.attr({
-      'width': width,
-      'height': height
+      'width': width * zoom,
+      'height': height * zoom
     });
 
     $helpers.css({
@@ -184,6 +185,8 @@ $(function () {
     var clicks = 0;
     $helpers__box.on('mousedown', function (e) {
 
+      
+      
       e.preventDefault();
       clicks++;
 
@@ -260,7 +263,9 @@ $(function () {
     //
     //
     $(window).on('mousemove', function (e) {
-
+      
+      
+      
       switch (event) {
         case 'drag':
           
@@ -307,96 +312,96 @@ $(function () {
           if ($activePoint.is('.ui-resizable-n')) {
             // верхняя сторона
             $activePoint.css({
-              top: parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+              'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
             });
 
             $helpers__box.css({
-              top: parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
-              height: parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px'
+              'top': parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
+              'height': parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px'
             });
 
           } else if ($activePoint.is('.ui-resizable-e')) {
             // правая сторона
             $activePoint.css({
-              left: parseInt($activePoint.css('left')) + xy[0] + corner + 'px'
+              'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px'
             });
 
             $helpers__box.css({
-              width: parseInt($activePoint.css('left')) + 'px'
+              'width': parseInt($activePoint.css('left')) + 'px'
             });
 
           } else if ($activePoint.is('.ui-resizable-s')) {
             // нижняя сторона
             $activePoint.css({
-              top: parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+              'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
             });
 
             $helpers__box.css({
-              height: parseInt($activePoint.css('top')) + 'px'
+              'height': parseInt($activePoint.css('top')) + 'px'
             });
 
           } else if ($activePoint.is('.ui-resizable-w')) {
             // левая сторона
             $activePoint.css({
-              left: parseInt($activePoint.css('left')) + xy[0] + corner + 'px'
+              'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px'
             });
 
             $helpers__box.css({
-              left: parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
-              width: parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px',
+              'left': parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
+              'width': parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px',
             });
 
           } else if ($activePoint.is('.ui-resizable-ne')) {
             // верхний правый угол
             $activePoint.css({
-              left: parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
-              top: parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+              'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
+              'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
             });
 
             $helpers__box.css({
-              top: parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
-              height: parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px',
-              left: parseInt($helpers__box.css('left')) + 'px',
-              width: parseInt($activePoint.css('left')) + 'px'
+              'top': parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
+              'height': parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px',
+              'left': parseInt($helpers__box.css('left')) + 'px',
+              'width': parseInt($activePoint.css('left')) + 'px'
             });
 
           } else if ($activePoint.is('.ui-resizable-se')) {
             // нижний правый угол
             $activePoint.css({
-              left: parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
-              top: parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+              'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
+              'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
             });
 
             $helpers__box.css({
-              width: parseInt($activePoint.css('left')) + 'px',
-              height: parseInt($activePoint.css('top')) + 'px'
+              'width': parseInt($activePoint.css('left')) + 'px',
+              'height': parseInt($activePoint.css('top')) + 'px'
             });
 
           } else if ($activePoint.is('.ui-resizable-sw')) {
             // нижней левый угол
             $activePoint.css({
-              left: parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
-              top: parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+              'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
+              'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
             });
 
             $helpers__box.css({
-              left: parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
-              width: parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px',
-              height: parseInt($activePoint.css('top')) + 'px'
+              'left': parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
+              'width': parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px',
+              'height': parseInt($activePoint.css('top')) + 'px'
 
             });
           } else if ($activePoint.is('.ui-resizable-nw')) {
             // верхний левый угол
             $activePoint.css({
-              left: parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
-              top: parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+              'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
+              'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
             });
 
             $helpers__box.css({
-              top: parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
-              left: parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
-              height: parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px',
-              width: parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px'
+              'top': parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
+              'left': parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
+              'height': parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px',
+              'width': parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px'
             });
 
           }
