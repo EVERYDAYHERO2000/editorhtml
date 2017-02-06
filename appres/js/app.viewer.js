@@ -91,7 +91,7 @@ $(function () {
     var $documents__browser = app.e.$documents__browser;
     var $selectedElement = app.e.$selectedElement = elem;
     var $helpers = app.e.$helpers;
-    $helpers.empty();
+    $helpers.empty().removeClass('parent-coord');
 
     if (elem !== null) {
 
@@ -138,6 +138,7 @@ $(function () {
 
 
       $tree.append($helpers__box);
+      $helpers__box.parent().addClass('parent-coord');
 
       $helpers__box.css({
         'width': parseInt($selectedElement[0].style.width) + 'px',
