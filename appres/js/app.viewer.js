@@ -254,8 +254,8 @@ $(function () {
       $(window).on('mousemove', function (e) {
 
         $helpers__drag.css({
-          left: e.pageX - shiftX + 'px',
-          top: e.pageY - shiftY + 'px'
+          'left': e.pageX - shiftX + 'px',
+          'top': e.pageY - shiftY + 'px'
         });
         
         var $active = (event === 'resize') ? $('.ui-resizable-handle-active') : $helpers__box;
@@ -271,8 +271,8 @@ $(function () {
           case 'drag':
             
             $helpers__box.css({
-              left: parseInt($helpers__box.css('left')) + xy[0] + 'px',
-              top: parseInt($helpers__box.css('top')) + xy[1] + 'px'
+              'left': parseInt($helpers__box.css('left')) + xy[0] + 'px',
+              'top': parseInt($helpers__box.css('top')) + xy[1] + 'px'
             });
 
             update();
