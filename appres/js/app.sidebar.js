@@ -142,29 +142,28 @@ $(function () {
       $(this).addClass('ui-sortable-selected');
       
       app.f.selectElement( $(this).parent().data('node') );
-      
-      
-      
-
-
     });
 
   }
   
-  app.f.deselectLayer = function(){
-    $('#sidebarTabs-layers li div').removeClass('ui-sortable-selected');
-  }
+
   
   app.f.selectLayer = function(elem){
+    
+    if (elem === null){
+      $('#sidebarTabs-layers li div').removeClass('ui-sortable-selected');
+      
+    } else {
+    
     $('#sidebarTabs-layers').find('li').each(function () {
         if ($(this).data('node')[0] === elem[0]) {
-          //console.log($(this).data('node')[0],$(this)[0])
           
           $(this).find('div').addClass('ui-sortable-selected');
         } else {
           $(this).find('div').removeClass('ui-sortable-selected');
         }
       });
+    }
   }
 
 });

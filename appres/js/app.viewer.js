@@ -12,7 +12,6 @@ $(function () {
 
     var $documents = app.e.$documents;
     var $documents__content = app.e.$documents__content;
-    var $selectedElement = app.e.$selectedElement;
     var $documents__browser = app.e.$documents__browser;
     var $helpers = app.e.$helpers = $('<div class="helpers"></div>');
 
@@ -38,12 +37,12 @@ $(function () {
     $documents__content.on('mouseup', function (e) {
 
       if ($(e.target).is('.editable')) {
-        $selectedElement = ($(e.target).is('.editable')) ? $(e.target) : $(e.target).parents('.editable').first();
-        app.f.selectLayer($selectedElement);
-        app.f.selectElement($selectedElement);
+        var $selected = ($(e.target).is('.editable')) ? $(e.target) : $(e.target).parents('.editable').first();
+        app.f.selectLayer($selected);
+        app.f.selectElement($selected);
       } else {
-        app.f.deselectLayer();
-        app.f.deselectElement();
+        app.f.selectLayer(null);
+        app.f.selectElement(null);
       }
 
     });
@@ -58,9 +57,7 @@ $(function () {
     var $documents__content = app.e.$documents__content;
     var $selectedElement = app.e.$selectedElement;
     var $helpers = app.e.$helpers;
-    var zoom = app.settings.window.zoom;
-    
-    
+
     if ($selectedElement) app.f.selectLayer($selectedElement);
 
     var w = 0;
@@ -75,8 +72,8 @@ $(function () {
     var height = (h >= $documents.outerHeight()) ? h : $documents.outerHeight();
 
     $documents__browser.attr({
-      'width': width * zoom,
-      'height': height * zoom
+      'width': width,
+      'height': height
     });
 
     $helpers.css({
@@ -87,333 +84,324 @@ $(function () {
 
   }
 
-  app.f.deselectElement = function () {
-    var $selectedElement = app.e.$selectedElement = null;
-    var $helpers = app.e.$helpers;
-    $helpers.empty();
-  }
-
   app.f.selectElement = function (elem) {
-
+    
     var $documents = app.e.$documents;
     var $documents__content = app.e.$documents__content;
     var $documents__browser = app.e.$documents__browser;
     var $selectedElement = app.e.$selectedElement = elem;
-    var $parents = $selectedElement.parents();
     var $helpers = app.e.$helpers;
-    var $helpers__box = $('<div class="helpers__box">' +
-      '<div class="ui-resizable-handle ui-resizable-n"><div class="ui-resizable-handle-area"></div></div>' +
-      '<div class="ui-resizable-handle ui-resizable-e"><div class="ui-resizable-handle-area"></div></div>' +
-      '<div class="ui-resizable-handle ui-resizable-s"><div class="ui-resizable-handle-area"></div></div>' +
-      '<div class="ui-resizable-handle ui-resizable-w"><div class="ui-resizable-handle-area"></div></div>' +
-      '<div class="ui-resizable-handle ui-resizable-ne"><div class="ui-resizable-handle-area"></div></div>' +
-      '<div class="ui-resizable-handle ui-resizable-se"><div class="ui-resizable-handle-area"></div></div>' +
-      '<div class="ui-resizable-handle ui-resizable-sw"><div class="ui-resizable-handle-area"></div></div>' +
-      '<div class="ui-resizable-handle ui-resizable-nw"><div class="ui-resizable-handle-area"></div></div>' +
-      '</div>');
-    var $helpers__drag = $('<div class="helpers__drag"></div>');
-    var $helpers__parent = $('<div class="helpers__parent"></div>');
-    var $helpers__resize = $('<div class="helpers__resize"></div>');
+    $helpers.empty();
 
-    var event = null;
-    var shiftX;
-    var shiftY;
-    var scrollX = false;
-    var scrollY = false;
-    var $elem;
-    var $rect;
-    var maxr = 0;
+    if (elem !== null) {
 
-    $helpers.empty().removeClass('parent-coord');
-    var $tree = $helpers;
+      var $parents = $selectedElement.parents();
+      var $helpers__box = $('<div class="helpers__box">' +
+        '<div class="ui-resizable-handle ui-resizable-n"><div class="ui-resizable-handle-area"></div></div>' +
+        '<div class="ui-resizable-handle ui-resizable-e"><div class="ui-resizable-handle-area"></div></div>' +
+        '<div class="ui-resizable-handle ui-resizable-s"><div class="ui-resizable-handle-area"></div></div>' +
+        '<div class="ui-resizable-handle ui-resizable-w"><div class="ui-resizable-handle-area"></div></div>' +
+        '<div class="ui-resizable-handle ui-resizable-ne"><div class="ui-resizable-handle-area"></div></div>' +
+        '<div class="ui-resizable-handle ui-resizable-se"><div class="ui-resizable-handle-area"></div></div>' +
+        '<div class="ui-resizable-handle ui-resizable-sw"><div class="ui-resizable-handle-area"></div></div>' +
+        '<div class="ui-resizable-handle ui-resizable-nw"><div class="ui-resizable-handle-area"></div></div>' +
+        '</div>');
+      var $helpers__drag = $('<div class="helpers__drag"></div>');
 
-    $($parents.get().reverse()).each(function (i, e) {
-      if (i > 1) {
+      var event = null;
+      var shiftX;
+      var shiftY;
+      var scrollX = false;
+      var scrollY = false;
+      var $elem;
+      var $rect;
+      var maxr = 0;
 
-        $tree = $helpers__parent.clone().appendTo($tree);
-        $tree.css({
-          'width': parseInt(e.style.width) + 'px',
-          'height': parseInt(e.style.height) + 'px',
-          'top': parseInt(e.style.top) + 'px',
-          'left': parseInt(e.style.left) + 'px',
-          'transform': $(e).css('transform'),
-          'transform-origin': '50% 50% 0'
-        });
+      var $tree = $helpers;
 
-        maxr += getRotationDegrees($tree);
-      }
-    });
+      $($parents.get().reverse()).each(function (i, e) {
+        if (i > 1) {
 
+          $tree = $helpers__drag.clone().appendTo($tree);
+          $tree.css({
+            'width': parseInt(e.style.width) + 'px',
+            'height': parseInt(e.style.height) + 'px',
+            'top': parseInt(e.style.top) + 'px',
+            'left': parseInt(e.style.left) + 'px',
+            'transform': $(e).css('transform'),
+            'transform-origin': '50% 50% 0'
+          });
 
-    $tree.append($helpers__box);
-
-    $helpers__box.parent().addClass('parent-coord')
-
-    $helpers__box.css({
-      'width': parseInt($selectedElement[0].style.width) + 'px',
-      'height': parseInt($selectedElement[0].style.height) + 'px',
-      'top': parseInt($selectedElement[0].style.top) + 'px',
-      'left': parseInt($selectedElement[0].style.left) + 'px',
-      'transform': $selectedElement.css('transform'),
-      'transform-origin': '50% 50% 0'
-    });
-
-    $helpers__box.rotatable({
-      angle: getRotationDegrees($helpers__box, 'rad'),
-      wheelRotate: false,
-      rotationCenterX: 50,
-      rotationCenterY: 50,
-      start: function (e, ui) {
-        $helpers.addClass('helpers__active');
-        event = 'rotate';
-      },
-      rotate: function (e, ui) {
-        update();
-      },
-      stop: function (e, ui) {
-        event = null;
-        $helpers.removeClass('helpers__active');
-        update();
-      }
-
-    });
+          maxr += getRotationDegrees($tree);
+        }
+      });
 
 
-    //
-    //
-    //
-    var clicks = 0;
-    $helpers__box.on('mousedown', function (e) {
+      $tree.append($helpers__box);
 
-      
-      
-      e.preventDefault();
-      clicks++;
+      $helpers__box.css({
+        'width': parseInt($selectedElement[0].style.width) + 'px',
+        'height': parseInt($selectedElement[0].style.height) + 'px',
+        'top': parseInt($selectedElement[0].style.top) + 'px',
+        'left': parseInt($selectedElement[0].style.left) + 'px',
+        'transform': $selectedElement.css('transform'),
+        'transform-origin': '50% 50% 0'
+      });
 
-      setTimeout(function () {
-        clicks = 0;
-      }, 400);
-
-
-      if (clicks === 2) {
-        app.f.deselectElement();
-        clicks = 0;
-        return;
-
-      } else {
-        $helpers.addClass('helpers__active');
-        scrollX = $documents.scrollLeft();
-        scrollY = $documents.scrollTop();
-
-
-        if ($(e.target).is('.helpers__box')) {
-
-          event = 'drag';
-          $helpers.append($helpers__drag);
-          $elem = $helpers__box;
-          $rect = $helpers__drag;
-
-        } else if ($(e.target).is('.ui-resizable-handle-area')) {
-
-          event = 'resize';
-          $helpers.append($helpers__resize);
-          $elem = $(e.target).parent().addClass('ui-resizable-handle-active');
-          $rect = $helpers__resize;
-
+      $helpers__box.rotatable({
+        angle: getRotationDegrees($helpers__box, 'rad'),
+        wheelRotate: false,
+        rotationCenterX: 50,
+        rotationCenterY: 50,
+        start: function (e, ui) {
+          $helpers.addClass('helpers__active');
+          event = 'rotate';
+        },
+        rotate: function (e, ui) {
+          update();
+        },
+        stop: function (e, ui) {
+          event = null;
+          $helpers.removeClass('helpers__active');
+          update();
         }
 
-        $rect.css({
-          'width': $elem.css('width'),
-          'height': $elem.css('height'),
-          'top': $documents.scrollTop() + $elem.offset().top - $documents.offset().top + 'px',
-          'left': $documents.scrollLeft() + $elem.offset().left - $documents.offset().left + 'px'
-        });
-
-        shiftX = e.pageX - $documents.scrollLeft() - $rect.offset().left + $documents.offset().left;
-        shiftY = e.pageY - $documents.scrollTop() - $rect.offset().top + $documents.offset().top;
-
-      }
-    });
+      });
 
 
-    //
-    //
-    //
-    $documents.on('scroll', function (e) {
-      if (scrollX !== false) $documents.scrollLeft(scrollX);
-      if (scrollY !== false) $documents.scrollTop(scrollY);
-    });
-    
-    //
-    //
-    //
-    $(window).on('mouseup', function (e) {
-      event = null;
-      scrollX = false;
-      scrollY = false;
-      $helpers.removeClass('helpers__active');
-      $helpers__drag.remove();
-      $helpers__resize.remove();
-      $('.ui-resizable-handle-active').removeClass('ui-resizable-handle-active');
-      app.f.virtualbodySizeDetector();
+      //
+      //
+      //
+      var clicks = 0;
+      $helpers__box.on('mousedown', function (e) {
 
-    });
+        e.preventDefault();
+        clicks++;
 
-    //
-    //
-    //
-    $(window).on('mousemove', function (e) {
-      
-      
-      
-      switch (event) {
-        case 'drag':
-          
-          $helpers__drag.css({
-            left: e.pageX - shiftX + 'px',
-            top: e.pageY - shiftY + 'px'
-          });
+        setTimeout(function () {
+          clicks = 0;
+        }, 400);
 
-          var ghostRect = $helpers__drag.offset();
-          var realRect = $helpers__box.offset();
 
-          var stepX = ghostRect.left - realRect.left;
-          var stepY = ghostRect.top - realRect.top;
+        if (clicks === 2) {
+          app.f.selectElement(null);
+          app.f.selectLayer(null);
+          clicks = 0;
+          return;
 
-          var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr, true);
+        } else {
+          $helpers.addClass('helpers__active');
+          scrollX = $documents.scrollLeft();
+          scrollY = $documents.scrollTop();
 
-          $helpers__box.css({
-            left: parseInt($helpers__box.css('left')) + xy[0] + 'px',
-            top: parseInt($helpers__box.css('top')) + xy[1] + 'px'
-          });
 
-          update();
-          break;
+          if ($(e.target).is('.helpers__box')) {
 
-        case 'resize':
-          
-          var $activePoint = $('.ui-resizable-handle-active');
+            event = 'drag';
+            $helpers.append($helpers__drag);
+            $elem = $helpers__box;
+            $rect = $helpers__drag;
 
-          $helpers__resize.css({
-            left: e.pageX - shiftX + 'px',
-            top: e.pageY - shiftY + 'px'
-          });
+          } else if ($(e.target).is('.ui-resizable-handle-area')) {
 
-          var corner = 3;
-
-          var ghostRect = $helpers__resize.offset();
-          var realRect = $activePoint.offset();
-
-          var stepX = ghostRect.left - realRect.left;
-          var stepY = ghostRect.top - realRect.top;
-
-          var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr + getRotationDegrees($helpers__box), true);
-
-          if ($activePoint.is('.ui-resizable-n')) {
-            // верхняя сторона
-            $activePoint.css({
-              'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
-            });
-
-            $helpers__box.css({
-              'top': parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
-              'height': parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px'
-            });
-
-          } else if ($activePoint.is('.ui-resizable-e')) {
-            // правая сторона
-            $activePoint.css({
-              'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px'
-            });
-
-            $helpers__box.css({
-              'width': parseInt($activePoint.css('left')) + 'px'
-            });
-
-          } else if ($activePoint.is('.ui-resizable-s')) {
-            // нижняя сторона
-            $activePoint.css({
-              'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
-            });
-
-            $helpers__box.css({
-              'height': parseInt($activePoint.css('top')) + 'px'
-            });
-
-          } else if ($activePoint.is('.ui-resizable-w')) {
-            // левая сторона
-            $activePoint.css({
-              'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px'
-            });
-
-            $helpers__box.css({
-              'left': parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
-              'width': parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px',
-            });
-
-          } else if ($activePoint.is('.ui-resizable-ne')) {
-            // верхний правый угол
-            $activePoint.css({
-              'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
-              'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
-            });
-
-            $helpers__box.css({
-              'top': parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
-              'height': parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px',
-              'left': parseInt($helpers__box.css('left')) + 'px',
-              'width': parseInt($activePoint.css('left')) + 'px'
-            });
-
-          } else if ($activePoint.is('.ui-resizable-se')) {
-            // нижний правый угол
-            $activePoint.css({
-              'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
-              'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
-            });
-
-            $helpers__box.css({
-              'width': parseInt($activePoint.css('left')) + 'px',
-              'height': parseInt($activePoint.css('top')) + 'px'
-            });
-
-          } else if ($activePoint.is('.ui-resizable-sw')) {
-            // нижней левый угол
-            $activePoint.css({
-              'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
-              'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
-            });
-
-            $helpers__box.css({
-              'left': parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
-              'width': parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px',
-              'height': parseInt($activePoint.css('top')) + 'px'
-
-            });
-          } else if ($activePoint.is('.ui-resizable-nw')) {
-            // верхний левый угол
-            $activePoint.css({
-              'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
-              'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
-            });
-
-            $helpers__box.css({
-              'top': parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
-              'left': parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
-              'height': parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px',
-              'width': parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px'
-            });
+            event = 'resize';
+            $helpers.append($helpers__drag);
+            $elem = $(e.target).parent().addClass('ui-resizable-handle-active');
+            $rect = $helpers__drag;
 
           }
 
-          $('.helpers .ui-resizable-handle').removeAttr('style');
+          $rect.css({
+            'width': $elem.css('width'),
+            'height': $elem.css('height'),
+            'top': $documents.scrollTop() + $elem.offset().top - $documents.offset().top + 'px',
+            'left': $documents.scrollLeft() + $elem.offset().left - $documents.offset().left + 'px'
+          });
 
-          update();
-          break;
-      }
+          shiftX = e.pageX - $documents.scrollLeft() - $rect.offset().left + $documents.offset().left;
+          shiftY = e.pageY - $documents.scrollTop() - $rect.offset().top + $documents.offset().top;
 
-    });
+        }
+      });
 
+
+      //
+      //
+      //
+      $documents.on('scroll', function (e) {
+        if (scrollX !== false) $documents.scrollLeft(scrollX);
+        if (scrollY !== false) $documents.scrollTop(scrollY);
+      });
+
+      //
+      //
+      //
+      $(window).on('mouseup', function (e) {
+        event = null;
+        scrollX = false;
+        scrollY = false;
+        $helpers.removeClass('helpers__active');
+        $helpers__drag.remove();
+        $('.ui-resizable-handle-active').removeClass('ui-resizable-handle-active');
+        app.f.virtualbodySizeDetector();
+
+      });
+
+      //
+      //
+      //
+      $(window).on('mousemove', function (e) {
+
+
+
+        switch (event) {
+          case 'drag':
+
+            $helpers__drag.css({
+              left: e.pageX - shiftX + 'px',
+              top: e.pageY - shiftY + 'px'
+            });
+
+            var ghostRect = $helpers__drag.offset();
+            var realRect = $helpers__box.offset();
+
+            var stepX = ghostRect.left - realRect.left;
+            var stepY = ghostRect.top - realRect.top;
+
+            var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr, true);
+
+            $helpers__box.css({
+              left: parseInt($helpers__box.css('left')) + xy[0] + 'px',
+              top: parseInt($helpers__box.css('top')) + xy[1] + 'px'
+            });
+
+            update();
+            break;
+
+          case 'resize':
+
+            var $activePoint = $('.ui-resizable-handle-active');
+
+            $helpers__drag.css({
+              left: e.pageX - shiftX + 'px',
+              top: e.pageY - shiftY + 'px'
+            });
+
+            var corner = 3;
+
+            var ghostRect = $helpers__drag.offset();
+            var realRect = $activePoint.offset();
+
+            var stepX = ghostRect.left - realRect.left;
+            var stepY = ghostRect.top - realRect.top;
+
+            var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr + getRotationDegrees($helpers__box), true);
+
+            if ($activePoint.is('.ui-resizable-n')) {
+              // верхняя сторона
+              $activePoint.css({
+                'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+              });
+
+              $helpers__box.css({
+                'top': parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
+                'height': parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px'
+              });
+
+            } else if ($activePoint.is('.ui-resizable-e')) {
+              // правая сторона
+              $activePoint.css({
+                'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px'
+              });
+
+              $helpers__box.css({
+                'width': parseInt($activePoint.css('left')) + 'px'
+              });
+
+            } else if ($activePoint.is('.ui-resizable-s')) {
+              // нижняя сторона
+              $activePoint.css({
+                'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+              });
+
+              $helpers__box.css({
+                'height': parseInt($activePoint.css('top')) + 'px'
+              });
+
+            } else if ($activePoint.is('.ui-resizable-w')) {
+              // левая сторона
+              $activePoint.css({
+                'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px'
+              });
+
+              $helpers__box.css({
+                'left': parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
+                'width': parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px',
+              });
+
+            } else if ($activePoint.is('.ui-resizable-ne')) {
+              // верхний правый угол
+              $activePoint.css({
+                'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
+                'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+              });
+
+              $helpers__box.css({
+                'top': parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
+                'height': parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px',
+                'left': parseInt($helpers__box.css('left')) + 'px',
+                'width': parseInt($activePoint.css('left')) + 'px'
+              });
+
+            } else if ($activePoint.is('.ui-resizable-se')) {
+              // нижний правый угол
+              $activePoint.css({
+                'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
+                'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+              });
+
+              $helpers__box.css({
+                'width': parseInt($activePoint.css('left')) + 'px',
+                'height': parseInt($activePoint.css('top')) + 'px'
+              });
+
+            } else if ($activePoint.is('.ui-resizable-sw')) {
+              // нижней левый угол
+              $activePoint.css({
+                'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
+                'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+              });
+
+              $helpers__box.css({
+                'left': parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
+                'width': parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px',
+                'height': parseInt($activePoint.css('top')) + 'px'
+
+              });
+            } else if ($activePoint.is('.ui-resizable-nw')) {
+              // верхний левый угол
+              $activePoint.css({
+                'left': parseInt($activePoint.css('left')) + xy[0] + corner + 'px',
+                'top': parseInt($activePoint.css('top')) + xy[1] + corner + 'px'
+              });
+
+              $helpers__box.css({
+                'top': parseInt($helpers__box.css('top')) + parseInt($activePoint.css('top')) + 'px',
+                'left': parseInt($helpers__box.css('left')) + parseInt($activePoint.css('left')) + 'px',
+                'height': parseInt($helpers__box[0].style.height) - parseInt($activePoint.css('top')) + 'px',
+                'width': parseInt($helpers__box[0].style.width) - parseInt($activePoint.css('left')) + 'px'
+              });
+
+            }
+
+            $('.helpers .ui-resizable-handle').removeAttr('style');
+
+            update();
+            break;
+        }
+
+      });
+    }
 
     function rotate(cx, cy, x, y, angle, round) {
       var radians = (Math.PI / 180) * angle,

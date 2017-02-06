@@ -4,7 +4,6 @@
   "window" : {
     "sidebarWidth" : 300,
     "windowWidth" : 1200,
-    "activeSidebarTab" : 1,
-    "zoom" : 1
+    "activeSidebarTab" : 1
   }
 }
