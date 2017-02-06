@@ -85,7 +85,7 @@ $(function () {
   }
 
   app.f.selectElement = function (elem) {
-    
+
     var $documents = app.e.$documents;
     var $documents__content = app.e.$documents__content;
     var $documents__browser = app.e.$documents__browser;
@@ -253,24 +253,23 @@ $(function () {
       //
       $(window).on('mousemove', function (e) {
 
-
+        $helpers__drag.css({
+          left: e.pageX - shiftX + 'px',
+          top: e.pageY - shiftY + 'px'
+        });
+        
+        var $active = (event === 'resize') ? $('.ui-resizable-handle-active') : $helpers__box;
+        var selfr = (event === 'resize') ? getRotationDegrees($helpers__box) : 0;
+        var ghostRect = $helpers__drag.offset();
+        var realRect = $active.offset();
+        var stepX = ghostRect.left - realRect.left;
+        var stepY = ghostRect.top - realRect.top;
+        var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr + selfr, true);
+        var corner = 3;
 
         switch (event) {
           case 'drag':
-
-            $helpers__drag.css({
-              left: e.pageX - shiftX + 'px',
-              top: e.pageY - shiftY + 'px'
-            });
-
-            var ghostRect = $helpers__drag.offset();
-            var realRect = $helpers__box.offset();
-
-            var stepX = ghostRect.left - realRect.left;
-            var stepY = ghostRect.top - realRect.top;
-
-            var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr, true);
-
+            
             $helpers__box.css({
               left: parseInt($helpers__box.css('left')) + xy[0] + 'px',
               top: parseInt($helpers__box.css('top')) + xy[1] + 'px'
@@ -280,24 +279,7 @@ $(function () {
             break;
 
           case 'resize':
-
-            var $activePoint = $('.ui-resizable-handle-active');
-
-            $helpers__drag.css({
-              left: e.pageX - shiftX + 'px',
-              top: e.pageY - shiftY + 'px'
-            });
-
-            var corner = 3;
-
-            var ghostRect = $helpers__drag.offset();
-            var realRect = $activePoint.offset();
-
-            var stepX = ghostRect.left - realRect.left;
-            var stepY = ghostRect.top - realRect.top;
-
-            var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr + getRotationDegrees($helpers__box), true);
-
+            var $activePoint = $active;
             if ($activePoint.is('.ui-resizable-n')) {
               // верхняя сторона
               $activePoint.css({
