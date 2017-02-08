@@ -15,8 +15,9 @@ $(function () {
     app.e.$statusbar = $('<div class="statusbar"></div>');
     app.e.$documents__browser = $('<iframe scrolling="no" class="documents__browser"></iframe>');
     app.e.$documents__content;
-    app.e.$selectedElement;
+    app.e.$selectedElement = null;
     app.e.$helpers;
+    app.e.$sidebar__activeTab = null;
 
     
     $('head').append('<link rel="shortcut icon" href="/appres/icon/icon-16.png" type="image/x-icon">'+

@@ -40,9 +40,11 @@ $(function () {
         var $selected = ($(e.target).is('.editable')) ? $(e.target) : $(e.target).parents('.editable').first();
         app.f.selectLayer($selected);
         app.f.selectElement($selected);
+        app.f.createProperties($selected);
       } else {
         app.f.selectLayer(null);
         app.f.selectElement(null);
+        app.f.createProperties(null);
       }
 
     });

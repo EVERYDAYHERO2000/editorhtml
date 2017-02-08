@@ -68,13 +68,84 @@ $(function () {
 
       $frame__sidebar.append($tab, $panel);
       $frame__sidebar.tabs({
-        active: app.settings.window.activeSidebarTab
+        active: app.settings.window.activeSidebarTab,
+        activate: function(e,ui){
+          if (ui.newPanel.is('#sidebarTabs-properties')) {
+            app.e.$sidebar__activeTab = ui.newPanel;
+            app.f.createProperties(app.e.$selectedElement);
+          } 
+          if (ui.oldPanel.is('#sidebarTabs-properties')){
+            app.e.$sidebar__activeTab = null;
+            $('#sidebarTabs-properties').empty();
+          }
+
+        }
       });
     }
 
     setTabs();
   }
 
+  app.f.createProperties = function(elem){
+    
+    var $frame__sidebar = app.e.$frame__sidebar;
+    var $properties = $('#sidebarTabs-properties');
+
+    if (elem === null){
+      $properties.empty();
+    } else {
+      if (app.e.$sidebar__activeTab !== null) build();
+    }
+    
+    function build(){
+      $properties.append('<div class="proppanel proppanel__main"></div>'+
+                         '<div class="proppanel proppanel__props"></div>');
+      var controlCounter = 0;
+       
+    }
+    
+    function createControl(type, keys, data, options){
+      controlCounter ++;
+      var $control = $('<div class="control"><div class="control__left"></div><div class="control__right"></div></div>');
+      
+      var $label, $input;
+      if (Object.keys(obj).length > 1){
+        $label = $('<select name="speed" id="speed"></select>');
+        for(var key in keys){
+          $label.append('<option name="' + key + '">' + keys[key] + '</option>');
+        }
+        $label.selectmenu();
+      } else {
+        $label = $('<label for="control_' + controlCounter + '">' + Object.values(obj)[0] + '</label>');
+      }
+      
+      $('.control__left"').append($label);
+      
+      
+      switch (type){
+        case 'text' :
+          break;
+          
+        case 'number' : 
+          break;
+          
+        case 'color' : 
+          break;
+          
+        case 'file' :
+          break;
+          
+        case 'select' : 
+          break;
+      }
+      
+      return $control;
+      
+    }
+    
+    
+  }
+  
   app.f.getDocumentTree = function () {
 
     var $documents__content = app.e.$documents__content;
