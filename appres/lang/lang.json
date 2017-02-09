@@ -106,5 +106,9 @@
   "preview" : {
     "RU" : "Просмотр",
     "EN" : "Preview"
+  },
+  "id" : {
+    "RU" : "id",
+    "EN" : "id"
   }
 }

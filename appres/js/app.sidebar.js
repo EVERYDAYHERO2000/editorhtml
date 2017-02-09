@@ -105,19 +105,33 @@ $(function () {
     }
 
     function build() {
-      $properties.append('<div class="proppanel proppanel__main"></div>' +
+      
+      $properties.empty().append('<div class="proppanel proppanel__main"></div>' +
         '<div class="proppanel proppanel__props"></div>');
       var controlCounter = 0;
 
-      $('.proppanel__main').append(createControl('text', {
-        'id': 'id'
-      }, ['']));
-      
+      $('.proppanel__main').append(createControl({
+        type : 'text',
+        keys : {
+          'id' : TEXT['id'][L]
+        },
+        data : [ elem.attr('data-id') ]
+      }));
       
 
-      function createControl(type, keys, data, options) {
+
+      
+      function createControl(obj) {
+            
+        var type = obj.type || 'text';
+        var keys = obj.keys || {'key' : 'value'};
+        var data = obj.data || [''];
+        var options = obj.options || {};
+        
         controlCounter++;
-        var $control = $('<div class="control"><div class="control__left"></div><div class="control__right"></div></div>');
+        var $control = $('<div class="control"><div class="control__left">'+
+                         '</div><div class="control__right"></div>'+
+                         '<div class="control__clear"></div></div>');
 
         var $label, $input;
         if (Object.keys(keys).length > 1) {
@@ -134,7 +148,7 @@ $(function () {
 
         switch (type) {
           case 'text':
-            $input = $('<input type="text" />')
+            $input = $('<input id="control_' + controlCounter + '" type="text" value="' + data[0] + '" />')
 
             break;
 

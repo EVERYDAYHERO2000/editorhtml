@@ -5,6 +5,7 @@
 @lightColor : #6a6a6a;
 @darkColor : #282828;
 @fontColor : #ffffff;
+@font2Color : rgba(255,255,255,0.5);
 @selectedColor : rgba(31, 195, 255, 0.61);
 @mainFont : 12px;
 @mainFontLineHeight : 1.2;
@@ -13,7 +14,7 @@
 @sidebarWidth : 300px;
 @statusbarHeight : 25px;
 
-@tabsHeight : 20px;
+@tabsHeight : 24px;
 @darkBorder : 1px solid @darkColor;
 @lightBorder : 1px solid @lightColor;
 @unborder : 1px solid @mainColor;
@@ -218,7 +219,7 @@ li {
 .sidebar__tabs a {
   text-decoration: none;
   color: @fontColor;
-  padding: 2px 8px 0 8px;
+  padding: 4px 8px 0 8px;
   display: block;
   text-shadow: @shadowText;
   cursor: default;
@@ -458,7 +459,7 @@ li {
 } 
 
 .sidebar__panel {
-  height: calc(100% ~'-' 21px)!important
+  height: calc(100% ~'-' @tabsHeight)!important
 }
 
 .ui-slider-horizontal {
@@ -485,13 +486,52 @@ li {
 }
 
 
+
 .proppanel__main {
+  width: 100%;
   padding: 10px 0 10px 0;
+  border-bottom: 1px solid @tone2Color;
 }
 
-.control .control__left, .control .control__right {
+.proppanel__props {
+  width: 100%;
+  height: calc(100% ~"-" 45px);
+}
+
+.control {
+  margin: 0 10px 0 10px;
+}
+
+.proppanel .control .control__left, .proppanel .control .control__right {
   width: 50%;
   position: relative;
   float:left;
   box-sizing: border-box;
+  font-size: @mainFont;
+}
+
+.proppanel .control .control__clear {
+  clear: both;
+}
+
+.proppanel .control .control__right {
+  border-left: 1px solid @tone2Color;
+}
+
+
+.proppanel .control input, .proppanel .control label {
+  width: 100%;
+  background-color: @toneColor;
+  box-sizing: border-box;
+  border: none;
+  color: @fontColor;
+  font-size: @mainFont;
+  padding: 5px;
+  display: block;
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
+}
+
+.proppanel .control label {
+  
+  color: @font2Color;
 }
