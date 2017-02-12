@@ -23,22 +23,47 @@
 @shadow2 : 1px 1px 5px rgba(0, 0, 0, 0.3);
 @editableHandlesSize : 6px;
 
-
 * {
   box-sizing: border-box;
 }
+
 html,
 body {
   -webkit-font-smoothing: antialiased;
   user-select: none;
   -webkit-user-select: none;
+  width: 100%;
+  height: 100%;
+  background: @bgColor;
 }
+
 ul,
 li {
   list-style: none;
   margin: 0;
   padding: 0;
 }
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  box-shadow: none;
+  background: @bgColor;
+}
+::-webkit-scrollbar-track {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: @lightColor;
+  border: 1px solid @bgColor;
+}
+::-webkit-scrollbar-corner {
+  background: @bgColor;
+}
+
 .window {
   background: @bgColor;
   margin: 0;
@@ -48,10 +73,10 @@ li {
   width: 100vw;
   height: 100vh;
   font-family: 'Roboto', Helvetica, Arial, sans-serif;
-  ;
   color: @fontColor;
   line-height: @mainFontLineHeight;
 }
+
 .app {
   width: 100vw;
   min-width: 800px;
@@ -127,25 +152,6 @@ li {
   
 }
 
-::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-  box-shadow: none;
-  background: @bgColor;
-}
-::-webkit-scrollbar-track {
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  background: @lightColor;
-  border: 1px solid @bgColor;
-}
-::-webkit-scrollbar-corner {
-  background: @bgColor;
-}
 .statusbar {
   height: @statusbarHeight;
   width: 100%;
@@ -487,22 +493,23 @@ li {
 
 
 
-.proppanel__main {
+.proppanel_main {
   width: 100%;
   padding: 10px 0 10px 0;
   border-bottom: 1px solid @tone2Color;
 }
 
-.proppanel__props {
+.proppanel_props {
   width: 100%;
   height: calc(100% ~"-" 45px);
+  overflow: auto;
 }
 
 .control {
-  margin: 0 10px 0 10px;
+
 }
 
-.proppanel .control .control__left, .proppanel .control .control__right {
+.proppanel .control .control_left, .proppanel .control .control_right {
   width: 50%;
   position: relative;
   float:left;
@@ -510,28 +517,86 @@ li {
   font-size: @mainFont;
 }
 
-.proppanel .control .control__clear {
+.proppanel .control .control_clear {
   clear: both;
 }
 
-.proppanel .control .control__right {
+.proppanel .control .control_right {
   border-left: 1px solid @tone2Color;
 }
 
+.control {
+  border-top: 1px solid @tone2Color;
+}
 
-.proppanel .control input, .proppanel .control label {
+.control:first-child {
+  border-top: none;
+}
+
+.control input, .control label, .control select {
   width: 100%;
   background-color: @toneColor;
   box-sizing: border-box;
   border: none;
+  border-radius: 0px;
   color: @fontColor;
   font-size: @mainFont;
   padding: 5px;
   display: block;
   font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  -webkit-appearance: none; 
+  min-height: 24px;
+}
+
+.control .unit {
+    -webkit-appearance: none;
+    width: auto;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    height: auto;
+    min-height: auto;
+    background-color: @tone2Color;
+    background-image: none!important;
+    padding: 2px 5px 2px 5px;
+    border-radius: 10px;
+    font-size: 9px;
+    text-align: center;
+    text-align-last:center;
+}
+
+
+.control input:focus, .control select:focus {
+  outline: none;
+}
+
+.proppanel .control select {
+  background-image: url(../img/icons/dd-arrow.svg);
+  background-repeat: no-repeat;
+  background-position: right 5px center;
+  background-size: 16px 16px;
 }
 
 .proppanel .control label {
-  
+  padding: 5px 0 5px 10px;
   color: @font2Color;
+}
+
+.controlGroup {
+  overflow: hidden;
+  border-radius: 12px;
+  margin: 5px 10px 5px 10px;
+}
+
+.proppanel__panelTitle {
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  padding-left: 20px;
+  margin: 10px 0 10px 0;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
 }

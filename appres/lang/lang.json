@@ -110,5 +110,61 @@
   "id" : {
     "RU" : "id",
     "EN" : "id"
+  },
+  "layout" : {
+    "RU" : "Положение",
+    "EN" : "Layout"
+  },
+  "vertical" : {
+    "RU" : "y",
+    "EN" : "y"
+  },
+  "horizontal" : {
+    "RU" : "x",
+    "EN" : "x"
+  },
+  "top" : {
+    "RU" : "top",
+    "EN" : "top"
+  },
+  "bottom" : {
+    "RU" : "bottom",
+    "EN" : "bottom"
+  },
+  "left" : {
+    "RU" : "left",
+    "EN" : "left"
+  },
+  "right" : {
+    "RU" : "right",
+    "EN" : "right"
+  },
+  "width" : {
+    "RU" : "ширина",
+    "EN" : "width"
+  },
+  "height" : {
+    "RU" : "высота",
+    "EN" : "height"
+  },
+  "rotation" : {
+    "RU" : "поворот",
+    "EN" : "rotation"
+  },
+  "style" : {
+    "RU" : "Стиль",
+    "EN" : "Style"
+  },
+  "opacity" : {
+    "RU" : "прозрачность",
+    "EN" : "opacity"
+  },
+  "blending" : {
+    "RU" : "смешивание",
+    "EN" : "blending"
+  },
+  "border-radius" : {
+    "RU" : "скругление углов",
+    "EN" : "border radius"
   }
 }
