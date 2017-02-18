@@ -134,7 +134,7 @@ $(function () {
             'transform-origin': '50% 50% 0'
           });
 
-          maxr += getRotationDegrees($tree);
+          maxr += app.f.getRotationDegrees($tree);
         }
       });
 
@@ -152,7 +152,7 @@ $(function () {
       });
 
       $helpers__box.rotatable({
-        angle: getRotationDegrees($helpers__box, 'rad'),
+        angle: app.f.getRotationDegrees($helpers__box, 'rad'),
         wheelRotate: false,
         rotationCenterX: 50,
         rotationCenterY: 50,
@@ -261,13 +261,12 @@ $(function () {
         });
         
         var $active = (event === 'resize') ? $('.ui-resizable-handle-active') : $helpers__box;
-        var selfr = (event === 'resize') ? getRotationDegrees($helpers__box) : 0;
+        var selfr = (event === 'resize') ? app.f.getRotationDegrees($helpers__box) : 0;
         var ghostRect = $helpers__drag.offset();
         var realRect = $active.offset();
         var stepX = ghostRect.left - realRect.left;
         var stepY = ghostRect.top - realRect.top;
         var xy = rotate(0, 0, Math.round(stepX), Math.round(stepY), maxr + selfr, true);
-        var corner = 3;
 
         switch (event) {
           case 'drag':
@@ -282,6 +281,8 @@ $(function () {
 
           case 'resize':
             var $activePoint = $active;
+            var corner = parseInt(getComputedStyle($active[0]).width) / 2;
+            
             if ($activePoint.is('.ui-resizable-n')) {
               // верхняя сторона
               $activePoint.css({
@@ -398,22 +399,6 @@ $(function () {
       return (round) ? [Math.round(nx), Math.round(ny)] : [nx, ny];
     }
 
-    function getRotationDegrees(obj, unit) {
-      var matrix = obj.css("-webkit-transform") || obj.css("transform");
-      var angle;
-      if (matrix !== 'none') {
-        var values = matrix.split('(')[1].split(')')[0].split(',');
-        var a = values[0];
-        var b = values[1];
-
-        angle = (unit === 'rad') ? Math.atan2(b, a) : Math.round(Math.atan2(b, a) * (180 / Math.PI));
-
-      } else {
-        angle = 0;
-      }
-      return angle
-    }
-
 
     function update() {
 
@@ -433,5 +418,20 @@ $(function () {
 
   }
 
+  app.f.getRotationDegrees = function(obj, unit) {
+      var matrix = obj.css("-webkit-transform") || obj.css("transform");
+      var angle;
+      if (matrix !== 'none') {
+        var values = matrix.split('(')[1].split(')')[0].split(',');
+        var a = values[0];
+        var b = values[1];
+
+        angle = (unit === 'rad') ? Math.atan2(b, a) : Math.round(Math.atan2(b, a) * (180 / Math.PI));
+
+      } else {
+        angle = 0;
+      }
+      return angle
+  }
 
 });

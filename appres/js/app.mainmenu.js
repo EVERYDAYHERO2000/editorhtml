@@ -1,11 +1,13 @@
 $(function () {
-  app.f.setMenu = function () {
-
-    var $mainmenu = app.e.$mainmenu;
+  app.f.mainMenu = function () {
+        
+    var $mainmenu = $('<ul class="mainmenu"></ul>');
     var $mainmenu__item;
     var $mode;
 
-    var menu = [
+    this.elem = $mainmenu;
+    
+    var menu = this.menu = [
       {
         name: TEXT['file'][L],
         items: [
@@ -111,5 +113,6 @@ $(function () {
     $mainmenu.mouseleave(function () {
       $mainmenu.menu('collapseAll');
     });
+    
   };
 });

@@ -166,5 +166,73 @@
   "border-radius" : {
     "RU" : "скругление углов",
     "EN" : "border radius"
-  }
+  },
+  "normal" : {
+    "RU" : "normal",
+    "EN" : "normal"
+  },
+  "multiply" : {
+    "RU" : "multiply",
+    "EN" : "multiply"
+  },
+  "screen" : {
+    "RU" : "screen",
+    "EN" : "screen"
+  },
+  "overlay" : {
+    "RU" : "overlay",
+    "EN" : "overlay"
+  },
+  "darken" : {
+    "RU" : "darken",
+    "EN" : "darken"
+  },
+  "lighten" : {
+    "RU" : "lighten",
+    "EN" : "lighten"
+  },
+  "color-dodge" : {
+    "RU" : "color-dodge",
+    "EN" : "color-dodge"
+  },
+  "color-burn" : {
+    "RU" : "color-burn",
+    "EN" : "color-burn"
+  },
+  "hard-light" : {
+    "RU" : "hard-light",
+    "EN" : "hard-light"
+  },
+  "soft-light" : {
+    "RU" : "soft-light",
+    "EN" : "soft-light"
+  },
+  "difference" : {
+    "RU" : "difference",
+    "EN" : "difference"
+  },
+  "exclusion" : {
+    "RU" : "exclusion",
+    "EN" : "exclusion"
+  },
+  "hue" : {
+    "RU" : "hue",
+    "EN" : "hue"
+  },
+  "saturation" : {
+    "RU" : "saturation",
+    "EN" : "saturation"
+  },
+  "color" : {
+    "RU" : "color",
+    "EN" : "color"
+  },
+  "luminosity" : {
+    "RU" : "luminosity",
+    "EN" : "luminosity"
+  },
+  "inherit" : {
+    "RU" : "inherit",
+    "EN" : "inherit"
+  }  
 }

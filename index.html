@@ -21,7 +21,8 @@
 <!-- js libs -->
   
 <!-- app -->  
-<script type="text/javascript" src="appres/js/app.js"></script>   
+<script type="text/javascript" src="appres/js/app.js"></script>
+<script type="text/javascript" src="appres/js/app.events.js"></script>
 <script type="text/javascript" src="appres/js/app.filesystem.js"></script> 
 <script type="text/javascript" src="appres/js/app.undomanager.js"></script>   
 <script type="text/javascript" src="appres/js/app.mainmenu.js"></script> 
@@ -37,7 +38,7 @@
 <script>
 "use strict";
 $(function(){
-  app.f.loadSettings(app.f.create);
+  app.create();
 })  
 </script>  
 

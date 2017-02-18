@@ -1,9 +1,12 @@
 "use strict";
 $(function () {
-  app.f.setTools = function () {
+  app.f.tools = function () {
 
-    var $frame__tools = app.e.$frame__tools;
+    var $frame__tools = $('<div class="frame__tools"></div>');
     var $toolButton = $('<button class="tools__button"></button>');
+    
+    this.elem = $frame__tools;
+    
     var tools = [
       {
         title: TEXT['div'][L],
